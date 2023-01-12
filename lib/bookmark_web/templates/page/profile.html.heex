@@ -1,0 +1,12 @@
+<div>
+  <p class="headline">Latest archives by <%= @username %></p>
+  <%= for a <- @archives do %>
+    <%= link(
+      img_tag(
+        Routes.static_path(@conn, "/archive/archive/" <> a <> "/screenshot.png"),
+        class: "profile_page_thumbnail"
+      ),
+      to: "/archive/" <> a
+    ) %>
+  <% end %>
+</div>

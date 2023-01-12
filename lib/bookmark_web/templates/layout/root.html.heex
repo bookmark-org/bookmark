@@ -1,30 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="csrf-token" content={csrf_token_value()}>
-    <%= live_title_tag assigns[:page_title] || "Bookmark", suffix: " · Phoenix Framework" %>
-    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
-    <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content={csrf_token_value()} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@bookmark_org" />
+    <%= if @meta_attrs, do: meta_tags(@meta_attrs) %>
+
+    <title><%= if @title, do: @title %></title>
+
+    <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
+    <script
+      defer
+      phx-track-static
+      type="text/javascript"
+      src={Routes.static_path(@conn, "/assets/app.js")}
+    >
+    </script>
   </head>
-  <body>
-    <header>
-      <section class="container">
-        <nav>
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
-            <% end %>
-          </ul>
-        </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src={Routes.static_path(@conn, "/images/phoenix.png")} alt="Phoenix Framework Logo"/>
-        </a>
-      </section>
-    </header>
+  <body style="background: #1e1e1e">
+    <a href="/">
+      <img
+        src="/images/bookmark-logo-white.png"
+        style="max-width:33%; max-height: 55px; padding: 11px"
+      />
+    </a>
+
+    <section style="position: absolute; right: 0; top: 0; font-size: 13px; padding-top: 10px; padding-right: 21px; background: #1e1e1e; color: white; max-width: 66%;  ">
+      <%= if @current_user do
+        render("_wallet.html", %{:amount => round(@balance), :username => @current_user.username})
+      end %>
+      <%= render("_user_menu.html", assigns) %>
+    </section>
+
     <%= @inner_content %>
+
+    <br /><br />
+    <div align="center" style="background: black; color: white;">
+      Want to learn more? Join the Bookmark community on
+      <a href="https://t.me/+j0rQv3_6C5pjOWYx">Telegram</a>
+      and follow us on <a href="https://twitter.com/bookmark_org">Twitter</a>
+    </div>
   </body>
 </html>
