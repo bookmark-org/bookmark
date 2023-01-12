@@ -175,16 +175,6 @@
   color: white;
 }
 
-.curator {
-  padding: 10px;
-  float: right;
-  width: 25%;
-  border: 2px;
-  border-style: solid;
-  border-color: #888888;
-  margin-right: 20px;
-}
-
 .add_to_archive {
   padding: 20px;
   padding-right: 66px;
