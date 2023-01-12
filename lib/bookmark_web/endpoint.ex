@@ -20,7 +20,7 @@ defmodule BookmarkWeb.Endpoint do
     at: "/",
     from: :bookmark,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: ~w(assets fonts images videos favicon.ico robots.txt archive)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

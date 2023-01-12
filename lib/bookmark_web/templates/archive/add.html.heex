@@ -1,0 +1,8 @@
+<div align="center">
+  <h2>Archive ID: <%= link(@id, to: "/archive/" <> @id) %></h2>
+  <span>https://bookmark.org/archive/<%= @id %></span>
+  <br /><br />
+</div>
+<div style="border: solid">
+  <%= img_tag(Routes.static_path(@conn, "/archive/archive/" <> @id <> "/screenshot.png")) %>
+</div>

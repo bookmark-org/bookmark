@@ -1,0 +1,16 @@
+<div align="center">
+  <p class="headline">Pay <%= @amount %> sats to @<%= @payee_username %></p>
+
+  <%= button("Confirm and pay", to: "/pay/" <> @invoice, class: "login_button") %>
+  <br />from <%= round(@balance) %> satoshi wallet balance
+  <br /><br />or<br /><a style="color: grey" href="/">Cancel</a>
+  <br />
+  <br />
+  <!--
+<h2>By invoice</h2>
+  <%= img_tag(@qr, class: "qr" ) %>
+  <div class="qrbox">
+    <%= @invoice %>
+  </div> 
+-->
+</div>

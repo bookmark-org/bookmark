@@ -1,0 +1,8 @@
+<div align="center">
+  <p class="headline"><%= @amount %> sats to @<%= @conn.assigns.current_user.username %></p>
+
+  <%= img_tag(@qr, class: "qr") %>
+  <div class="qrbox">
+    <%= @invoice %>
+  </div>
+</div>
