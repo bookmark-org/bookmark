@@ -1,15 +1,18 @@
 /* This file is for your main application CSS */
 @import "./phoenix.css";
 
+/* Pico CSS */
+@import "./pico.min.css";
+
 /* Alerts and form errors used by phx.new */
 .alert {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
-}
+} 
 .alert-info {
-  color: #31708f;
+  color: #31708f; 
   background-color: #d9edf7;
   border-color: #bce8f1;
 }
@@ -117,4 +120,689 @@
 @keyframes fade-out-keys{
   0% { opacity: 1; }
   100% { opacity: 0; }
+}
+
+.thumbnail {
+  width:100%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: grey;
+  border-radius: 6px;
+}
+
+.profile_page_thumbnail {
+  width: 200px;
+  padding: 10px;
+}
+
+.add_to_archive_box {
+  border-style:solid;
+  border-color: #eee;
+  border-width: 3px;
+  padding: 33px; 
+}
+
+.qr{
+  width: 250px;
+}
+
+.qrbox {
+  inline-size: 250px;
+  overflow-wrap: break-word;
+  font-size: 9px;
+}
+
+.pdf_button {
+  text-align: center;
+  text-decoration: none;
+  font-size: 24px;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.url_copy_box {
+  text-decoration: none;
+  font-size: 9px;
+  border: #fff;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #333;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  padding-right: 8px;
+  padding-left: 8px;
+  background-color: #202020;
+  color: white;
+}
+
+.curator {
+  padding: 10px;
+  float: right;
+  width: 25%;
+  border: 2px;
+  border-style: solid;
+  border-color: #888888;
+  margin-right: 20px;
+}
+
+.add_to_archive {
+  padding: 20px;
+  padding-right: 66px;
+  float: right;
+  font-size: 111px;
+}
+
+.archive_patron {
+  padding: 20px;
+  float: right;
+  font-size: 188px;
+}
+
+.archive_page_image {
+  width: 333px;
+  float: left;
+}
+
+.archive_image_open {
+  font-size: larger;
+  background-color: #fff;
+  padding:0rem 0rem;
+  display: inline-block;
+  text-decoration: none;
+  border: 0 solid;
+  margin: 0 auto;
+  color: white;
+ 
+}
+
+.header_container {
+margin: 0 auto;
+max-width: 80.0rem;
+padding: 0 2.0rem;
+position: relative;
+width: 100%;
+}
+
+.alpha_style {
+  font-size: 9px; 
+  background: yellow; 
+  color: black;
+}
+
+.pay_button {
+  font-size: larger;
+  background-color: #0069d9;
+  padding:1rem 2rem;
+  display: inline-block;
+  text-decoration: none;
+  border: 0 solid;
+  margin: 0 auto;
+  color: white;
+  width: 20rem;
+  border-radius: 5px;
+}
+
+
+.logo_text {
+  color: rgb(248, 217, 39); 
+  background-color:#333;
+  font-weight: bold;
+  font-size: 22px;
+  padding: 9px;
+}
+
+.container{
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+
+
+/* **************** template CSS below *******************/
+
+/* Loader / spinner */
+.loader {
+  border: 16px solid #f3f3f3; /* Light grey */
+  border-top: 16px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+/* Modal opening object (link, button, or pretend button) */
+
+button,
+[aria-role="button"] {
+  cursor: pointer;
+}
+button[data-modal][aria-controls],
+[aria-role="button"][data-modal][aria-controls] {
+  transition: all .3s ease-out;
+}
+
+/* Hover & focus indication. */
+
+/* Reads as: if button, or aria-role=button, has data-model attribute and JavaScript has added aria-controls then on hover or focus */ 
+
+button[data-modal][aria-controls]:hover,
+button[data-modal][aria-controls]:focus,
+[aria-role="button"][data-modal][aria-controls]:hover,
+[aria-role="button"][data-modal][aria-controls]:focus {
+  -webkit-filter: contrast(120%);
+  filter: contrast(120%);
+   box-shadow: 0 0 0 4px rgba(0, 94, 255, 0.6); /* Red so you can tell */
+  outline: 0 solid;
+  color: white;
+}
+
+
+/* Modal opening link cosmetics */
+
+.lnk_modal-open {
+  font-size: larger;
+  background-color: #0069d9;
+  padding:1rem 2rem;
+  display: inline-block;
+  text-decoration: none;
+  border: 0 solid;
+  margin: 0 auto;
+  color: white;
+  
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.lnk_modal-img {
+  padding: 0;
+}
+
+.lnk_modal-open:active {
+  -webkit-filter: brightness(85%);
+  filter: brightness(85%);
+}
+
+.img_modal-open {
+  display: block;
+  border: 0 solid;
+}
+
+
+/* The modal section is added via JS */
+
+.modal {
+  max-width: 80vw;
+  max-height: 90vh;
+  background-color: #ffffff;
+  margin: 0 auto;
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 5%;
+  bottom: 5%;
+  z-index: 10;
+  border: 1px solid #000;
+  box-shadow: 0 .25em .5em #000;
+  transition: opacity .5s ease-out, visibility 0s ease-out 1s, transform .5s ease-out .5s;
+  backface-visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(.8) translate3d(0,0,0);
+  pointer-events: none;
+}
+
+.modal[aria-hidden="false"] {
+  position: fixed;
+  transition-delay: 0s,0s, 0s;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1) translate3d(0,0,0);
+  pointer-events: auto;
+}
+
+
+
+
+/* Light box properties */
+
+.modal_lightbox {
+  text-indent: -200em;
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  /* places the modal overlay between the main page (0) and the modal dialog (10) */
+  z-index: 5;
+  cursor: pointer;
+  transition: opacity .5s ease-out, visibility 0s ease-out .5s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal_lightbox-on {
+  transition-delay: 0s, 0s;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.modal_lightbox-on:hover {
+  /* Stolen from trickle.js. Under consideration. SVGs will not work here */
+  cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAANpJREFUOBGNkz0KAjEQhYPYWXgCKws7LcXWyt7WG4i9jegBvIJ4AvEyXsRCsBDiN0sGkiE/O/A2O9n3viS7rPPeb9ETrVzPwrtHDzR1XF5I6oPWLQaeq5hDXQRw0I6xCuF5HH7Tz7oFuTkhrSyEhza8THaLoQhphpWUg/QOFyA/AFpy5nTbGrIjxvg4AiiGBzYc+rGZH9KPzFy+ZbX4bX9l+VDZr5NQMMbhbtvMxccpQ3JhpTchtXATQviItIpvW0CY7HHm8c9UDRd2chbABt3RQk2tEe8O3dDkD4JQ4iOR7BMpAAAAAElFTkSuQmCC"), pointer;
+}
+
+
+/* Modal title and description */
+
+.modal_title,
+.modal_desc {
+  position: absolute;
+  top: 5px;
+  left: -200em;
+  background-color: #fff;
+  color: #ccc;
+  text-shadow: 0 0 0 #fff;
+  font-size: 9px;
+  padding: 0.125em .25em;
+  /* Tesco requirement
+  font-family: Tesco_W_Rg, sans-serif; */
+  margin: 0;
+}
+
+.modal_title:focus,
+.modal_desc:focus {
+  left: 5px;
+}
+
+[aria-hidden="false"] .modal_title {
+  transition: opacity .5s ease-out 3s;
+  opacity: 0;
+}
+
+.modal_title,
+.modal_title:focus {
+  opacity: 1;
+  transition: opacity .5s ease-out;
+}
+
+
+/* The iframe */
+
+.modal_iframe {
+  transition: opacity .5s ease-out, visibility 0s ease-out 1s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.modal_iframe-on {
+  transition: opacity .8s ease-out, visibility 0s ease-out 0s;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+[aria-hidden="true"] .modal_iframe {
+  display: none;
+}
+
+[aria-hidden="false"] .modal_iframe {
+  display: block;
+}
+
+
+/* The modal pop-ups close button, appears last in the modal, but is moved visually to the top right of the pop-up */
+
+.modal_lnk-close {
+  cursor: pointer;
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  border: 0 solid;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  box-shadow: 0 .25em .5em rgba(0, 0, 0, .25);
+  overflow: hidden;
+  transition: background-color .3s ease-out;
+}
+
+.modal_lnk-close:hover,
+.modal_lnk-close:active,
+.modal_lnk-close:focus {
+  background-color: #c00;
+  outline: 0 solid;
+}
+
+.svg-close {
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+
+
+
+/* Modal SVG (Tesco) loading animation version 2 (overlaid on itself and out of phase) */
+
+[class*="svg-loading"] {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
+  z-index: -1;
+  transition: opacity .3s ease-out;
+  backface-visibility: hidden;
+}
+
+.svg-loading {
+  fill: #00539f;
+  -webkit-animation: rotate 4s linear 0s infinite;
+  animation: rotate 4s linear 0s infinite;
+}
+
+.svg-loading2 {
+  /* Match to .modal background colour for full effect */
+  fill: #F7F0E8;
+  -webkit-animation: rotate 5s linear 1s infinite;
+  animation: rotate 5s linear 1s infinite;
+}
+
+@-webkit-keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg) translate3d(0,0,0);
+    transform: rotate(360deg) translate3d(0,0,0);
+  }
+}
+
+@keyframes rotate {
+  to {
+    -webkit-transform: rotate(360deg) translate3d(0,0,0);
+    transform: rotate(360deg) translate3d(0,0,0);
+  }
+}
+
+
+
+/* While modal is open */
+
+/* Class added to body tag to prevent scroll
+   Note the body does not require class "-modal" */
+body.-modal-open {
+  overflow: hidden;
+}
+
+
+/* Any tags classed with "-modal", when open, get "-modal-open" added */
+/* Both of these are equivalent, best practice to use the attribute version which enforces accessibility */
+
+.-modal[aria-hidden="true"] {
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
+}
+.-modal.-modal-open {
+  -webkit-filter: blur(4px);
+  filter: blur(4px);
+}
+
+
+/* Generic helper style */
+.u-margin2 {
+  margin: 2rem 0;
+}
+
+
+   /* Absolute Center Spinner */
+   .loading {
+    position: fixed;
+    z-index: 999;
+    height: 3em;
+    width: 3em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    visibility: hidden;
+  }
+  
+  /* Transparent Overlay */
+  .loading:before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.77);
+  }
+  
+  /* :not(:required) hides these rules from IE9 and below */
+  .loading:not(:required) {
+    /* hide "loading..." text */
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+  }
+  
+  .loading:not(:required):after {
+    content: '';
+    display: block;
+    font-size: 10px;
+    width: 1em;
+    height: 1em;
+    margin-top: -0.5em;
+    -webkit-animation: spinner 1500ms infinite linear;
+    -moz-animation: spinner 1500ms infinite linear;
+    -ms-animation: spinner 1500ms infinite linear;
+    -o-animation: spinner 1500ms infinite linear;
+    animation: spinner 1500ms infinite linear;
+    border-radius: 0.5em;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+    box-shadow: rgba(255, 255, 255, 0.75) 1.5em 0 0 0, rgba(255, 255, 255, 0.75) 1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) 0 1.5em 0 0, rgba(255, 255, 255, 0.75) -1.1em 1.1em 0 0, rgba(255, 255, 255, 0.75) -1.5em 0 0 0, rgba(255, 255, 255, 0.75) -1.1em -1.1em 0 0, rgba(255, 255, 255, 0.75) 0 -1.5em 0 0, rgba(255, 255, 255, 0.75) 1.1em -1.1em 0 0;
+  }
+  
+  /* Animation */
+  
+  @-webkit-keyframes spinner {
+    0% {
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @-moz-keyframes spinner {
+    0% {
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes spinner {
+    0% {
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes spinner {
+    0% {
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+h2 {
+  color: black
+}
+
+li {
+  color: black
+}
+
+
+/* Red Light scheme (Default) */
+/* Can be forced with data-theme="light" */
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+  --primary: #0033cc;
+  --primary-hover: #222222;
+  --primary-focus: rgba(229, 57, 53, 0.125);
+  --primary-inverse: #FFF;
+}
+
+/* Red Dark scheme (Auto) */
+/* Automatically enabled if user has Dark mode enabled */
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --primary: #0033cc;
+    --primary-hover: #222222;
+    --primary-focus: rgba(229, 57, 53, 0.25);
+    --primary-inverse: #FFF;
+  }
+}
+
+/* Red Dark scheme (Forced) */
+/* Enabled if forced with data-theme="dark" */
+[data-theme="dark"] {
+  --primary: #0033cc;
+  --primary-hover: #f44336;
+  --primary-focus: rgba(229, 57, 53, 0.25);
+  --primary-inverse: #FFF;
+}
+
+/* Red (Common styles) */
+:root {
+  --form-element-active-border-color: var(--primary);
+  --form-element-focus-color: var(--primary-focus);
+  --switch-color: var(--primary-inverse);
+  --switch-checked-background-color: var(--primary);
+}
+
+
+ul {
+  padding-left: 33px;
+}
+
+.headline {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.big_headline {
+  font-size: 29px;
+  font-weight: bold;
+}
+
+.add_archive_button {
+  font-size: 22px;
+  font-family: "Epilogue";
+  font-weight: bold;
+  height: 66px;
+  background: #111111;
+  color: #ce0000; 
+  border: #000000;
+  width: 66%;
+  border-radius: 6px;
+}
+
+.login_button {
+  font-size: 22px;
+  font-family: "Epilogue";
+  font-weight: bold;
+  height: 66px;
+  background: #111111;
+  color: white; 
+  border: #000000;
+}
+
+.add_archive_input {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+body {
+  color: black;
+}
+
+a {
+  color: #ce0000; 
+  font-weight: bold;
+}
+
+input {
+  color: #1e1e1e;
+}
+
+section {
+  background: white; 
+}
+
+.container {
+  
+}
+
+body {
+  background: #1e1e1e;
 }
