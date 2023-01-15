@@ -1,4 +1,5 @@
 defmodule Bookmark.Archives.Archive do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 

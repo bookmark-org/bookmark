@@ -36,6 +36,7 @@ defmodule Bookmark.Wallets do
 
   """
   def get_wallet!(id), do: Repo.get!(Wallet, id)
+
   def wallet_balance(key) do
     {:ok, balance} =
       Req.request(
@@ -45,6 +46,7 @@ defmodule Bookmark.Wallets do
 
     balance
   end
+
   @doc """
   Creates a wallet.
 
