@@ -2,7 +2,7 @@ defmodule BookmarkWeb.ArchiveController do
   use BookmarkWeb, :controller
 
   require Logger
-  
+
   alias Ecto.Changeset
 
   def archivebox(url) do
@@ -23,14 +23,7 @@ defmodule BookmarkWeb.ArchiveController do
   def view(conn, %{"id" => id}) do
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-
-    balance = balance.body["balance"]
-
-    display_balance =
-      if is_integer(balance) do
-        balance / 1000
-      end
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     index_json = index_data(id)
     list = JSON.decode!(index_json)
@@ -54,7 +47,7 @@ defmodule BookmarkWeb.ArchiveController do
       conn,
       "index.html",
       id: id,
-      balance: display_balance,
+      balance: balance,
       url: list["base_url"],
       date: list["bookmarked_date"],
       domain: list["domain"],

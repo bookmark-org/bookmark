@@ -1,9 +1,9 @@
 defmodule BookmarkWeb.WalletController do
   use BookmarkWeb, :controller
 
-
   def get_invoice(key, amount, description) do
-    desc = description |> Base.encode16
+    desc = description |> Base.encode16()
+
     {:ok, body} =
       JSON.encode(
         out: "false",
@@ -25,7 +25,6 @@ defmodule BookmarkWeb.WalletController do
 
     Map.fetch!(response.body, "payment_request")
   end
-
 
   def get_new_wallet_key() do
     {:ok, response} =
@@ -55,8 +54,7 @@ defmodule BookmarkWeb.WalletController do
 
   def index(conn, _params) do
     user = conn.assigns.current_user
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user.wallet_key)
     title = "Balance"
 
     attrs_list = [
@@ -65,7 +63,7 @@ defmodule BookmarkWeb.WalletController do
       %{property: "og:description", content: "bookmark.org wallet balance"}
     ]
 
-    render(conn, "index.html", balance: display_balance, meta_attrs: attrs_list, title: title)
+    render(conn, "index.html", balance: balance, meta_attrs: attrs_list, title: title)
   end
 
   def deposit(conn, params) do
@@ -79,8 +77,7 @@ defmodule BookmarkWeb.WalletController do
       end
 
     display_invoice = get_invoice(user.wallet_key, amount, "deposit to " <> user.username)
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     title = "Deposit"
 
@@ -91,7 +88,7 @@ defmodule BookmarkWeb.WalletController do
     ]
 
     render(conn, "deposit.html",
-      balance: display_balance,
+      balance: balance,
       invoice: display_invoice,
       amount: amount,
       qr: qr(display_invoice),
@@ -104,15 +101,19 @@ defmodule BookmarkWeb.WalletController do
   def lightning_address(conn, params) do
     username = params["username"]
     id = username <> "@bookmark.org"
-    json(conn,
-      %{callback: "https://bookmark.org/api/payment_request/" <> username,
-        maxSendable: 1000000000,
+
+    json(
+      conn,
+      %{
+        callback: "https://bookmark.org/api/payment_request/" <> username,
+        maxSendable: 1_000_000_000,
         minSendable: 1000,
         commentAllowed: 255,
-        metadata: "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\""<> id <>"\"]]",
+        metadata: "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\"" <> id <> "\"]]",
         tag: "payRequest",
         status: "OK"
-      })
+      }
+    )
   end
 
   # receive GET request from LN wallet, send bech32-serialized lightning invoice response
@@ -120,9 +121,15 @@ defmodule BookmarkWeb.WalletController do
     payee_user = Bookmark.Accounts.get_user_by_username(params["username"])
     id = params["username"] <> "@bookmark.org"
     amount = String.to_integer(params["amount"]) / 1000
-    invoice = get_invoice(payee_user.wallet_key, amount, "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\""<> id <>"\"]]")
 
-    json(conn,%{pr: invoice, routes: []})
+    invoice =
+      get_invoice(
+        payee_user.wallet_key,
+        amount,
+        "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\"" <> id <> "\"]]"
+      )
+
+    json(conn, %{pr: invoice, routes: []})
   end
 
   def qr(invoice) do
@@ -143,10 +150,9 @@ defmodule BookmarkWeb.WalletController do
       redirect(conn, to: "/users/log_in")
     end
 
-    balance = Bookmark.Wallets.wallet_balance(current_user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(current_user.wallet_key)
 
-    if display_balance < amount do
+    if balance < amount do
       redirect(conn, to: "/deposit")
     end
 
@@ -159,7 +165,7 @@ defmodule BookmarkWeb.WalletController do
     ]
 
     render(conn, "pay.html",
-      balance: display_balance,
+      balance: balance,
       invoice: display_invoice,
       amount: amount,
       payee_username: payee_user.username,

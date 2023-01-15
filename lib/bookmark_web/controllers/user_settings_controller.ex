@@ -10,11 +10,9 @@ defmodule BookmarkWeb.UserSettingsController do
   def edit(conn, _params) do
     current_user = conn.assigns.current_user
 
-    balance = Wallets.wallet_balance(current_user.wallet_key)
+    balance = Wallets.balance(current_user.wallet_key)
 
-    display_balance = balance.body["balance"] / 1000
-
-    render(conn, "edit.html", meta_attrs: nil, title: nil, balance: display_balance)
+    render(conn, "edit.html", meta_attrs: nil, title: nil, balance: balance)
   end
 
   def update(conn, %{"action" => "update_email"} = params) do

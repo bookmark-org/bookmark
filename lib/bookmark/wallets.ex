@@ -36,15 +36,10 @@ defmodule Bookmark.Wallets do
 
   """
   def get_wallet!(id), do: Repo.get!(Wallet, id)
-  def wallet_balance(key) do
-    {:ok, balance} =
-      Req.request(
-        url: "https://legend.lnbits.com/api/v1/wallet",
-        headers: [{:x_api_key, key}]
-      )
 
-    balance
-  end
+  def balance(nil), do: nil
+  def balance(key), do: wallet_balance(key)["balance"] / 1000
+
   @doc """
   Creates a wallet.
 
@@ -108,5 +103,15 @@ defmodule Bookmark.Wallets do
   """
   def change_wallet(%Wallet{} = wallet, attrs \\ %{}) do
     Wallet.changeset(wallet, attrs)
+  end
+
+  defp wallet_balance(key) do
+    {:ok, balance} =
+      Req.request(
+        url: "https://legend.lnbits.com/api/v1/wallet",
+        headers: [{:x_api_key, key}]
+      )
+
+    balance
   end
 end
