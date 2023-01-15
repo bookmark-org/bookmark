@@ -14,7 +14,7 @@ defmodule BookmarkWeb.PageController do
 
     render(conn, "index.html",
       archives: ids,
-      balance: Bookmark.Wallets.balance(user[:wallet_key]),
+      balance: user |> Map.get(:wallet_key) |> Bookmark.Wallets.balance(),
       meta_attrs: attrs_list,
       title: "Bookmark.org - Archive links and earn rewards ⚡"
     )

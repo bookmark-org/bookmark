@@ -8,13 +8,9 @@ defmodule Bookmark.BookmarkContextFixtures do
   Generate a archive.
   """
   def archive_fixture(attrs \\ %{}) do
-    {:ok, archive} =
       attrs
       |> Enum.into(%{
         name: "some name"
       })
-      |> Bookmark.BookmarkContext.create_archive()
-
-    archive
   end
 end

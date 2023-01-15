@@ -70,11 +70,20 @@ defmodule BookmarkWeb.ArchiveController do
   end
 
   defp do_create(
-         %{changes: %{url: url}, valid?: false, errors: [{_field, {error_message, _}}]},
+         %{changes: changes, valid?: false, errors: [{_field, {error_message, _}}]},
          conn
        ) do
+    url = changes[:url]
+
     conn
-    |> put_flash(:error, "#{url}: #{error_message}")
+    |> put_flash(
+      :error,
+      if url do
+        "#{url}: #{error_message}"
+      else
+        error_message
+      end
+    )
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
