@@ -1,9 +1,9 @@
 defmodule BookmarkWeb.WalletController do
   use BookmarkWeb, :controller
 
-
   def get_invoice(key, amount, description) do
-    desc = description |> Base.encode16
+    desc = description |> Base.encode16()
+
     {:ok, body} =
       JSON.encode(
         out: "false",
@@ -26,8 +26,7 @@ defmodule BookmarkWeb.WalletController do
     Map.fetch!(response.body, "payment_request")
   end
 
-
-  def get_new_wallet_key() do
+  def get_new_wallet_key do
     {:ok, response} =
       Req.request(
         url: "https://legend.lnbits.com/wallet?nme=Bookmark",
@@ -103,26 +102,34 @@ defmodule BookmarkWeb.WalletController do
   # receive GET request from LN wallet, send JSON response with callback info
   def lightning_address(conn, params) do
     username = params["username"]
-    id = username <> "@bookmark.org"
-    json(conn,
-      %{callback: "https://bookmark.org/api/payment_request/" <> username,
-        maxSendable: 1000000000,
+
+    json(
+      conn,
+      %{
+        callback: "https://bookmark.org/api/payment_request/" <> username,
+        maxSendable: 1_000_000_000,
         minSendable: 1000,
         commentAllowed: 255,
-        metadata: "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\""<> id <>"\"]]",
+        metadata: description(username),
         tag: "payRequest",
         status: "OK"
-      })
+      }
+    )
   end
 
   # receive GET request from LN wallet, send bech32-serialized lightning invoice response
   def payment_request(conn, params) do
     payee_user = Bookmark.Accounts.get_user_by_username(params["username"])
-    id = params["username"] <> "@bookmark.org"
     amount = String.to_integer(params["amount"]) / 1000
-    invoice = get_invoice(payee_user.wallet_key, amount, "[[\"text/identifier\", \"" <> id <> "\"], [\"text/plain\",\""<> id <>"\"]]")
 
-    json(conn,%{pr: invoice, routes: []})
+    invoice =
+      get_invoice(
+        payee_user.wallet_key,
+        amount,
+        description(params["username"])
+      )
+
+    json(conn, %{pr: invoice, routes: []})
   end
 
   def qr(invoice) do
@@ -183,4 +190,11 @@ defmodule BookmarkWeb.WalletController do
 
     redirect(conn, to: "/")
   end
+
+  defp description(username) do
+    id = id(username)
+    ~s([["text/identifier", ") <> id <> ~s("], ["text/plain",") <> id <> ~s("]])
+  end
+
+  defp id(username), do: username <> "@bookmark.org"
 end

@@ -1,4 +1,5 @@
 defmodule Bookmark.Accounts.UserNotifier do
+  @moduledoc false
   import Swoosh.Email
 
   alias Bookmark.Mailer
