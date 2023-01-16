@@ -58,6 +58,8 @@ defmodule BookmarkWeb.Router do
 
     get "/.well-known/lnurlp/:username", WalletController, :lightning_address
     get "/api/payment_request/:username", WalletController, :payment_request
+
+    get "/.well-known/nostr.json", NostrKeyController, :index
   end
 
   scope "/", BookmarkWeb do
