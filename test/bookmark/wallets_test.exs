@@ -24,11 +24,6 @@ defmodule Bookmark.WalletsTest do
       assert Wallets.list_wallets() == [wallet]
     end
 
-    test "get_wallet!/1 returns the wallet with given id" do
-      wallet = wallet_fixture()
-      assert Wallets.get_wallet!(wallet.id) == wallet
-    end
-
     test "create_wallet/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Wallets.create_wallet(@invalid_attrs)
     end

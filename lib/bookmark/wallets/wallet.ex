@@ -1,4 +1,5 @@
 defmodule Bookmark.Wallets.Wallet do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 

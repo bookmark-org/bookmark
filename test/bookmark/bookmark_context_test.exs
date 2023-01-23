@@ -3,7 +3,6 @@ defmodule Bookmark.ArchivesTest do
 
   alias Bookmark.Archives
   alias Bookmark.Archives.Archive
-  alias Bookmark.Archives
 
   import Bookmark.BookmarkContextFixtures
 

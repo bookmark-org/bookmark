@@ -53,7 +53,8 @@ defmodule Bookmark.MixProject do
       {:qr_code, "~> 2.3.1"},
       {:castore, "~> 0.1"},
       {:json, "~> 1.4"},
-      {:bcrypt_elixir, "~> 3.0"}
+      {:bcrypt_elixir, "~> 3.0"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

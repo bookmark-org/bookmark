@@ -1,4 +1,5 @@
 defmodule Bookmark.Accounts.UserToken do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Query
   alias Bookmark.Accounts.UserToken

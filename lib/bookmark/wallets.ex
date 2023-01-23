@@ -21,23 +21,8 @@ defmodule Bookmark.Wallets do
     Repo.all(Wallet)
   end
 
-  @doc """
-  Gets a single wallet.
-
-  Raises `Ecto.NoResultsError` if the Wallet does not exist.
-
-  ## Examples
-
-      iex> get_wallet!(123)
-      %Wallet{}
-
-      iex> get_wallet!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_wallet!(id), do: Repo.get!(Wallet, id)
-
   def balance(nil), do: nil
+  def balance(%{wallet_key: key}), do: balance(key)
 
   def balance(key) do
     wallet_balance(key) / 1000
@@ -60,7 +45,6 @@ defmodule Bookmark.Wallets do
     |> Wallet.changeset(attrs)
     |> Repo.insert()
   end
-
   defp wallet_balance(key) do
     {:ok, %{body: %{"balance" => balance}}} =
       Req.request(

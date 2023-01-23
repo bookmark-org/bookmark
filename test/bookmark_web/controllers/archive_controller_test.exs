@@ -1,8 +1,6 @@
 defmodule BookmarkWeb.ArchiveControllerTest do
   use BookmarkWeb.ConnCase
 
-  import Bookmark.BookmarkContextFixtures
-
   @invalid_attrs %{name: nil}
 
   describe "create archive" do

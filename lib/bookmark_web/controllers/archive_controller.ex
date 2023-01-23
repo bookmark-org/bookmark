@@ -91,7 +91,7 @@ defmodule BookmarkWeb.ArchiveController do
     twitter_regex = Regex.run(~r/\/(\d+)\/?$/is, url)
 
     archive_url =
-      if !is_nil(twitter_regex) do
+      if twitter_regex do
         [_, tweet_id] = twitter_regex
         "https://bookmark.org/twitter/" <> tweet_id
       else

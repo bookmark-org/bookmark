@@ -6,9 +6,7 @@ defmodule Bookmark.Accounts do
   import Ecto.Query, warn: false
   alias Bookmark.Repo
 
-  alias Bookmark.Accounts.{User, UserToken, UserNotifier}
-
-  ## Database getters
+  alias Bookmark.Accounts.{User, UserNotifier, UserToken}
 
   @doc """
   Gets a user by email.

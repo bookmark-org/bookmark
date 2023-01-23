@@ -14,14 +14,11 @@ defmodule BookmarkWeb.PageController do
 
     render(conn, "index.html",
       archives: ids,
-      balance: user |> get_wallet_key() |> Bookmark.Wallets.balance(),
+      balance: Bookmark.Wallets.balance(user),
       meta_attrs: attrs_list,
       title: "Bookmark.org - Archive links and earn rewards ⚡"
     )
   end
-
-  defp get_wallet_key(nil), do: nil
-  defp get_wallet_key(%{wallet_key: wallet_key}), do: wallet_key
 
   def policy(conn, %{}) do
     user = conn.assigns.current_user
