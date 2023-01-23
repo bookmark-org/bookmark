@@ -19,8 +19,8 @@ defmodule BookmarkWeb.ArchiveController do
     File.read!(file_path <> "/index.json")
   end
 
-  @spec view(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def view(conn, %{"id" => id}) do
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def show(conn, %{"id" => id}) do
     user = conn.assigns.current_user
 
     balance = Bookmark.Wallets.balance(user.wallet_key)
@@ -116,12 +116,9 @@ defmodule BookmarkWeb.ArchiveController do
       [_err, id] = String.split(List.first(regex_result), "archive/")
       user = conn.assigns.current_user
 
-      Bookmark.Archives.create_archive(
-        user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org"),
-        %{name: id, comment: ""}
-      )
+      Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
 
-      redirect(conn, to: "/archive/" <> id)
+      conn |> redirect(to: Routes.archive_path(conn, :show, id))
     end
   end
 

@@ -54,7 +54,7 @@ defmodule BookmarkWeb.WalletController do
 
   def index(conn, _params) do
     user = conn.assigns.current_user
-    balance = Bookmark.Wallets.balance(user.wallet_key)
+    balance = Bookmark.Wallets.balance(user[:wallet_key])
     title = "Balance"
 
     attrs_list = [

@@ -30,7 +30,7 @@ defmodule BookmarkWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/archive/:id", ArchiveController, :view
+    get "/archive/:id", ArchiveController, :show
     post "/archive", ArchiveController, :create
     get "/profile/:username", PageController, :profile
     get "/@:username", PageController, :profile

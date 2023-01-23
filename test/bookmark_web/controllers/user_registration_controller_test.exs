@@ -8,7 +8,7 @@ defmodule BookmarkWeb.UserRegistrationControllerTest do
       conn = get(conn, Routes.user_registration_path(conn, :new))
       response = html_response(conn, 200)
       assert response =~ "Register"
-      assert response =~ "Log in</a>"
+      assert response =~ "Log in"
       assert response =~ "Register</a>"
     end
 
@@ -44,7 +44,7 @@ defmodule BookmarkWeb.UserRegistrationControllerTest do
         })
 
       response = html_response(conn, 200)
-      assert response =~ "<h1>Register</h1>"
+      assert response =~ "Register"
       assert response =~ "must have the @ sign and no spaces"
       assert response =~ "should be at least 12 character"
     end

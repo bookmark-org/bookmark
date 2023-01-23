@@ -61,53 +61,6 @@ defmodule Bookmark.Wallets do
     |> Repo.insert()
   end
 
-  @doc """
-  Updates a wallet.
-
-  ## Examples
-
-      iex> update_wallet(wallet, %{field: new_value})
-      {:ok, %Wallet{}}
-
-      iex> update_wallet(wallet, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_wallet(%Wallet{} = wallet, attrs) do
-    wallet
-    |> Wallet.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a wallet.
-
-  ## Examples
-
-      iex> delete_wallet(wallet)
-      {:ok, %Wallet{}}
-
-      iex> delete_wallet(wallet)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_wallet(%Wallet{} = wallet) do
-    Repo.delete(wallet)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking wallet changes.
-
-  ## Examples
-
-      iex> change_wallet(wallet)
-      %Ecto.Changeset{data: %Wallet{}}
-
-  """
-  def change_wallet(%Wallet{} = wallet, attrs \\ %{}) do
-    Wallet.changeset(wallet, attrs)
-  end
-
   defp wallet_balance(key) do
     {:ok, %{body: %{"balance" => balance}}} =
       Req.request(

@@ -42,91 +42,24 @@ defmodule Bookmark.Archives do
   end
 
   @doc """
-  Gets a single archive.
-
-  Raises `Ecto.NoResultsError` if the Archive does not exist.
-
-  ## Examples
-
-      iex> get_archive!(123)
-      %Archive{}
-
-      iex> get_archive!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_archive!(id), do: Repo.get!(Archive, id)
-
-  @spec create_archive(
-          :invalid
-          | %{optional(:__struct__) => none, optional(atom | binary) => any}
-        ) :: any
-  @doc """
   Creates a archive.
 
   ## Examples
 
-      iex> create_archive(%{field: value})
+      iex> create_archive(%{field: value}, user)
       {:ok, %Archive{}}
 
-      iex> create_archive(%{field: bad_value})
+      iex> create_archive(%{field: bad_value}, user)
       {:error, %Ecto.Changeset{}}
 
   """
   def create_archive(
-        user,
-        attrs \\ %{}
+        attrs,
+        user \\ Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
       ) do
     %Archive{}
     |> Archive.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
-  end
-
-  @doc """
-  Updates a archive.
-
-  ## Examples
-
-      iex> update_archive(archive, %{field: new_value})
-      {:ok, %Archive{}}
-
-      iex> update_archive(archive, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_archive(%Archive{} = archive, attrs) do
-    archive
-    |> Archive.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a archive.
-
-  ## Examples
-
-      iex> delete_archive(archive)
-      {:ok, %Archive{}}
-
-      iex> delete_archive(archive)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_archive(%Archive{} = archive) do
-    Repo.delete(archive)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking archive changes.
-
-  ## Examples
-
-      iex> change_archive(archive)
-      %Ecto.Changeset{data: %Archive{}}
-
-  """
-  def change_archive(%Archive{} = archive, attrs \\ %{}) do
-    Archive.changeset(archive, attrs)
   end
 end

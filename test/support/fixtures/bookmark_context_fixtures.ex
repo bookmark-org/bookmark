@@ -8,9 +8,15 @@ defmodule Bookmark.BookmarkContextFixtures do
   Generate a archive.
   """
   def archive_fixture(attrs \\ %{}) do
+    {:ok, archive} =
       attrs
       |> Enum.into(%{
         name: "some name"
       })
+      |> Bookmark.Archives.create_archive(
+        Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+      )
+
+    archive
   end
 end
