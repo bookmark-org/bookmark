@@ -4,12 +4,7 @@ defmodule BookmarkWeb.PageController do
   def index(conn, _params) do
     ids = Enum.take_random(Bookmark.Archives.list_archives(), 3)
 
-    # TODO: this code is in multiple places, refactor it out
     user = conn.assigns.current_user
-
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-
-    display_balance = balance.body["balance"] / 1000
 
     attrs_list = [
       %{property: "og:title", content: "Bookmark.org"},
@@ -19,19 +14,16 @@ defmodule BookmarkWeb.PageController do
 
     render(conn, "index.html",
       archives: ids,
-      balance: display_balance,
+      balance: Bookmark.Wallets.balance(user),
       meta_attrs: attrs_list,
       title: "Bookmark.org - Archive links and earn rewards ⚡"
     )
   end
 
   def policy(conn, %{}) do
-    # TODO: this code is in multiple places, refactor it out
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     title = "Bookmark.org Policy"
 
@@ -42,19 +34,16 @@ defmodule BookmarkWeb.PageController do
     ]
 
     render(conn, "policy.html",
-      balance: display_balance,
+      balance: balance,
       title: title,
       meta_attrs: attrs_list
     )
   end
 
   def profile(conn, %{"username" => username}) do
-    # TODO: this code is in multiple places, refactor it out
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     ids =
       Bookmark.Archives.get_topn_archive_ids_by_user(
@@ -73,7 +62,7 @@ defmodule BookmarkWeb.PageController do
     render(conn, "profile.html",
       archives: ids,
       username: username,
-      balance: display_balance,
+      balance: balance,
       title: title,
       meta_attrs: attrs_list
     )

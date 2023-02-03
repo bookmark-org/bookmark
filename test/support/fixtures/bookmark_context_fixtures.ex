@@ -13,7 +13,9 @@ defmodule Bookmark.BookmarkContextFixtures do
       |> Enum.into(%{
         name: "some name"
       })
-      |> Bookmark.BookmarkContext.create_archive()
+      |> Bookmark.Archives.create_archive(
+        Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+      )
 
     archive
   end

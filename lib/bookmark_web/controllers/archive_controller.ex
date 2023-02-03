@@ -19,18 +19,11 @@ defmodule BookmarkWeb.ArchiveController do
     File.read!(file_path <> "/index.json")
   end
 
-  @spec view(Plug.Conn.t(), map) :: Plug.Conn.t()
-  def view(conn, %{"id" => id}) do
+  @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
+  def show(conn, %{"id" => id}) do
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-
-    balance = balance.body["balance"]
-
-    display_balance =
-      if is_integer(balance) do
-        balance / 1000
-      end
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     index_json = index_data(id)
     list = JSON.decode!(index_json)
@@ -54,7 +47,7 @@ defmodule BookmarkWeb.ArchiveController do
       conn,
       "index.html",
       id: id,
-      balance: display_balance,
+      balance: balance,
       url: list["base_url"],
       date: list["bookmarked_date"],
       domain: list["domain"],
@@ -77,11 +70,20 @@ defmodule BookmarkWeb.ArchiveController do
   end
 
   defp do_create(
-         %{changes: %{url: url}, valid?: false, errors: [{_field, {error_message, _}}]},
+         %{changes: changes, valid?: false, errors: [{_field, {error_message, _}}]},
          conn
        ) do
+    url = changes[:url]
+
     conn
-    |> put_flash(:error, "#{url}: #{error_message}")
+    |> put_flash(
+      :error,
+      if url do
+        "#{url}: #{error_message}"
+      else
+        error_message
+      end
+    )
     |> redirect(to: Routes.page_path(conn, :index))
   end
 
@@ -114,12 +116,9 @@ defmodule BookmarkWeb.ArchiveController do
       [_err, id] = String.split(List.first(regex_result), "archive/")
       user = conn.assigns.current_user
 
-      Bookmark.Archives.create_archive(
-        user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org"),
-        %{name: id, comment: ""}
-      )
+      Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
 
-      redirect(conn, to: "/archive/" <> id)
+      conn |> redirect(to: Routes.archive_path(conn, :show, id))
     end
   end
 

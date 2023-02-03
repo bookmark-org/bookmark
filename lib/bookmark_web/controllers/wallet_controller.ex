@@ -54,8 +54,7 @@ defmodule BookmarkWeb.WalletController do
 
   def index(conn, _params) do
     user = conn.assigns.current_user
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user)
     title = "Balance"
 
     attrs_list = [
@@ -64,7 +63,7 @@ defmodule BookmarkWeb.WalletController do
       %{property: "og:description", content: "bookmark.org wallet balance"}
     ]
 
-    render(conn, "index.html", balance: display_balance, meta_attrs: attrs_list, title: title)
+    render(conn, "index.html", balance: balance, meta_attrs: attrs_list, title: title)
   end
 
   def deposit(conn, params) do
@@ -78,8 +77,7 @@ defmodule BookmarkWeb.WalletController do
       end
 
     display_invoice = get_invoice(user.wallet_key, amount, "deposit to " <> user.username)
-    balance = Bookmark.Wallets.wallet_balance(user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(user.wallet_key)
 
     title = "Deposit"
 
@@ -90,7 +88,7 @@ defmodule BookmarkWeb.WalletController do
     ]
 
     render(conn, "deposit.html",
-      balance: display_balance,
+      balance: balance,
       invoice: display_invoice,
       amount: amount,
       qr: qr(display_invoice),
@@ -102,7 +100,6 @@ defmodule BookmarkWeb.WalletController do
   # receive GET request from LN wallet, send JSON response with callback info
   def lightning_address(conn, params) do
     username = params["username"]
-
     json(
       conn,
       %{
@@ -150,10 +147,9 @@ defmodule BookmarkWeb.WalletController do
       redirect(conn, to: "/users/log_in")
     end
 
-    balance = Bookmark.Wallets.wallet_balance(current_user.wallet_key)
-    display_balance = balance.body["balance"] / 1000
+    balance = Bookmark.Wallets.balance(current_user.wallet_key)
 
-    if display_balance < amount do
+    if balance < amount do
       redirect(conn, to: "/deposit")
     end
 
@@ -166,7 +162,7 @@ defmodule BookmarkWeb.WalletController do
     ]
 
     render(conn, "pay.html",
-      balance: display_balance,
+      balance: balance,
       invoice: display_invoice,
       amount: amount,
       payee_username: payee_user.username,

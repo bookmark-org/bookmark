@@ -8,9 +8,9 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@bookmark_org" />
-    <%= if @meta_attrs, do: meta_tags(@meta_attrs) %>
+    <%= if assigns[:meta_attrs], do: meta_tags(assigns[:meta_attrs]) %>
 
-    <title><%= if @title, do: @title %></title>
+    <title><%= if assigns[:title], do: assigns[:title] %></title>
 
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")} />
     <script
@@ -31,7 +31,7 @@
 
     <section style="position: absolute; right: 0; top: 0; font-size: 13px; padding-top: 10px; padding-right: 21px; background: #1e1e1e; color: white; max-width: 66%;  ">
       <%= if @current_user do
-        render("_wallet.html", %{:amount => round(@balance), :username => @current_user.username})
+        render("_wallet.html", %{:amount => assigns[:balance] && round(assigns[:balance]), :username => @current_user.username})
       end %>
       <%= render("_user_menu.html", assigns) %>
     </section>
