@@ -12,7 +12,7 @@ defmodule BookmarkWeb.ArchiveController do
     System.cmd("sh", ["-c", command], cd: directory())
   end
 
-  defp directory, do: System.fetch_env!("HOME") <> "/bookmark/priv/static/archive/"
+  defp directory, do: File.cwd!() <> "/priv/static/archive/"
 
   def index_data(archive_id) do
     file_path = directory() <> "archive/" <> archive_id
@@ -29,8 +29,6 @@ defmodule BookmarkWeb.ArchiveController do
     list = JSON.decode!(index_json)
     canonical = list["canonical"]
     archive = Bookmark.Repo.get_by(Bookmark.Archives.Archive, name: id)
-
-    Logger.debug("Fetched archive #{inspect archive}")
 
     archive_poster =
       if Map.get(archive, :user_id) do
@@ -101,7 +99,6 @@ defmodule BookmarkWeb.ArchiveController do
       end
 
     {a, _err} = archivebox(archive_url)
-    Logger.info("=== The result is #{inspect(a)}")
 
     regex_result = Regex.run(~r/archive\/(.*)/, a)
     # this gets triggered on duplicate URL and when archivebox is not running
@@ -121,7 +118,8 @@ defmodule BookmarkWeb.ArchiveController do
 
       Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
 
-      conn |> redirect(to: Routes.archive_path(conn, :show, id))
+      conn
+      |> redirect(to: Routes.archive_path(conn, :show, id))
     end
   end
 
