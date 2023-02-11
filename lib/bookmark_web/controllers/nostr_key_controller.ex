@@ -11,7 +11,7 @@ defmodule BookmarkWeb.NostrKeyController do
     render(conn, "index.json", keys: keys)
   end
 
-  def index(conn,_params) do
+  def index(conn, _params) do
     keys = Nostr.list_keys()
     render(conn, "index.json", keys: keys)
   end

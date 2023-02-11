@@ -100,6 +100,7 @@ defmodule BookmarkWeb.WalletController do
   # receive GET request from LN wallet, send JSON response with callback info
   def lightning_address(conn, params) do
     username = params["username"]
+
     json(
       conn,
       %{

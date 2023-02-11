@@ -45,6 +45,7 @@ defmodule Bookmark.Wallets do
     |> Wallet.changeset(attrs)
     |> Repo.insert()
   end
+
   defp wallet_balance(key) do
     {:ok, %{body: %{"balance" => balance}}} =
       Req.request(
