@@ -8,9 +8,9 @@
         Bookmark.Accounts.get_user_by_username(archive_poster)
       end
 
-    link("⚡1 sat", to: "/pay/" <> to_string(archive_poster_user[:id]) <> "/1") %>
-    <%= link("⚡10", to: "/pay/" <> to_string(archive_poster_user[:id]) <> "/10") %>
-    <%= link("⚡100", to: "/pay/" <> to_string(archive_poster_user[:id]) <> "/100") %>
+    link("⚡1 sat", to: "/pay/" <> to_string(archive_poster_user.id) <> "/1") %>
+    <%= link("⚡10", to: "/pay/" <> to_string(archive_poster_user.id) <> "/10") %>
+    <%= link("⚡100", to: "/pay/" <> to_string(archive_poster_user.id) <> "/100") %>
   </span>
 </section>
 <!-- embedded iframe -->
@@ -24,9 +24,9 @@
   <span style="color: white; font-weight: 600; font-size: 21px;"><%= @title %></span>
   <br />
   <span style="color:grey; font-size: 13px; ">
-    archived by <%= if assigns[:archive_poster] do
-      link(assigns[:archive_poster],
-        to: Routes.static_path(@conn, "/@" <> assigns[:archive_poster])
+    archived by <%= if assigns.archive_poster do
+      link(assigns.archive_poster,
+        to: Routes.static_path(@conn, "/@" <> assigns.archive_poster)
       )
     end %> via <em><%= @domain %></em>
     on <%= @date %>
