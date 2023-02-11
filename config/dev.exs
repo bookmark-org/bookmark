@@ -57,7 +57,6 @@ config :bookmark, BookmarkWeb.Endpoint,
 config :bookmark, BookmarkWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/bookmark_web/(live|views)/.*(ex)$",
       ~r"lib/bookmark_web/templates/.*(eex)$"
