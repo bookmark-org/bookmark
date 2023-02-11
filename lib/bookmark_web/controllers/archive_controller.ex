@@ -30,6 +30,8 @@ defmodule BookmarkWeb.ArchiveController do
     canonical = list["canonical"]
     archive = Bookmark.Repo.get_by(Bookmark.Archives.Archive, name: id)
 
+    Logger.debug("Fetched archive #{inspect archive}")
+
     archive_poster =
       if Map.get(archive, :user_id) do
         Bookmark.Repo.get_by(Bookmark.Accounts.User, id: archive.user_id)
@@ -99,6 +101,7 @@ defmodule BookmarkWeb.ArchiveController do
       end
 
     {a, _err} = archivebox(archive_url)
+    Logger.info("=== The result is #{inspect(a)}")
 
     regex_result = Regex.run(~r/archive\/(.*)/, a)
     # this gets triggered on duplicate URL and when archivebox is not running
