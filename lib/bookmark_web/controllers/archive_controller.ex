@@ -4,12 +4,11 @@ defmodule BookmarkWeb.ArchiveController do
   require Logger
 
   alias Ecto.Changeset
+  alias Bookmark.Accounts
 
   def archivebox(url) do
-    command = "cd #{directory()}; archivebox add #{url}"
-
     # FIXME: raise if cmd returns an error code
-    System.cmd("sh", ["-c", command], cd: directory())
+    System.cmd("archivebox", ["add", url], cd: directory())
   end
 
   defp directory, do: File.cwd!() <> "/priv/static/archive/"
@@ -23,17 +22,14 @@ defmodule BookmarkWeb.ArchiveController do
   def show(conn, %{"id" => id}) do
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.balance(user.wallet_key)
+    balance = Bookmark.Wallets.balance(user)
 
     index_json = index_data(id)
     list = JSON.decode!(index_json)
     canonical = list["canonical"]
     archive = Bookmark.Repo.get_by(Bookmark.Archives.Archive, name: id)
 
-    archive_poster =
-      if archive.user_id do
-        Bookmark.Repo.get_by(Bookmark.Accounts.User, id: archive.user_id)
-      end
+    archive_poster = Accounts.get_user_name(archive.user_id)
 
     image_url = directory() <> id <> "/screenshot.png"
 
@@ -54,7 +50,7 @@ defmodule BookmarkWeb.ArchiveController do
       title: list["title"],
       wget_url: canonical["wget_path"],
       comment: archive.comment,
-      archive_poster: archive_poster.username,
+      archive_poster: archive_poster,
       meta_attrs: attrs_list
     )
 
@@ -88,7 +84,7 @@ defmodule BookmarkWeb.ArchiveController do
   end
 
   defp do_create(%{changes: %{url: url}}, conn) do
-    twitter_regex = Regex.run(~r/\/(\d+)\/?$/is, url)
+    twitter_regex = Regex.run(~r/^https:\/\/twitter\.com\/(\d+)\/?$/is, url)
 
     archive_url =
       if twitter_regex do
@@ -98,9 +94,11 @@ defmodule BookmarkWeb.ArchiveController do
         url
       end
 
-    {a, _err} = archivebox(archive_url)
+    {result, _err} = archivebox(archive_url)
+    IO.inspect(result)
 
-    regex_result = Regex.run(~r/archive\/(.*)/, a)
+    regex_result = Regex.run(~r/\.\/archive\/(.*)/, result)
+
     # this gets triggered on duplicate URL and when archivebox is not running
     if is_nil(regex_result) do
       message = url <> " already exists"
@@ -116,10 +114,14 @@ defmodule BookmarkWeb.ArchiveController do
       [_err, id] = String.split(List.first(regex_result), "archive/")
       user = conn.assigns.current_user
 
-      Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
+      case Bookmark.Archives.create_archive(%{name: id, comment: ""}, user) do
+        {:ok, _} ->
+          conn
+          |> redirect(to: Routes.archive_path(conn, :show, id))
 
-      conn
-      |> redirect(to: Routes.archive_path(conn, :show, id))
+        error ->
+          error
+      end
     end
   end
 

@@ -28,6 +28,10 @@ defmodule Bookmark.Accounts do
     Repo.get_by(User, username: username)
   end
 
+  def get_user_name(id) do
+    Repo.one(from u in User, where: u.id == ^id, select: u.username)
+  end
+
   @doc """
   Gets a user by email and password.
 

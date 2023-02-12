@@ -9,4 +9,8 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-Bookmark.Accounts.register_user(%{email: "anonymous@bookmark.org"})
+Bookmark.Accounts.register_user(%{
+  email: "anonymous@bookmark.org",
+  user_name: "anonymous",
+  password: "passwordpassword"
+})

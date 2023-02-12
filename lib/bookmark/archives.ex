@@ -3,6 +3,7 @@ defmodule Bookmark.Archives do
   The Archives context.
   """
 
+  require Logger
   import Ecto.Query, warn: false
   alias Bookmark.Repo
 
@@ -19,6 +20,10 @@ defmodule Bookmark.Archives do
   """
   def list_archives do
     Repo.all(Archive)
+  end
+
+  def archive_exists?(url) do
+    # Regex.run
   end
 
   def get_archive_ids_by_user(user) do
@@ -55,8 +60,10 @@ defmodule Bookmark.Archives do
   """
   def create_archive(
         attrs,
-        user \\ Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+        user
       ) do
+    user = user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+
     %Archive{}
     |> Archive.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
