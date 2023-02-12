@@ -23,7 +23,7 @@ defmodule BookmarkWeb.ArchiveController do
   def show(conn, %{"id" => id}) do
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.balance(user.wallet_key)
+    balance = Bookmark.Wallets.balance(user)
 
     index_json = index_data(id)
     list = JSON.decode!(index_json)
@@ -31,7 +31,7 @@ defmodule BookmarkWeb.ArchiveController do
     archive = Bookmark.Repo.get_by(Bookmark.Archives.Archive, name: id)
 
     archive_poster =
-      if archive[:user_id] do
+      if Map.get(archive, :user_id) do
         Bookmark.Repo.get_by(Bookmark.Accounts.User, id: archive.user_id)
       end
 
@@ -53,7 +53,7 @@ defmodule BookmarkWeb.ArchiveController do
       domain: list["domain"],
       title: list["title"],
       wget_url: canonical["wget_path"],
-      comment: archive[:comment],
+      comment: Map.get(archive, :comment),
       archive_poster: archive_poster[:username],
       meta_attrs: attrs_list
     )
