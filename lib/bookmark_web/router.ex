@@ -2,6 +2,7 @@ defmodule BookmarkWeb.Router do
   use BookmarkWeb, :router
 
   import BookmarkWeb.UserAuth
+  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -37,6 +38,7 @@ defmodule BookmarkWeb.Router do
     get "/policy", PageController, :policy
     get "/deposit", WalletController, :index
     get "/deposit/:amount", WalletController, :deposit
+    live "/withdraw", WithdrawalsLive
     get "/pay/:user_id/:amount", WalletController, :pay
     post "/pay/:invoice", WalletController, :execute
     get "/users/log_out", UserSessionController, :delete
