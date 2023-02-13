@@ -14,7 +14,7 @@ is to take [this](https://raw.githubusercontent.com/ArchiveBox/ArchiveBox/dev/bi
 script and strip the `docker` and `docker-compose` parts.
 * In the `priv/static` folder create the archive folder `mkdir -p priv/static/archive`,
 `cd` into it and initialize the archive: `archivebox init --setup`.
-* Make sure you have posgres running and `config/dev.exs` is setup to
+* Make sure you have postgres running and `config/dev.exs` is setup to
 talk to your db. 
 * Install elixir dependencies with `mix deps.get`.
 * Create and migrate your database with `mix ecto.setup`.
