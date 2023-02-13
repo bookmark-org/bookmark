@@ -28,21 +28,6 @@ defmodule BookmarkWeb.WalletController do
     Map.fetch!(response.body, "payment_request")
   end
 
-  def pay_invoice(key, bolt11_invoice) do
-    {:ok, body} = JSON.encode(
-      out: "true",
-      bolt11: bolt11_invoice,
-    )
-
-    {:ok, response} = 
-      Req.request(
-        url: @lnbits_payment_url,
-        headers: [{:x_api_key, key}],
-        method: :post,
-        body: body
-      )
-  end
-
   def get_new_wallet_key do
     {:ok, response} =
       Req.request(
@@ -81,21 +66,6 @@ defmodule BookmarkWeb.WalletController do
     ]
 
     render(conn, "index.html", balance: balance, meta_attrs: attrs_list, title: title)
-  end
-
-  def withdraw(conn, _) do
-    user = conn.assigns.current_user
-    balance = Bookmark.Wallets.balance(user)
-    title = "Balance"
-
-    attrs_list = [
-      %{property: "og:title", content: title},
-      %{property: "og:image", content: "https://bookmark.org/images/bookmark-logo-wide.png"},
-      %{property: "og:description", content: "bookmark.org wallet balance"}
-    ]
-
-    render(conn, "withdraw.html",
-      balance: balance, meta_attrs: attrs_list, title: title)
   end
 
   def deposit(conn, params) do
