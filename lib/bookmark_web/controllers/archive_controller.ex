@@ -54,7 +54,7 @@ defmodule BookmarkWeb.ArchiveController do
       title: list["title"],
       wget_url: canonical["wget_path"],
       comment: Map.get(archive, :comment),
-      archive_poster: archive_poster[:username],
+      archive_poster: archive_poster.username,
       meta_attrs: attrs_list
     )
 
