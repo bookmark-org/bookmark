@@ -796,3 +796,15 @@ section {
 body {
   background: #1e1e1e;
 }
+
+.pay_invoice_button {
+  font-size: 22px;
+  font-family: "Epilogue";
+  font-weight: bold;
+  height: 66px;
+  background: #111111;
+  color: #ce0000; 
+  border: #000000;
+  width: 66%;
+  border-radius: 6px;
+}

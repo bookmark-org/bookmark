@@ -3,6 +3,7 @@ defmodule BookmarkWeb.Router do
 
   import BookmarkWeb.UserAuth
   import Phoenix.LiveView.Router
+  import BookmarkWeb.Plug.Balance
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -12,6 +13,7 @@ defmodule BookmarkWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :fetch_user_balance
   end
 
   pipeline :browser_noroot do

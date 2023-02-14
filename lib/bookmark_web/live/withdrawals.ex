@@ -1,36 +1,46 @@
 defmodule BookmarkWeb.WithdrawalsLive do
+  use BookmarkWeb, :live_view
   alias Bookmark.Withdrawals
   alias Bookmark.Accounts
-  use BookmarkWeb, :live_view
+  alias Bookmark.Wallets
+
   require Logger
 
   def render(assigns) do
     ~H"""
-      <div class="grid">
-          <div>
-            coming soon... 
-          </div>
-
+      <div>
           <form phx-submit="pay" >
             <label>Bolt 11 invoice:</label>
-            <input type="text" placeholder="invoice" name="bolt11_invoice"/>
-            <button>Pay Invoice</button>
+            <input id="bolt_invoice" type="text" placeholder="invoice" name="bolt11_invoice"/>
+            <div class="grid">
+              <button>Pay Invoice</button>
+              <button type="button" id="scan-btn" phx-hook="ScanCode">📷 Scan</button>
+            </div>
           </form>
+
+          <div>
+            <video id="display-camera"></video>
+          </div>
       </div>
     """
   end
 
-  def mount(_params, %{"user_token" => user_token}, socket) do
+  def mount(params, %{"user_token" => user_token} = session, socket) do
     if connected?(socket) do
       user = Accounts.get_user_by_session_token(user_token)
-      {:ok, assign(socket, current_user: user)}
+      balance = Wallets.balance(user) |> IO.inspect()
+      {:ok, assign(socket, current_user: user, balance: balance)}
     else
+      Logger.debug("params #{inspect(params)}")
+      Logger.debug("session #{inspect(session)}")
       {:ok, socket}
     end
   end
 
   def mount(_params, _session, socket) do
     redirect(socket, to: "/")
+
+    {:ok, socket}
   end
 
   def handle_event("pay", %{"bolt11_invoice" => invoice}, socket) do
@@ -43,7 +53,7 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
       {:error, reason} ->
         Logger.error("Error paying invoice #{inspect(reason)}")
-        {:noreply, put_flash(socket, :error, "Error paying invoice: #{inspect reason}")}
+        {:noreply, put_flash(socket, :error, "Error paying invoice: #{inspect(reason)}")}
     end
   end
 
