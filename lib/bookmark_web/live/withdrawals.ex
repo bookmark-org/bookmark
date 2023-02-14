@@ -1,39 +1,49 @@
 defmodule BookmarkWeb.WithdrawalsLive do
   use BookmarkWeb, :live_view
+  alias Bookmark.Wallets
   alias Bookmark.Withdrawals
   alias Bookmark.Accounts
-  alias Bookmark.Wallets
 
   require Logger
 
   def render(assigns) do
     ~H"""
-      <div>
-          <form phx-submit="pay" >
-            <label>Bolt 11 invoice:</label>
-            <input id="bolt_invoice" type="text" placeholder="invoice" name="bolt11_invoice"/>
-            <div class="grid">
-              <button>Pay Invoice</button>
-              <button type="button" id="scan-btn" phx-hook="ScanCode">📷 Scan</button>
-            </div>
-          </form>
-
-          <div>
-            <video id="display-camera"></video>
+      <div style="padding: 30px">
+        <h1>Withdraw</h1>
+        <div style="display: flex; justify-content: space-between">
+          <div>Total:</div>
+          <div><%= @balance %></div>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+          <em>Fee:</em>
+          <em>-2</em>
+        </div>
+        <div style="display: flex; justify-content: space-between">
+          <strong>Available:</strong>
+          <strong><%= @balance - 2 %></strong>
+        </div>
+        <form phx-submit="pay" >
+          <input class="pay-invoice-input" id="bolt_invoice" type="text" placeholder="bolt11 invoice" name="bolt11_invoice"/>
+          <div class="grid">
+            <button>Pay Invoice</button>
+            <button type="button" id="scan-btn" phx-hook="ScanCode">📷 Scan</button>
           </div>
+        </form>
+
+        <div>
+          <video id="display-camera"></video>
+        </div>
       </div>
     """
   end
 
-  def mount(params, %{"user_token" => user_token} = session, socket) do
+  def mount(_params, %{"user_token" => user_token}, socket) do
     if connected?(socket) do
       user = Accounts.get_user_by_session_token(user_token)
-      balance = Wallets.balance(user) |> IO.inspect()
+      balance = Wallets.balance(user) || 0
       {:ok, assign(socket, current_user: user, balance: balance)}
     else
-      Logger.debug("params #{inspect(params)}")
-      Logger.debug("session #{inspect(session)}")
-      {:ok, socket}
+      {:ok, assign(socket, balance: 0)}
     end
   end
 

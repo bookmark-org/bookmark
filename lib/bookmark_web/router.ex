@@ -40,7 +40,6 @@ defmodule BookmarkWeb.Router do
     get "/policy", PageController, :policy
     get "/deposit", WalletController, :index
     get "/deposit/:amount", WalletController, :deposit
-    live "/withdraw", WithdrawalsLive
     get "/pay/:user_id/:amount", WalletController, :pay
     post "/pay/:invoice", WalletController, :execute
     get "/users/log_out", UserSessionController, :delete
@@ -82,6 +81,7 @@ defmodule BookmarkWeb.Router do
   scope "/", BookmarkWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    live "/withdraw", WithdrawalsLive
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email

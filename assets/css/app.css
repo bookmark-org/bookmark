@@ -797,14 +797,20 @@ body {
   background: #1e1e1e;
 }
 
+.pay-invoice-input {
+  background-color: white !important;
+  font-size: 16px;
+  height: 66px;
+  margin-top: 20px;
+}
+
 .pay_invoice_button {
-  font-size: 22px;
+  background: #111111;
+  border: #000000;
   font-family: "Epilogue";
   font-weight: bold;
   height: 66px;
-  background: #111111;
   color: #ce0000; 
-  border: #000000;
   width: 66%;
   border-radius: 6px;
 }
