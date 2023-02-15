@@ -55,8 +55,10 @@ defmodule Bookmark.Archives do
   """
   def create_archive(
         attrs,
-        user \\ Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+        user
       ) do
+    user = user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
+
     %Archive{}
     |> Archive.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
