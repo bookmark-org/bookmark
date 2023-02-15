@@ -12,7 +12,7 @@ defmodule BookmarkWeb.ArchiveController do
     System.cmd("sh", ["-c", command], cd: directory())
   end
 
-  defp directory, do: System.fetch_env!("HOME") <> "/bookmark/priv/static/archive/"
+  defp directory, do: File.cwd!() <> "/priv/static/archive/"
 
   def index_data(archive_id) do
     file_path = directory() <> "archive/" <> archive_id
@@ -54,7 +54,7 @@ defmodule BookmarkWeb.ArchiveController do
       title: list["title"],
       wget_url: canonical["wget_path"],
       comment: Map.get(archive, :comment),
-      archive_poster: archive_poster[:username],
+      archive_poster: archive_poster.username,
       meta_attrs: attrs_list
     )
 
@@ -118,7 +118,8 @@ defmodule BookmarkWeb.ArchiveController do
 
       Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
 
-      conn |> redirect(to: Routes.archive_path(conn, :show, id))
+      conn
+      |> redirect(to: Routes.archive_path(conn, :show, id))
     end
   end
 
