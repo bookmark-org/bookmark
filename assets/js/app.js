@@ -27,26 +27,27 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import QrScanner from "../vendor/qr-scanner.min.js"
 
-async function loadVideo() {
-	const video = document.getElementById("display-camera");
-	const input = document.getElementById("bolt_invoice");
-	const qrScanner = new QrScanner(
-		video,
-		result => { 
-			qrScanner.stop();
-			input.value = result;
-		},
-	);
-
-	qrScanner.start();
-}
-
 let Hooks = {};
 Hooks.ScanCode = {
 	mounted() {
 		const btn = document.getElementById("scan-btn");
+
 		btn.addEventListener("click", () => {
-			loadVideo();
+			this.pushEvent("scan-btn-clicked");
+		});
+
+		this.handleEvent("scan-btn-clicked", (e) => {
+			console.log("received event");
+			const video = document.getElementById("display-camera");
+			const qrScanner = new QrScanner(
+				video,
+				result => { 
+					qrScanner.stop();
+					this.pushEvent("modal-closed", result);
+				},
+			);
+
+			qrScanner.start();
 		});
 	}
 }

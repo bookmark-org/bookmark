@@ -68,16 +68,15 @@
 .phx-modal-content {
   background-color: #fefefe;
   margin: 15vh auto;
-  padding: 20px;
   border: 1px solid #888;
   width: 80%;
 }
 
 .phx-modal-close {
   color: #aaa;
-  float: right;
   font-size: 28px;
   font-weight: bold;
+  position: absolute;
 }
 
 .phx-modal-close:hover,
@@ -797,20 +796,49 @@ body {
   background: #1e1e1e;
 }
 
-.pay-invoice-input {
-  background-color: white !important;
-  font-size: 16px;
-  height: 66px;
-  margin-top: 20px;
+.pay-invoice {
+  border: 1px solid grey;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1.5rem;
 }
 
-.pay_invoice_button {
+.pay-invoice:focus-within {
+  outline: 1px solid blue;
+}
+
+.pay-invoice input {
+  background-color: white !important;
+  border: none;
+  border-radius: 0px !important;
+  flex-grow: 3;
+  font-size: 1em;
+  height: 2.5em;
+  margin-bottom: 0;
+}
+
+.pay-invoice input:focus {
+  outline: none;
+}
+
+.pay-invoice button {
+  background: #111111;
+  border: 0px solid #111111;
+  font-size: 1em;
+  height: auto !important;
+  margin-bottom: 0;
+  padding: 7.5px;
+  width: auto !important;
+}
+
+.pay-invoice-btn {
   background: #111111;
   border: #000000;
+  border-radius: 6px;
+  color: #ce0000; 
   font-family: "Epilogue";
   font-weight: bold;
-  height: 66px;
-  color: #ce0000; 
-  width: 66%;
-  border-radius: 6px;
+  font-size: 1em;
+  margin-top: 1em;
 }

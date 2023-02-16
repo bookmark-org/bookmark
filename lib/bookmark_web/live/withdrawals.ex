@@ -4,15 +4,17 @@ defmodule BookmarkWeb.WithdrawalsLive do
   alias Bookmark.Withdrawals
   alias Bookmark.Accounts
 
+  import BookmarkWeb.LiveHelpers
+
   require Logger
 
   def render(assigns) do
     ~H"""
-      <div style="padding: 30px">
+      <div style="padding: 30px; height: 74vh">
         <h1>Withdraw</h1>
         <div style="display: flex; justify-content: space-between">
           <div>Total:</div>
-          <div><%= @balance %></div>
+          <div><%= floor(@balance_local) %></div>
         </div>
         <div style="display: flex; justify-content: space-between">
           <em>Fee:</em>
@@ -20,19 +22,23 @@ defmodule BookmarkWeb.WithdrawalsLive do
         </div>
         <div style="display: flex; justify-content: space-between">
           <strong>Available:</strong>
-          <strong><%= @balance - 2 %></strong>
+          <strong><%= floor(@balance_local - 2) %></strong>
         </div>
-        <form phx-submit="pay" >
-          <input class="pay-invoice-input" id="bolt_invoice" type="text" placeholder="bolt11 invoice" name="bolt11_invoice"/>
-          <div class="grid">
-            <button>Pay Invoice</button>
-            <button type="button" id="scan-btn" phx-hook="ScanCode">📷 Scan</button>
+        <form phx-submit="pay">
+          <div class="pay-invoice">
+            <input class="pay-invoice-input" id="bolt_invoice" type="text" value={@invoice} placeholder="bolt11 invoice" name="bolt11_invoice"/>
+            <button type="button" id="scan-btn" phx-hook="ScanCode">📷</button>
           </div>
+          <button class="pay-invoice-btn">Pay Invoice</button>
         </form>
 
-        <div>
-          <video id="display-camera"></video>
-        </div>
+        <%= if @show_modal do %>
+          <.modal>
+            <div>
+              <video style="width: 20em;" id="display-camera"></video>
+            </div>
+          </.modal>
+        <% end %>
       </div>
     """
   end
@@ -41,9 +47,9 @@ defmodule BookmarkWeb.WithdrawalsLive do
     if connected?(socket) do
       user = Accounts.get_user_by_session_token(user_token)
       balance = Wallets.balance(user) || 0
-      {:ok, assign(socket, current_user: user, balance: balance)}
+      {:ok, assign(socket, current_user: user, balance_local: balance, show_modal: false, invoice: "")}
     else
-      {:ok, assign(socket, balance: 0)}
+      {:ok, assign(socket, balance_local: 0, show_modal: false, invoice: "")}
     end
   end
 
@@ -53,21 +59,40 @@ defmodule BookmarkWeb.WithdrawalsLive do
     {:ok, socket}
   end
 
+  def handle_event("scan-btn-clicked", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(show_modal: true)
+     |> push_event("scan-btn-clicked", %{})}
+  end
+
   def handle_event("pay", %{"bolt11_invoice" => invoice}, socket) do
     user = socket.assigns.current_user
 
-    case Withdrawals.pay_invoice(user.wallet_key, invoice) do
+    withdraw(socket, user.wallet_key, invoice)
+  end
+
+  def handle_event("pay", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("modal-closed", invoice, socket) when is_binary(invoice) do
+    {:noreply, assign(socket, invoice: invoice, show_modal: false)}
+  end
+
+  def handle_event("modal-closed", _params, socket) do
+    {:noreply, assign(socket, show_modal: false)}
+  end
+
+  defp withdraw(socket, wallet_key, invoice) do
+    case Withdrawals.pay_invoice(wallet_key, invoice) do
       {:ok, res} ->
         Logger.debug("Succesful response #{inspect(res)}")
-        {:noreply, put_flash(socket, :info, "Invoice has been paid")}
+        {:noreply, put_flash(socket, :info, "Invoice has been paid") |> assign(invoice: "")}
 
       {:error, reason} ->
         Logger.error("Error paying invoice #{inspect(reason)}")
         {:noreply, put_flash(socket, :error, "Error paying invoice: #{inspect(reason)}")}
     end
-  end
-
-  def handle_event("pay", _params, socket) do
-    {:noreply, socket}
   end
 end
