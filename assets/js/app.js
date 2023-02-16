@@ -44,7 +44,10 @@ Hooks.ScanCode = {
 				result => { 
 					qrScanner.stop();
 					this.pushEvent("modal-closed", result);
-				},
+				}, {
+					highlightScanRegion: true,
+					highlightCodeOutline: true,
+				}
 			);
 
 			qrScanner.start();
