@@ -10,7 +10,7 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
   def render(assigns) do
     ~H"""
-      <div class="withdraw-panel" style="padding: 30px; height: 74vh">
+      <div class="withdraw-panel" style="margin-top: 5rem; height: 74vh">
         <h1>Withdraw</h1>
         <div style="display: flex; justify-content: space-between">
           <div>Total:</div>
@@ -34,8 +34,8 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
         <%= if @show_modal do %>
           <.modal>
-            <div>
-              <video style="width: 20em;" id="display-camera"></video>
+            <div style="display: flex; justify-content: center">
+              <video class="scan-video" style="width: 20em;" id="display-camera"></video>
             </div>
           </.modal>
         <% end %>

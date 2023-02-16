@@ -66,24 +66,18 @@
 }
 
 .phx-modal-content {
-  background-color: #fefefe;
+  background-color: rgba(0, 0, 0, 0);
+  display: block;
   margin: 15vh auto;
-  border: 1px solid #888;
-  width: 80%;
+  width: 60%;
 }
 
 .phx-modal-close {
   color: #aaa;
+  display: none;
   font-size: 28px;
   font-weight: bold;
   position: absolute;
-}
-
-.phx-modal-close:hover,
-.phx-modal-close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
 }
 
 .fade-in-scale {
@@ -845,6 +839,13 @@ body {
 
 @media screen and (min-width: 700px) {
   .withdraw-panel {
+	margin-top: 10rem;
 	min-width: 640px;
   }
+
+  .scan-video {
+	  min-width: 640px;
+  }
 }
+
+
