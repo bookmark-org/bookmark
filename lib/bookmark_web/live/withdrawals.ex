@@ -10,7 +10,7 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
   def render(assigns) do
     ~H"""
-      <div style="padding: 30px; height: 74vh">
+      <div class="withdraw-panel" style="padding: 30px; height: 74vh">
         <h1>Withdraw</h1>
         <div style="display: flex; justify-content: space-between">
           <div>Total:</div>

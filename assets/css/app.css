@@ -842,3 +842,9 @@ body {
   font-size: 1em;
   margin-top: 1em;
 }
+
+@media screen and (min-width: 700px) {
+  .withdraw-panel {
+	min-width: 640px;
+  }
+}
