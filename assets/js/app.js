@@ -25,9 +25,38 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import QrScanner from "../vendor/qr-scanner.min.js"
+
+let Hooks = {};
+Hooks.ScanCode = {
+	mounted() {
+		const btn = document.getElementById("scan-btn");
+
+		btn.addEventListener("click", () => {
+			this.pushEvent("scan-btn-clicked");
+		});
+
+		this.handleEvent("scan-btn-clicked", (e) => {
+			console.log("received event");
+			const video = document.getElementById("display-camera");
+			const qrScanner = new QrScanner(
+				video,
+				result => { 
+					qrScanner.stop();
+					this.pushEvent("modal-closed", result);
+				}, {
+					highlightScanRegion: true,
+					highlightCodeOutline: true,
+				}
+			);
+
+			qrScanner.start();
+		});
+	}
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})

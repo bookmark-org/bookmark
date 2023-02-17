@@ -28,11 +28,11 @@ a {
 }
 
 body {
-  background-color: #fff;
+  background-color: #1e1e1e;
   color: #000;
 }
 
-div {
+div.white-bg-panel {
   background-color: #fff;
   padding: 30px;
 }

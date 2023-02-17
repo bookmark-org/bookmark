@@ -2,6 +2,8 @@ defmodule BookmarkWeb.Router do
   use BookmarkWeb, :router
 
   import BookmarkWeb.UserAuth
+  import Phoenix.LiveView.Router
+  import BookmarkWeb.Plug.Balance
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -11,6 +13,7 @@ defmodule BookmarkWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug :fetch_user_balance
   end
 
   pipeline :browser_noroot do
@@ -78,6 +81,7 @@ defmodule BookmarkWeb.Router do
   scope "/", BookmarkWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    live "/withdraw", WithdrawalsLive
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email

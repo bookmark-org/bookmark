@@ -1,6 +1,8 @@
 defmodule BookmarkWeb.WalletController do
   use BookmarkWeb, :controller
 
+  @lnbits_payment_url "https://legend.lnbits.com/api/v1/payments"
+
   def get_invoice(key, amount, description) do
     desc = description |> Base.encode16()
 
@@ -17,7 +19,7 @@ defmodule BookmarkWeb.WalletController do
 
     {:ok, response} =
       Req.request(
-        url: "https://legend.lnbits.com/api/v1/payments",
+        url: @lnbits_payment_url,
         headers: [{:x_api_key, key}],
         method: :post,
         body: body
