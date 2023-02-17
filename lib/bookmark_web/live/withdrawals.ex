@@ -14,15 +14,15 @@ defmodule BookmarkWeb.WithdrawalsLive do
         <h1>Withdraw</h1>
         <div style="display: flex; justify-content: space-between">
           <div>Total:</div>
-          <div><%= floor(@balance_local) %></div>
+          <div><%= floor(@balance_local) %> <%= pluralize(@balance_local) %></div>
         </div>
         <div style="display: flex; justify-content: space-between">
           <em>Fee:</em>
-          <em>-2</em>
+          <em>-2 Sats</em>
         </div>
         <div style="display: flex; justify-content: space-between">
           <strong>Available:</strong>
-          <strong><%= floor(@balance_local - 2) %></strong>
+          <strong><%= max(floor(@balance_local - 2), 0) %> <%= pluralize(@balance_local) %></strong>
         </div>
         <form phx-submit="pay">
           <div class="pay-invoice">
@@ -43,11 +43,20 @@ defmodule BookmarkWeb.WithdrawalsLive do
     """
   end
 
+  defp pluralize(amount) do
+    case floor(amount) do
+      1 -> "Sat"
+      _amout -> "Sats"
+    end
+  end
+
   def mount(_params, %{"user_token" => user_token}, socket) do
     if connected?(socket) do
       user = Accounts.get_user_by_session_token(user_token)
       balance = Wallets.balance(user) || 0
-      {:ok, assign(socket, current_user: user, balance_local: balance, show_modal: false, invoice: "")}
+
+      {:ok,
+       assign(socket, current_user: user, balance_local: balance, show_modal: false, invoice: "")}
     else
       {:ok, assign(socket, balance_local: 0, show_modal: false, invoice: "")}
     end
