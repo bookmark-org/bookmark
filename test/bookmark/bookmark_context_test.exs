@@ -18,12 +18,12 @@ defmodule Bookmark.ArchivesTest do
     test "create_archive/1 with valid data creates a archive" do
       valid_attrs = %{name: "some name"}
 
-      assert {:ok, %Archive{} = archive} = Archives.create_archive(valid_attrs)
+      assert {:ok, %Archive{} = archive} = Archives.create_archive(valid_attrs, nil)
       assert archive.name == "some name"
     end
 
     test "create_archive/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Archives.create_archive(@invalid_attrs)
+      assert {:error, %Ecto.Changeset{}} = Archives.create_archive(@invalid_attrs, nil)
     end
   end
 end
