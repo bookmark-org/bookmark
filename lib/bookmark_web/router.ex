@@ -48,6 +48,8 @@ defmodule BookmarkWeb.Router do
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
+
+    live "/new_registration", Live.UserRegistration
   end
 
   scope "/", BookmarkWeb do
