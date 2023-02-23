@@ -19,6 +19,6 @@ talk to your db.
 * Create and migrate your database with `mix ecto.setup`.
 * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`.
 * For anonymous archives to work, you must register a new user with `anonymous@bookmark.org`
-as email, it can be done running the seed: `run priv/repo/seeds.exs`.
+as email, it can be done running the seed: `mix run priv/repo/seeds.exs`.
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
