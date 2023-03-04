@@ -11,6 +11,6 @@
 # and so on) as they will fail if something goes wrong.
 Bookmark.Accounts.register_user(%{
   email: "anonymous@bookmark.org",
-  user_name: "anonymous",
+  username: "anonymous",
   password: "passwordpassword"
 })
