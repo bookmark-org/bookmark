@@ -58,4 +58,3 @@ defmodule BookmarkWeb.LiveHelpers do
     |> JS.push("modal-closed")
   end
 end
-
