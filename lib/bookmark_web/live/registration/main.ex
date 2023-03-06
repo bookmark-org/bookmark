@@ -1,12 +1,29 @@
 defmodule BookmarkWeb.Live.Registration.Main do
   use BookmarkWeb, :live_view
 
+  alias BookmarkWeb.Live.Registration.UserFeedback
   alias BookmarkWeb.Live.Registration.Username
   alias BookmarkWeb.Live.Registration.Email
 
   @steps %{
-    :username => %{component: Username, next: :email, prev: nil, event: "save-username"},
-    :email => %{component: Email, next: nil, prev: :username, event: "save-email"}
+    :username => %{
+      component: Username,
+      next: :user_feedback,
+      prev: nil,
+      event: "save-username"
+    },
+    :user_feedback => %{
+      component: UserFeedback,
+      next: :email,
+      prev: :username,
+      event: "confirm-feedback"
+    },
+    :email => %{
+      component: Email,
+      next: nil,
+      prev: :user_feedback,
+      event: "save-email"
+    }
   }
 
   def mount(_params, _session, socket) do
@@ -23,27 +40,31 @@ defmodule BookmarkWeb.Live.Registration.Main do
   end
 
   def handle_event("save-username", %{"username" => username}, socket) do
-    %{steps: steps, current: current, form_data: form_data} = socket.assigns
+    %{form_data: form_data} = socket.assigns
 
     socket = socket |> assign(form_data: Map.put(form_data, "username", username))
 
-    case steps[current][:next] do
-      nil -> {:noreply, socket}
-      next -> {:noreply, assign(socket, current: next)}
-    end
+    {:noreply, load_next_step(socket)}
+  end
+
+  def handle_event("confirm-feedback", _data, socket) do
+    {:noreply, load_next_step(socket)}
   end
 
   def handle_event("save-email", %{"email" => email}, socket) do
-    IO.inspect(socket.assigns.form_data, label: "before email")
-    %{steps: steps, current: current, form_data: form_data} = socket.assigns
+    %{form_data: form_data} = socket.assigns
 
     socket = socket |> assign(form_data: Map.put(form_data, "email", email))
 
-    IO.inspect(socket.assigns.form_data, label: "after email")
+    {:noreply, load_next_step(socket)}
+  end
+
+  defp load_next_step(socket) do
+    %{steps: steps, current: current} = socket.assigns
 
     case steps[current][:next] do
-      nil -> {:noreply, socket}
-      next -> {:noreply, assign(socket, current: next)}
+      nil -> socket
+      next -> assign(socket, current: next)
     end
   end
 end

@@ -22,3 +22,10 @@ talk to your db.
 as email, it can be done running the seed: `mix run priv/repo/seeds.exs`.
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
+
+## TODO
+
+- Give user lightning address
+- GIve user wallet key
+- Log them in
+- Ask for email, other things
