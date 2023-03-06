@@ -32,13 +32,13 @@ defmodule Bookmark.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:wallet_key, :username])
+    |> cast(attrs, [:email, :password, :wallet_key, :username])
     |> validate_required([:username])
     |> validate_length(:username, max: 32)
     |> unique_constraint(:username)
     |> validate_format(:username, ~r/[a-zA-Z][a-zA-Z0-9-_]/)
-    #|> validate_email()
-    #|> validate_password(opts)
+    |> validate_email()
+    |> validate_password(opts)
   end
 
   defp validate_email(changeset) do
