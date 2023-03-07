@@ -17,6 +17,8 @@ defmodule BookmarkWeb do
   and import those modules here.
   """
 
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt archive)
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: BookmarkWeb
@@ -24,6 +26,8 @@ defmodule BookmarkWeb do
       import Plug.Conn
       import BookmarkWeb.Gettext
       alias BookmarkWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
     end
   end
 
@@ -97,6 +101,17 @@ defmodule BookmarkWeb do
       import BookmarkWeb.ErrorHelpers
       import BookmarkWeb.Gettext
       alias BookmarkWeb.Router.Helpers, as: Routes
+
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes() do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: BookmarkWeb.Endpoint,
+        router: BookmarkWeb.Router,
+        statics: BookmarkWeb.static_paths()
     end
   end
 

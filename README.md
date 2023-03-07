@@ -25,7 +25,12 @@ Now you can visit [`localhost:4000`](http://localhost:4000)
 
 ## TODO
 
-- Give user lightning address
-- GIve user wallet key
-- Log them in
-- Ask for email, other things
+- Ask for email, other things in a profile page
+
+----
+
+- Create the user with random password
+	- Generating the key
+
+- Render userfeedback correctly
+- Login user when they "got it".
