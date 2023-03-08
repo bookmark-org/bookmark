@@ -46,6 +46,12 @@ defmodule Bookmark.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
+  def get_user_by_username_and_wallet_key(username, wallet_key)
+      when is_binary(username) and is_binary(wallet_key) do
+    user = Repo.get_by(User, username: username)
+    if User.valid_wallet_key?(user, wallet_key), do: user
+  end
+
   @doc """
   Gets a single user.
 
@@ -80,6 +86,17 @@ defmodule Bookmark.Accounts do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  def register_user_only_username(username) do
+    wallet_key = BookmarkWeb.WalletController.get_new_wallet_key()
+    user_data = %{
+      username: username,
+      wallet_key: wallet_key,
+      password: "randpass012#!"
+    }
+
+    register_user(user_data)
   end
 
   @doc """

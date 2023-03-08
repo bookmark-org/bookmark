@@ -852,6 +852,10 @@ body {
   color: #1e1e1e;
 }
 
+.text-red {
+  color: #ce0000; 
+}
+
 .bg-white {
   background-color: white !important;
 }
@@ -882,10 +886,6 @@ body {
 
 .border-radius-1 {
   border-radius: 4px;
-}
-
-.text-red {
-  color: #ce0000; 
 }
 
 .text-bold {

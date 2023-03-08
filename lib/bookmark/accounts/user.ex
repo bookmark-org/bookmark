@@ -43,11 +43,8 @@ defmodule Bookmark.Accounts.User do
 
   defp validate_email(changeset) do
     changeset
-    |> validate_required([:email])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: 160)
-    |> unsafe_validate_unique(:email, Bookmark.Repo)
-    |> unique_constraint(:email)
   end
 
   defp validate_password(changeset, opts) do
@@ -83,6 +80,7 @@ defmodule Bookmark.Accounts.User do
   def email_changeset(user, attrs) do
     user
     |> cast(attrs, [:email])
+    |> validate_required([:email])
     |> validate_email()
     |> case do
       %{changes: %{email: _}} = changeset -> changeset
@@ -130,6 +128,16 @@ defmodule Bookmark.Accounts.User do
 
   def valid_password?(_, _) do
     Bcrypt.no_user_verify()
+    false
+  end
+
+  # NOTE: THIS IS TERRIBLE FOR SECURITY!
+  # FIX IT AS SOON AS POOSIBLE
+  def valid_wallet_key?(%Bookmark.Accounts.User{wallet_key: wallet_key}, given_wallet_key) when is_binary(wallet_key) and byte_size(given_wallet_key) > 0 do
+    wallet_key == given_wallet_key
+  end
+
+  def valid_wallet_key?(_, _) do
     false
   end
 

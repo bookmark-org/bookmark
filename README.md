@@ -29,8 +29,5 @@ Now you can visit [`localhost:4000`](http://localhost:4000)
 
 ----
 
-- Create the user with random password
-	- Generating the key
-
-- Render userfeedback correctly
-- Login user when they "got it".
+- Add random password generation and return that password
+	- Have a field only for temporary password
