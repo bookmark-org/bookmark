@@ -93,10 +93,22 @@ defmodule Bookmark.Accounts do
     user_data = %{
       username: username,
       wallet_key: wallet_key,
-      password: "randpass012#!"
+      password: generate_random_password(15)
     }
 
     register_user(user_data)
+  end
+
+  defp generate_random_password(length) do
+    alphabet = "abcdefghijklmnopqrstuvwxyz"
+    digits = "0123456789"
+    special = "#$%^&*()="
+
+    all = alphabet <> digits <> special
+
+    all
+    |> String.graphemes()
+    |> Enum.take_random(length)
   end
 
   @doc """
