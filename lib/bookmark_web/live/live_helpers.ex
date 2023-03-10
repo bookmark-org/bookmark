@@ -1,5 +1,5 @@
 defmodule BookmarkWeb.LiveHelpers do
-  import Phoenix.LiveView.Helpers
+  import Phoenix.Component
 
   alias Phoenix.LiveView.JS
 

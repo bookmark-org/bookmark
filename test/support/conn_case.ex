@@ -19,15 +19,17 @@ defmodule BookmarkWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint BookmarkWeb.Endpoint
+
+      use BookmarkWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import BookmarkWeb.ConnCase
 
       alias BookmarkWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint BookmarkWeb.Endpoint
     end
   end
 

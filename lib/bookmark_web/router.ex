@@ -48,6 +48,7 @@ defmodule BookmarkWeb.Router do
     post "/users/confirm", UserConfirmationController, :create
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
+
   end
 
   scope "/", BookmarkWeb do
@@ -76,6 +77,9 @@ defmodule BookmarkWeb.Router do
     post "/users/reset_password", UserResetPasswordController, :create
     get "/users/reset_password/:token", UserResetPasswordController, :edit
     put "/users/reset_password/:token", UserResetPasswordController, :update
+
+
+    live "/users/register_new", Live.Registration.Main
   end
 
   scope "/", BookmarkWeb do

@@ -60,12 +60,11 @@ defmodule Bookmark.AccountsTest do
   end
 
   describe "register_user/1" do
-    test "requires email and password to be set" do
+    test "requires password to be set" do
       {:error, changeset} = Accounts.register_user(%{})
 
       assert %{
                password: ["can't be blank"],
-               email: ["can't be blank"]
              } = errors_on(changeset)
     end
 
@@ -85,16 +84,6 @@ defmodule Bookmark.AccountsTest do
       assert "should be at most 72 character(s)" in errors_on(changeset).password
     end
 
-    test "validates email uniqueness" do
-      %{email: email} = user_fixture()
-      {:error, changeset} = Accounts.register_user(%{email: email})
-      assert "has already been taken" in errors_on(changeset).email
-
-      # Now try with the upper cased email too, to check that email case is ignored.
-      {:error, changeset} = Accounts.register_user(%{email: String.upcase(email)})
-      assert "has already been taken" in errors_on(changeset).email
-    end
-
     test "registers users with a hashed password" do
       email = unique_user_email()
       {:ok, user} = Accounts.register_user(valid_user_attributes(email: email))
@@ -108,7 +97,7 @@ defmodule Bookmark.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :email, :username]
+      assert changeset.required == [:password, :username]
     end
 
     test "allows fields to be set" do
@@ -160,15 +149,6 @@ defmodule Bookmark.AccountsTest do
         Accounts.apply_user_email(user, valid_user_password(), %{email: too_long})
 
       assert "should be at most 160 character(s)" in errors_on(changeset).email
-    end
-
-    test "validates email uniqueness", %{user: user} do
-      %{email: email} = user_fixture()
-
-      {:error, changeset} =
-        Accounts.apply_user_email(user, valid_user_password(), %{email: email})
-
-      assert "has already been taken" in errors_on(changeset).email
     end
 
     test "validates current password", %{user: user} do

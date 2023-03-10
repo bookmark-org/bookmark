@@ -22,3 +22,12 @@ talk to your db.
 as email, it can be done running the seed: `mix run priv/repo/seeds.exs`.
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
+
+## TODO
+
+- Ask for email, other things in a profile page
+
+----
+
+- Add random password generation and return that password
+	- Have a field only for temporary password
