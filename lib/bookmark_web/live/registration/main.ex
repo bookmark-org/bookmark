@@ -49,6 +49,7 @@ defmodule BookmarkWeb.Live.Registration.Main do
         {:noreply, socket}
 
       {:error, changeset} ->
+        IO.inspect(changeset)
         {:noreply, socket}
     end
   end

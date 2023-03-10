@@ -90,10 +90,14 @@ defmodule Bookmark.Accounts do
 
   def register_user_only_username(username) do
     wallet_key = BookmarkWeb.WalletController.get_new_wallet_key()
+    pwd = generate_random_password(15)
+
+    IO.inspect(pwd, label: "password")
+
     user_data = %{
       username: username,
       wallet_key: wallet_key,
-      password: generate_random_password(15)
+      password: pwd
     }
 
     register_user(user_data)
@@ -109,6 +113,7 @@ defmodule Bookmark.Accounts do
     all
     |> String.graphemes()
     |> Enum.take_random(length)
+    |> Enum.join("")
   end
 
   @doc """
