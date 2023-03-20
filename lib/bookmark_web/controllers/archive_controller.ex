@@ -6,10 +6,13 @@ defmodule BookmarkWeb.ArchiveController do
   alias Ecto.Changeset
 
   def archivebox(url) do
-    command = "cd #{directory()}; archivebox add #{url}"
+    Logger.info("Executing: archivebox add #{url} ...")
 
     # FIXME: raise if cmd returns an error code
-    System.cmd("sh", ["-c", command], cd: directory())
+    {result, _err} = System.cmd("archivebox", ["add", url], cd: directory())
+
+    Logger.info("Executed: archivebox add #{url}")
+    {:ok, result}
   end
 
   defp directory, do: File.cwd!() <> "/priv/static/archive/"
@@ -98,11 +101,12 @@ defmodule BookmarkWeb.ArchiveController do
         url
       end
 
-    {a, _err} = archivebox(archive_url)
+    {:ok, result} = archivebox(archive_url)
 
-    regex_result = Regex.run(~r/archive\/(.*)/, a)
+    regex_result = Regex.run(~r/archive\/(.*)/, result)
     # this gets triggered on duplicate URL and when archivebox is not running
     if is_nil(regex_result) do
+      Logger.error(result)
       message = url <> " already exists"
       Logger.info(message)
 
@@ -113,6 +117,7 @@ defmodule BookmarkWeb.ArchiveController do
       )
       |> redirect(to: "/")
     else
+      Logger.debug(result)
       [_err, id] = String.split(List.first(regex_result), "archive/")
       user = conn.assigns.current_user
 
