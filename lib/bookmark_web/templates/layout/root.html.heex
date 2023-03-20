@@ -29,20 +29,23 @@
       />
     </a>
 
+<!--
     <section style="position: absolute; right: 0; top: 0; font-size: 13px; padding-top: 10px; padding-right: 21px; background: #1e1e1e; color: white; max-width: 66%;  ">
       <%= if @current_user do
         render("_wallet.html", %{:amount => assigns[:balance] && floor(assigns[:balance]), :username => @current_user.username})
       end %>
       <%= render("_user_menu.html", assigns) %>
     </section>
-
+-->
     <%= @inner_content %>
 
+<!--
     <br /><br />
     <div align="center" style="background: black; color: white; padding: 5px 0">
       Want to learn more? Join the Bookmark community on
       <a href="https://t.me/+j0rQv3_6C5pjOWYx">Telegram</a>
       and follow us on <a href="https://twitter.com/bookmark_org">Twitter</a>
     </div>
+-->    
   </body>
 </html>

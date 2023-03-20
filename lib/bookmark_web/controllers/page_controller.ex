@@ -16,7 +16,7 @@ defmodule BookmarkWeb.PageController do
       archives: ids,
       balance: Bookmark.Wallets.balance(user),
       meta_attrs: attrs_list,
-      title: "Bookmark.org - Archive links and earn rewards ⚡"
+      title: "Bookmark.org - Archive links ⚡"
     )
   end
 
