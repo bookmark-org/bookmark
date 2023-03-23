@@ -1,4 +1,6 @@
 #!/bin/bash
+mkdir priv/static/archive
+
 cd priv/static/archive
 
 archivebox init --setup
