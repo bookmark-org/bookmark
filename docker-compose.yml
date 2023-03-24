@@ -4,6 +4,7 @@ services:
     image: bookmark:latest
     container_name: bookmark-app
     restart: on-failure
+    command: sh -c "mix ecto.setup && mix phx.server"
     environment:
       MIX_ENV: prod
     depends_on:

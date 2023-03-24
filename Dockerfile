@@ -21,8 +21,3 @@ RUN mix compile
 # Compile assets.
 RUN mix assets.deploy
 
-# Configure DB.
-CMD mix ecto.migrate
-
-# Run the project.
-CMD mix phx.server
