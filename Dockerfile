@@ -1,6 +1,6 @@
 # Extend from the official Elixir image.
 # TODO: Set an Alpine version to reduce the image size
-FROM elixir:latest
+FROM elixir:1.14.3-otp-24
 
 # Create app directory and copy the Elixir projects into it.
 RUN mkdir /app
@@ -10,6 +10,7 @@ WORKDIR /app
 # Download app dependencies
 COPY mix.exs mix.lock ./
 RUN mix local.hex --force
+RUN mix local.rebar --force
 RUN mix deps.get
 
 # Copy the rest of the files

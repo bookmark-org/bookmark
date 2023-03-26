@@ -5,14 +5,24 @@ defmodule BookmarkWeb.ArchiveController do
 
   alias Ecto.Changeset
 
+  defp archivebox_url() do
+    System.get_env("BOOKMARK_ARCHIVEBOX_URL") ||
+      raise """
+      environment variable BOOKMARK_ARCHIVEBOX_URL is missing.
+      For example: archivebox:5000/add
+      """
+  end
+
   def archivebox(url) do
     Logger.info("Executing: archivebox add #{url} ...")
 
-    # FIXME: raise if cmd returns an error code
-    {result, _err} = System.cmd("archivebox", ["add", url], cd: directory())
+    body = JSON.encode!(url: url)
+    headers = %{"content-type" => "application/json"}
+    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers)
 
     Logger.info("Executed: archivebox add #{url}")
-    {:ok, result}
+
+    {:ok, res.body["result"]}
   end
 
   defp directory, do: File.cwd!() <> "/priv/static/archive/"

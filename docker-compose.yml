@@ -9,10 +9,13 @@ services:
       MIX_ENV: prod
     depends_on:
       - bookmark-db
+      - archivebox
     ports:
       - '4000:4000'
     env_file:
       - base.env
+    volumes:
+      - ./priv/static/archive:/app/priv/static/archive
 
   bookmark-db:
     image: postgres:14.1-alpine
@@ -25,6 +28,16 @@ services:
       - '5432:5432'
     volumes: 
       - db:/var/lib/postgresql/data
+
+  archivebox:
+    image: archivebox-server:latest
+    ports:
+        - '5000:5000'
+    # TODO: Archivebox Server must take environment variables to enable these properties
+    # environment:
+    #     - PROPERTY=VALUE
+    volumes:
+      - ./priv/static/archive:/app/archivebox
 
 volumes:
   db:
