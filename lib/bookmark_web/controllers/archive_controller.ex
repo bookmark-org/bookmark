@@ -5,20 +5,35 @@ defmodule BookmarkWeb.ArchiveController do
 
   alias Ecto.Changeset
 
+  defp archivebox_url() do
+    System.get_env("BOOKMARK_ARCHIVEBOX_URL") ||
+      raise """
+      environment variable BOOKMARK_ARCHIVEBOX_URL is missing.
+      For example: archivebox:5000/add
+      """
+  end
+
   def archivebox(url) do
     Logger.info("Executing: archivebox add #{url} ...")
 
-    # FIXME: raise if cmd returns an error code
-    {result, _err} = System.cmd("archivebox", ["add", url], cd: directory())
+    body = JSON.encode!(url: url)
+    headers = %{"content-type" => "application/json"}
+    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 90_000)
 
     Logger.info("Executed: archivebox add #{url}")
-    {:ok, result}
+
+    {:ok, res.body["result"]}
   end
 
-  defp directory, do: File.cwd!() <> "/priv/static/archive/"
+  def directory do
+    case Application.get_env(:bookmark, :env) do
+      :prod -> Application.app_dir(:bookmark, "priv/static/archive")
+      _ -> File.cwd!() <> "/priv/static/archive"
+    end
+  end
 
   def index_data(archive_id) do
-    file_path = directory() <> "archive/" <> archive_id
+    file_path = directory() <> "/archive/" <> archive_id
     File.read!(file_path <> "/index.json")
   end
 
@@ -38,7 +53,7 @@ defmodule BookmarkWeb.ArchiveController do
         Bookmark.Repo.get_by(Bookmark.Accounts.User, id: archive.user_id)
       end
 
-    image_url = directory() <> id <> "/screenshot.png"
+    image_url = directory() <> "/" <> id <> "/screenshot.png"
 
     attrs_list = [
       %{property: "og:title", content: list["title"]},

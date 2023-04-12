@@ -12,7 +12,7 @@ defmodule Bookmark.ArchivesTest do
     test "list_archives/0 returns all archives" do
       archive = archive_fixture()
       [archive_from_list] = Archives.list_archives()
-      assert Map.replace(archive_from_list, :user, nil) == archive
+      assert archive_from_list |> Bookmark.Repo.preload(:user) == archive
     end
 
     test "create_archive/1 with valid data creates a archive" do
