@@ -1,3 +1,6 @@
+include .env
+export
+
 default: help
 
 .PHONY: help
@@ -21,3 +24,13 @@ dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServe
 .PHONY: down
 down: # Stop services and remove containers + volumes
 	docker compose down -v
+
+.PHONY: push-image
+push-image: # Push image to registry
+	docker tag bookmark:latest $(DOCKER_REGISTRY)/bookmark:latest
+	docker push $(DOCKER_REGISTRY)/bookmark:latest
+
+.PHONY: pull-images
+pull-images: # Pull images from registry
+	docker pull $(DOCKER_REGISTRY)/bookmark:latest
+	docker pull $(DOCKER_REGISTRY)/archivebox-server:latest
