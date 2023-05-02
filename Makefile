@@ -21,9 +21,14 @@ dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServe
 	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5000/add  iex -S mix phx.server
 	docker compose stop
 
-.PHONY: down
-down: # Stop services and remove containers + volumes
-	docker compose down -v
+.PHONY: stop
+stop: # Terminates the execution of all containers
+	docker compose down --remove-orphans
+
+.PHONY: clean
+clean: # Terminates the execution of all containers + delete volumes
+	docker compose down -v --remove-orphans
+	rm -r priv/static/archive/*
 
 .PHONY: push-image
 push-image: # Push image to registry

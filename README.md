@@ -9,34 +9,68 @@ This is the repo containing the [bookmark.org](https://bookmark.org/) code.
 3. In the root of the project `/bookmark`, create a `.env` file with the following content:
 
 ```
-DOCKER_REGISTRY=<registry-name>
+DOCKER_REGISTRY=bookmarkorg
 ```
 
 4. Optional: Login to the Docker registry (required for Docker image pushes)
 
 ```
-$ docker login -u <registry-name> -p <registry-password>
+$ docker login -u bookmarkorg -p <registry-password>
 ```
 
-## Running in development mode
+## Basic Commands: Development
 
-Follow these steps to run bookmark locally:
+Run app:
 
-* Install elixir dependencies with `mix deps.get`.
-* Run app with `make dev`
+```
+# Install elixir dependencies
+mix deps.get
+
+# Run the Elixir app locally + DB and a Archivebox server in containers
+make dev
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
 
-## Running in production mode
 
-* Build image with `make build`
-* Run containers with `make prod`
+Stop app:
+
+```
+make stop # Terminates the execution of all containers
+```
+
+Push image to deployment:
+
+```
+make push-images
+```
+
+## Basic Commands: Production
+
+1. Download latest tagged image from Docker registry
+
+```
+make pull-images
+```
+
+2. Stop old containers
+
+```
+make stop
+```
+
+3. Run docker project
+
+```
+make prod
+```
+
 
 Now you can visit [`localhost:4000`](http://localhost:4000)
 
-## Destroy containers
+## Clean containers
 
-* After using the containers, you can destroy them using `make down`
+* After using the containers, you can destroy them with their volumes using `make clean`
 
 ## Available tasks
 
