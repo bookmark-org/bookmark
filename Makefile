@@ -18,7 +18,7 @@ prod: # Run bookmark dockerized in prod mode. Dockerized Database and Archivebox
 .PHONY: dev
 dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServer
 	docker compose -f docker-compose-dev.yml up -d
-	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5000/add  iex -S mix phx.server
+	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5001/add  iex -S mix phx.server
 	docker compose stop
 
 .PHONY: stop

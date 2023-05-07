@@ -15,7 +15,7 @@ services:
   archivebox:
     image: ${DOCKER_REGISTRY}/archivebox-server:latest
     ports:
-        - '5000:5000'
+        - '5001:5000'
     # TODO: Archivebox Server must take environment variables to enable these properties
     # environment:
     #     - PROPERTY=VALUE
