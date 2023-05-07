@@ -9,7 +9,7 @@ defmodule BookmarkWeb.ArchiveController do
     System.get_env("BOOKMARK_ARCHIVEBOX_URL") ||
       raise """
       environment variable BOOKMARK_ARCHIVEBOX_URL is missing.
-      For example: archivebox:5000/add
+      For example: archivebox:5001/add
       """
   end
 

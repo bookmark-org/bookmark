@@ -2,32 +2,75 @@
 
 This is the repo containing the [bookmark.org](https://bookmark.org/) code.
 
-## Prerequisites
-* Install [docker](https://docs.docker.com/engine/install/)
-* Download [ArchiveboxServer repository](https://github.com/bookmark-org/archivebox) and build the image with `make build`
-* Clone this repository `git clone https://github.com/bookmark-org/bookmark.git`
-* Create the archive folder with `mkdir priv/static/archive/` inside this repository.
+## Setup
 
-## Running
+1. Install [docker](https://docs.docker.com/engine/install/)
+2. Create the archive folder with `mkdir priv/static/archive/` inside this repository.
+3. In the root of the project `/bookmark`, create a `.env` file with the following content:
 
-Follow these steps to run bookmark locally:
+```
+DOCKER_REGISTRY=bookmarkorg
+```
 
-* Install elixir dependencies with `mix deps.get`.
-* Run app with `make dev`
+4. Optional: Login to the Docker registry (required for Docker image pushes)
+
+```
+$ docker login -u bookmarkorg -p <registry-password>
+```
+
+## Basic Commands: Development
+
+Run app:
+
+```
+# Install elixir dependencies
+mix deps.get
+
+# Run the Elixir app locally + DB and a Archivebox server in containers
+make dev
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
 
-## Running in production mode
 
-* Build image with `make build`
-* Run containers with `make prod`
+Stop app:
+
+```
+make stop # Terminates the execution of all containers
+```
+
+Push image to deployment:
+
+```
+make push-images
+```
+
+## Basic Commands: Production
+
+1. Download latest tagged image from Docker registry
+
+```
+make pull-images
+```
+
+2. Stop old containers
+
+```
+make stop
+```
+
+3. Run docker project
+
+```
+make prod
+```
+
 
 Now you can visit [`localhost:4000`](http://localhost:4000)
 
-## Destroy containers
+## Clean containers
 
-* After using the containers, you can destroy them using `make down`
-
+* After using the containers, you can destroy them with their volumes using `make clean`
 
 ## Available tasks
 
