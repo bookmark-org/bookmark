@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   bookmark:
-    image: ${DOCKER_REGISTRY}/bookmark:latest
+    image: bookmarkorg/bookmark:latest
     container_name: bookmark-app
     restart: on-failure
     environment:
@@ -29,7 +29,7 @@ services:
       - db:/var/lib/postgresql/data
 
   archivebox:
-    image: ${DOCKER_REGISTRY}/archivebox-server:latest
+    image: bookmarkorg/archivebox-server:latest
     ports:
         - '5001:5000'
     # TODO: Archivebox Server must take environment variables to enable these properties

@@ -13,7 +13,7 @@ services:
       - db:/var/lib/postgresql/data
 
   archivebox:
-    image: ${DOCKER_REGISTRY}/archivebox-server:latest
+    image: bookmarkorg/archivebox-server:latest
     ports:
         - '5001:5000'
     # TODO: Archivebox Server must take environment variables to enable these properties

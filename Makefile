@@ -1,4 +1,3 @@
-include .env
 export
 
 default: help
@@ -32,10 +31,10 @@ clean: # Terminates the execution of all containers + delete volumes
 
 .PHONY: push-image
 push-image: # Push image to registry
-	docker tag bookmark:latest $(DOCKER_REGISTRY)/bookmark:latest
-	docker push $(DOCKER_REGISTRY)/bookmark:latest
+	docker tag bookmark:latest bookmarkorg/bookmark:latest
+	docker push bookmarkorg/bookmark:latest
 
 .PHONY: pull-images
 pull-images: # Pull images from registry
-	docker pull $(DOCKER_REGISTRY)/bookmark:latest
-	docker pull $(DOCKER_REGISTRY)/archivebox-server:latest
+	docker pull bookmarkorg/bookmark:latest
+	docker pull bookmarkorg/archivebox-server:latest

@@ -6,13 +6,7 @@ This is the repo containing the [bookmark.org](https://bookmark.org/) code.
 
 1. Install [docker](https://docs.docker.com/engine/install/)
 2. Create the archive folder with `mkdir priv/static/archive/` inside this repository.
-3. In the root of the project `/bookmark`, create a `.env` file with the following content:
-
-```
-DOCKER_REGISTRY=bookmarkorg
-```
-
-4. Optional: Login to the Docker registry (required for Docker image pushes)
+3. Optional: Login to the Docker registry (required for Docker image pushes)
 
 ```
 $ docker login -u bookmarkorg -p <registry-password>
