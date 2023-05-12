@@ -1,12 +1,12 @@
 # Bookmark
 
-This is the repo containing the [bookmark.org](https://bookmark.org/) code.
+This repository contains the code for [bookmark.org](https://bookmark.org/), an online service that allows users to archive and organize important web links.
 
 ## Setup
 
-1. Install [docker](https://docs.docker.com/engine/install/)
-2. Create the archive folder with `mkdir priv/static/archive/` inside this repository.
-3. Optional: Login to the Docker registry (required for Docker image pushes)
+1. Install [Docker](https://docs.docker.com/engine/install/). Don't forget to perform the [Docker post-installation](https://docs.docker.com/engine/install/linux-postinstall/).
+
+2. Optional: Login to the Docker registry (only required for Docker image pushes)
 
 ```
 $ docker login -u bookmarkorg -p <registry-password>
@@ -14,20 +14,19 @@ $ docker login -u bookmarkorg -p <registry-password>
 
 ## Basic Commands: Development
 
-Run app:
+Run the app:
 
 ```
-# Install elixir dependencies
+# Install Elixir dependencies
 mix deps.get
 
-# Run the Elixir app locally + DB and a Archivebox server in containers
+# Run the Elixir app locally + DB and an Archivebox server in containers
 make dev
 ```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) 
 
-
-Stop app:
+Stop the app:
 
 ```
 make stop # Terminates the execution of all containers
@@ -41,7 +40,7 @@ make push-images
 
 ## Basic Commands: Production
 
-1. Download latest tagged image from Docker registry
+1. Download the latest tagged image from the Docker registry
 
 ```
 make pull-images
@@ -53,7 +52,7 @@ make pull-images
 make stop
 ```
 
-3. Run docker project
+3. Run the Docker project
 
 ```
 make prod
@@ -64,8 +63,8 @@ Now you can visit [`localhost:4000`](http://localhost:4000)
 
 ## Clean containers
 
-* After using the containers, you can destroy them with their volumes using `make clean`
+After using the containers, you can destroy them along with their volumes (which contain the archives) using `make clean`.
 
 ## Available tasks
 
-You can see available tasks (build, dev, prod, etc) and what they do with `make`
+You can see available tasks (build, dev, prod, etc.) and what they do with `make`.
