@@ -20,6 +20,10 @@ dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServe
 	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5001/add  iex -S mix phx.server
 	docker compose stop
 
+.PHONY: console-prod
+console-prod: # Executes interactive console in production mode
+	docker exec -it bookmark-app /app/bin/bookmark remote
+
 .PHONY: stop
 stop: # Terminates the execution of all containers
 	docker compose down --remove-orphans
