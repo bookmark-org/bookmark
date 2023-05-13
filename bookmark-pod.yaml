@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bookmark
+  name: bookmark
+spec:
+  containers:
+    - env:
+        - name: BOOKMARK_ARCHIVEBOX_URL
+          valueFrom:
+            configMapKeyRef:
+              key: BOOKMARK_ARCHIVEBOX_URL
+              name: base-env
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              key: DATABASE_URL
+              name: base-env
+        - name: MIX_ENV
+          value: prod
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            configMapKeyRef:
+              key: SECRET_KEY_BASE
+              name: base-env
+      image: bookmarkorg/bookmark:latest
+      name: bookmark-app
+      ports:
+        - containerPort: 4000
+      resources: {}
+      volumeMounts:
+        - mountPath: /app/lib/bookmark-0.1.0/priv/static/archive
+          name: bookmark-claim0
+  restartPolicy: OnFailure
+  volumes:
+    - name: bookmark-claim0
+      persistentVolumeClaim:
+        claimName: bookmark-claim0
+status: {}

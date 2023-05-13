@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose --file docker-compose.yml convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bookmark-db
+  name: bookmark-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: bookmark-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose --file docker-compose.yml convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: bookmark-db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: bookmark_dev
+            - name: POSTGRES_PASSWORD
+              value: postgres
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:14.1-alpine
+          name: bookmark-db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: db
+      restartPolicy: Always
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: db
+status: {}
