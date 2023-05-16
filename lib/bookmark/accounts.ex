@@ -8,6 +8,10 @@ defmodule Bookmark.Accounts do
 
   alias Bookmark.Accounts.{User, UserNotifier, UserToken}
 
+  def get_default_user() do
+    get_user_by_username("anonymous")
+  end
+
   @doc """
   Gets a user by email.
 

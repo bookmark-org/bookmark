@@ -43,7 +43,9 @@ defmodule BookmarkWeb.PageController do
   def profile(conn, %{"username" => username}) do
     user = conn.assigns.current_user
 
-    balance = Bookmark.Wallets.balance(user.wallet_key)
+    balance = if user do
+      Bookmark.Wallets.balance(user.wallet_key)
+    end
 
     ids =
       Bookmark.Archives.get_topn_archive_ids_by_user(

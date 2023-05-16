@@ -46,6 +46,7 @@ defmodule Bookmark.Application do
 
   defp run_seeds() do
     Bookmark.Accounts.register_user(%{
+      wallet_key: BookmarkWeb.WalletController.get_new_wallet_key(),
       email: "anonymous@bookmark.org",
       username: "anonymous",
       password: "passwordpassword"
