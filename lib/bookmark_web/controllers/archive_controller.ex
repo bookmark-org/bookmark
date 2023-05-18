@@ -25,15 +25,8 @@ defmodule BookmarkWeb.ArchiveController do
     {:ok, res.body["result"]}
   end
 
-  def directory do
-    case Application.get_env(:bookmark, :env) do
-      :prod -> Application.app_dir(:bookmark, "priv/static/archive")
-      _ -> File.cwd!() <> "/priv/static/archive"
-    end
-  end
-
   def index_data(archive_id) do
-    file_path = directory() <> "/archive/" <> archive_id
+    file_path = Bookmark.Archives.directory() <> "/archive/" <> archive_id
     File.read!(file_path <> "/index.json")
   end
 
@@ -53,7 +46,7 @@ defmodule BookmarkWeb.ArchiveController do
         Bookmark.Repo.get_by(Bookmark.Accounts.User, id: archive.user_id)
       end
 
-    image_url = directory() <> "/" <> id <> "/screenshot.png"
+    image_url = Bookmark.Archives.directory() <> "/" <> id <> "/screenshot.png"
 
     attrs_list = [
       %{property: "og:title", content: list["title"]},
