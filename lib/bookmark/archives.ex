@@ -63,8 +63,6 @@ defmodule Bookmark.Archives do
       ) do
     user = user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
 
-    # TODO: get title from url and put it in params here
-
     {:ok, archive} =
       %Archive{}
       |> Archive.changeset(attrs)

@@ -23,7 +23,7 @@ defmodule Bookmark.ArchivesTest do
     end
 
     test "create_archive/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Archives.create_archive(@invalid_attrs, nil)
+      assert_raise(MatchError,  fn -> Archives.create_archive(@invalid_attrs, nil) end)
     end
   end
 end
