@@ -129,7 +129,7 @@ defmodule BookmarkWeb.ArchiveController do
       [_err, id] = String.split(List.first(regex_result), "archive/")
       user = conn.assigns.current_user
 
-      Bookmark.Archives.create_archive(%{name: id, comment: ""}, user)
+      Bookmark.Archives.create_archive(%{name: id, comment: "", title: url}, user)
 
       conn
       |> redirect(to: Routes.archive_path(conn, :show, id))

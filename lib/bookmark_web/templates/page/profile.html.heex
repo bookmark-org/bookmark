@@ -1,23 +1,22 @@
-<div class="card-group">
+<div class="row row-cols-1 row-cols-md-2 g-4">
   <%= for a <- @archives do %>
-
-    <a href={"/archive/" <> a.name} class="card mb-3 card-with-margin" style="width: 18rem;" style="text-decoration: none">
-    <div class="row g-0">
-      <div class="col-md-4">
-        <%= img_tag(
-            Routes.static_path(@conn, "/archive/archive/" <> a.name <> "/screenshot.png"),
-            class: "profile_page_thumbnail"
-          )
-        %>
-      </div>
-      <div class="col-md-8">
-        <div class="card-body">
-          <h5 class="card-title"><%= a.title %></h5>
-          <p class="card-text"><%= a.summary %></p>
-          <p class="card-text"><small class="text-body-secondary">Last updated <%= a.updated_at %></small></p>
+    <div class="col">
+      <a href={"/archive/" <> a.name} style="text-decoration: none">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-4">
+              <%= img_tag(Routes.static_path(@conn, "/archive/archive/" <> a.name <> "/screenshot.png"), class: "profile_page_thumbnail")%>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><%= a.title %></h5>
+                <p class="card-text"><%= a.summary %></p>
+                <small class="card-text"> Uploaded at <%= a.updated_at %></small>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
-    </a>
   <% end %>
 </div>
