@@ -1,3 +1,5 @@
+# Load environment variables from .env file
+include .env
 export
 
 default: help
@@ -16,6 +18,8 @@ prod: # Run bookmark dockerized in prod mode. Dockerized Database and Archivebox
 
 .PHONY: dev
 dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServer
+	OPENAI_API_KEY=$(OPENAI_API_KEY)
+	export OPENAI_API_KEY
 	docker compose -f docker-compose-dev.yml up -d
 	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5001/add  iex -S mix phx.server
 	docker compose stop

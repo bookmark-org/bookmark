@@ -3,9 +3,9 @@ defmodule Bookmark.Archives do
   The Archives context.
   """
 
+  require Logger
   import Ecto.Query, warn: false
   alias Bookmark.Repo
-
   alias Bookmark.Archives.Archive
 
   @doc """
@@ -28,6 +28,10 @@ defmodule Bookmark.Archives do
         select: a.name
 
     Repo.all(query)
+  end
+
+  def get_archives_by_user(user) do
+    Repo.all(Archive, user_id: user.id)
   end
 
   def get_topn_archive_ids_by_user(user, n) do
@@ -78,9 +82,18 @@ defmodule Bookmark.Archives do
     |> Repo.update()
   end
 
+
+  # Summary
   def get_summary(archive) do
-    pdf_path(archive)
-    |> Bookmark.Summarize.get_summary()
+    pdf_path = pdf_path(archive)
+
+    try do
+      {output, 0} = System.cmd("python3", ["summarize.py", pdf_path], cd: File.cwd!)
+      {:ok, output}
+    rescue e ->
+      Logger.error(e)
+      {:ok, "Summary not available"}
+    end
   end
 
 
