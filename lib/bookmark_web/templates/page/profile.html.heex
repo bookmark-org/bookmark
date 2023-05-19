@@ -1,12 +1,23 @@
-<div class="white-bg-panel">
-  <p class="headline">Latest archives by <%= @username %></p>
+<div class="card-group">
   <%= for a <- @archives do %>
-    <%= link(
-      img_tag(
-        Routes.static_path(@conn, "/archive/archive/" <> a <> "/screenshot.png"),
-        class: "profile_page_thumbnail"
-      ),
-      to: "/archive/" <> a
-    ) %>
+
+    <a href={"/archive/" <> a.name} class="card mb-3 card-with-margin" style="width: 18rem;" style="text-decoration: none">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <%= img_tag(
+            Routes.static_path(@conn, "/archive/archive/" <> a.name <> "/screenshot.png"),
+            class: "profile_page_thumbnail"
+          )
+        %>
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= a.title %></h5>
+          <p class="card-text"><%= a.summary %></p>
+          <p class="card-text"><small class="text-body-secondary">Last updated <%= a.updated_at %></small></p>
+        </div>
+      </div>
+    </div>
+    </a>
   <% end %>
 </div>
