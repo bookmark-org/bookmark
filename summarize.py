@@ -9,7 +9,7 @@ import tiktoken
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
-#####################     Funtions      ###################
+#####################     Functions      ###################
 def summarize_pdf(path):
     pdf_text = read_pdf(path)
     prompt = "Summarize this for a high school student, make sure all sentences are grammatical and not cut off, strip whitespace and newlines:\n\n " + truncate_string(pdf_text)

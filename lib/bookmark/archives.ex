@@ -72,6 +72,12 @@ defmodule Bookmark.Archives do
     add_summary(archive)
   end
 
+
+  def get_title(archive_id) do
+    list = index_data(archive_id)
+    list["title"]
+  end
+
   def add_summary(archive) do
     {:ok, summary} = get_summary(archive)
 
@@ -105,5 +111,11 @@ defmodule Bookmark.Archives do
       :prod -> Application.app_dir(:bookmark, "priv/static/archive")
       _ -> File.cwd!() <> "/priv/static/archive"
     end
+  end
+
+  def index_data(archive_id) do
+    file_path = Bookmark.Archives.directory() <> "/archive/" <> archive_id
+    index_json = File.read!(file_path <> "/index.json")
+    JSON.decode!(index_json)
   end
 end

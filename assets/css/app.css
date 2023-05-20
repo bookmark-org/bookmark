@@ -4,10 +4,6 @@
 /* Pico CSS */
 @import "./pico.min.css";
 
-a, a:hover {
-  text-decoration: none !important;
-}
-
 .card-with-margin {
   margin-left: 10px;
   margin-right: 10px;
