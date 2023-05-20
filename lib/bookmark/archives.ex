@@ -31,7 +31,7 @@ defmodule Bookmark.Archives do
   end
 
   def get_archives_by_user(user) do
-    Repo.all(Archive, user_id: user.id)
+    Archive |> where(user_id: ^user.id) |> Repo.all()
   end
 
   def get_topn_archive_ids_by_user(user, n) do
