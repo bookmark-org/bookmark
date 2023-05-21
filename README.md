@@ -6,7 +6,13 @@ This repository contains the code for [bookmark.org](https://bookmark.org/), an 
 
 1. Install [Docker](https://docs.docker.com/engine/install/). Don't forget to perform the [Docker post-installation](https://docs.docker.com/engine/install/linux-postinstall/).
 
-2. Optional: Login to the Docker registry (only required for Docker image pushes)
+2. Optional: Create the following `.env` file in the root folder of this project (only required for archive summary generated with AI)
+
+```
+OPENAI_API_KEY=<api-key>
+```
+
+3. Optional: Login to the Docker registry (only required for Docker image pushes)
 
 ```
 $ docker login -u bookmarkorg -p <registry-password>

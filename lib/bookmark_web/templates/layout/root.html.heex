@@ -20,8 +20,14 @@
       src={Routes.static_path(@conn, "/assets/app.js")}
     >
     </script>
-  </head>
-  <body style="background: #1e1e1e">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+    </head>
+  <body class="dark" style="background: #1e1e1e">
     <a href="/">
       <img
         src="/images/bookmark-logo-white.png"

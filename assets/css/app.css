@@ -4,6 +4,11 @@
 /* Pico CSS */
 @import "./pico.min.css";
 
+.card-with-margin {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 /* Alerts and form errors used by phx.new */
 .alert {
   padding: 15px;

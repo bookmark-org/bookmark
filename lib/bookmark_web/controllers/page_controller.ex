@@ -41,17 +41,13 @@ defmodule BookmarkWeb.PageController do
   end
 
   def profile(conn, %{"username" => username}) do
-    user = conn.assigns.current_user
-
-    balance = if user do
-      Bookmark.Wallets.balance(user.wallet_key)
+    current_user = conn.assigns.current_user
+    balance = if current_user do
+      Bookmark.Wallets.balance(current_user.wallet_key)
     end
 
-    ids =
-      Bookmark.Archives.get_topn_archive_ids_by_user(
-        Bookmark.Accounts.get_user_by_username(username),
-        5
-      )
+    user = Bookmark.Accounts.get_user_by_username(username)
+    archives = Bookmark.Archives.get_archives_by_user(user)
 
     title = "Latest archives by " <> username <> " | bookmark.org"
 
@@ -62,7 +58,7 @@ defmodule BookmarkWeb.PageController do
     ]
 
     render(conn, "profile.html",
-      archives: ids,
+      archives: archives,
       username: username,
       balance: balance,
       title: title,
