@@ -5,6 +5,7 @@ services:
     container_name: bookmark-app
     restart: on-failure
     environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
       MIX_ENV: prod
     depends_on:
       - bookmark-db

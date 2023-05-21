@@ -18,7 +18,7 @@ defmodule BookmarkWeb.ArchiveController do
 
     body = JSON.encode!(url: url)
     headers = %{"content-type" => "application/json"}
-    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 90_000)
+    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
 
     Logger.info("Executed: archivebox add #{url}")
 
