@@ -5,26 +5,6 @@ defmodule BookmarkWeb.ArchiveController do
 
   alias Ecto.Changeset
 
-  defp archivebox_url() do
-    System.get_env("BOOKMARK_ARCHIVEBOX_URL") ||
-      raise """
-      environment variable BOOKMARK_ARCHIVEBOX_URL is missing.
-      For example: archivebox:5001/add
-      """
-  end
-
-  def archivebox(url) do
-    Logger.info("Executing: archivebox add #{url} ...")
-
-    body = JSON.encode!(url: url)
-    headers = %{"content-type" => "application/json"}
-    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
-
-    Logger.info("Executed: archivebox add #{url}")
-
-    {:ok, res.body["result"]}
-  end
-
   @spec show(Plug.Conn.t(), map) :: Plug.Conn.t()
   def show(conn, %{"id" => id}) do
     user = conn.assigns.current_user
@@ -93,40 +73,17 @@ defmodule BookmarkWeb.ArchiveController do
   end
 
   defp do_create(%{changes: %{url: url}}, conn) do
-    twitter_regex = Regex.run(~r/\/(\d+)\/?$/is, url)
+    user = conn.assigns.current_user
 
-    archive_url =
-      if twitter_regex do
-        [_, tweet_id] = twitter_regex
-        "https://bookmark.org/twitter/" <> tweet_id
-      else
-        url
-      end
-
-    {:ok, result} = archivebox(archive_url)
-
-    regex_result = Regex.run(~r/archive\/(.*)/, result)
-    # this gets triggered on duplicate URL and when archivebox is not running
-    if is_nil(regex_result) do
-      Logger.error(result)
-      message = url <> " already exists"
-      Logger.info(message)
-
+    with {:ok, archive} <- Bookmark.Archives.archive_url(url, user) do
       conn
-      |> put_flash(
-        :info,
-        message
-      )
-      |> redirect(to: "/")
+      |> redirect(to: Routes.archive_path(conn, :show, archive.name))
     else
-      Logger.debug(result)
-      [_err, id] = String.split(List.first(regex_result), "archive/")
-      user = conn.assigns.current_user
-
-      Bookmark.Archives.create_archive(%{name: id, comment: "", title: Bookmark.Archives.get_title(id)}, user)
-
+      # TODO: Add error handling here
+      _ ->
       conn
-      |> redirect(to: Routes.archive_path(conn, :show, id))
+      |> put_flash(:info, url <> " already exists")
+      |> redirect(to: "/")
     end
   end
 
