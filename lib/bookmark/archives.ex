@@ -86,6 +86,43 @@ defmodule Bookmark.Archives do
     |> Repo.update()
   end
 
+  # Archivebox, create archive
+  def archive_url(url, user) do
+    {:ok, result} = archivebox(url)
+    regex_result = Regex.run(~r/archive\/(.*)/, result)
+
+    # this gets triggered on duplicate URL or when archivebox is not running/fails
+    if is_nil(regex_result) do
+      Logger.error(result)
+      # TODO: Add error handling here
+     {:error, :already_exists}
+    else
+      Logger.debug(result)
+      [_err, id] = String.split(List.first(regex_result), "archive/")
+
+      create_archive(%{name: id, comment: "", title: get_title(id)}, user)
+    end
+  end
+
+  def archivebox(url) do
+    Logger.info("Executing: archivebox add #{url} ...")
+
+    body = JSON.encode!(url: url)
+    headers = %{"content-type" => "application/json"}
+    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
+
+    Logger.info("Executed: archivebox add #{url}")
+
+    {:ok, res.body["result"]}
+  end
+
+  defp archivebox_url() do
+    System.get_env("BOOKMARK_ARCHIVEBOX_URL") ||
+      raise """
+      environment variable BOOKMARK_ARCHIVEBOX_URL is missing.
+      For example: archivebox:5001/add
+      """
+  end
 
   # Summary
   def get_summary(archive) do
