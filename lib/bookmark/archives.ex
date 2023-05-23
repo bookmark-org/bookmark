@@ -92,7 +92,9 @@ defmodule Bookmark.Archives do
     pdf_path = pdf_path(archive)
 
     try do
+      Logger.info("Executing: python3 summarize.py #{pdf_path} ...")
       {output, 0} = System.cmd("python3", ["summarize.py", pdf_path], cd: File.cwd!)
+      Logger.info("Executed: python3 summarize.py #{pdf_path}")
       {:ok, output}
     rescue e ->
       Logger.error(e)
