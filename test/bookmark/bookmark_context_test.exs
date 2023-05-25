@@ -54,13 +54,26 @@ defmodule Bookmark.ArchivesTest do
     end
 
     test "archive_url/2 with valid data creates archives" do
+      # Mocked functions
       Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id"} end)
       Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
 
+      # Test archive creation
       assert {:ok, %Archive{} = archive} = Archives.archive_url("some_url", nil)
-
       assert archive.name == "some_id"
       assert archive.title == "some_title"
+    end
+
+    test "bulk_archives/3 with valid data creates archives" do
+      # Mocked functions
+      Mimic.expect(Archives, :archivebox, 2, fn url -> {:ok, "archive/#{url}"} end)
+      Mimic.expect(Archives, :get_title, 2, fn _archive ->  "some_title" end )
+
+      # Test archives creation
+      url_list = ["foo.com", "bar.com"]
+      assert [{:ok, %Archive{} = a1}, {:ok, %Archive{} = a2}] = Archives.bulk_archives(url_list, nil)
+      assert a1.name == "foo.com"
+      assert a2.name == "bar.com"
     end
   end
 end

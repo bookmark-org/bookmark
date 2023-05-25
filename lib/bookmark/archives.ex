@@ -87,6 +87,20 @@ defmodule Bookmark.Archives do
     |> Repo.update()
   end
 
+  # Archivebox, create archives
+
+  # Returns a list of {:ok, %Archive}
+  def bulk_archives(url_list, user, callback \\ nil) do
+    archive_processes =
+      url_list
+      |> Enum.map(fn url ->
+        {:ok, pid} = Task.Supervisor.start_link()
+        Task.Supervisor.async(pid, fn -> archive_url(url, user) end)
+      end)
+
+    Enum.map(archive_processes, fn task -> Task.await(task) end)
+  end
+
   def archive_url(url, user) do
     {:ok, result} = Archives.archivebox(url)
     regex_result = Regex.run(~r/archive\/(.*)/, result)
