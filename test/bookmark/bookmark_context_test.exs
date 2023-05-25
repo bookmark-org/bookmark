@@ -1,5 +1,7 @@
 defmodule Bookmark.ArchivesTest do
   use Bookmark.DataCase
+  use ExUnit.Case, async: true
+  use Mimic
 
   alias Bookmark.Archives
   alias Bookmark.Archives.Archive
@@ -49,6 +51,16 @@ defmodule Bookmark.ArchivesTest do
       # Test get_archives_by_user
       assert [archive_1, archive2] = Bookmark.Archives.get_archives_by_user(user1)
       assert [archive3] = Bookmark.Archives.get_archives_by_user(user2)
+    end
+
+    test "archive_url/2 with valid data creates archives" do
+      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id"} end)
+      Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
+
+      assert {:ok, %Archive{} = archive} = Archives.archive_url("some_url", nil)
+
+      assert archive.name == "some_id"
+      assert archive.title == "some_title"
     end
   end
 end

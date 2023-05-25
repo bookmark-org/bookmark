@@ -7,6 +7,7 @@ defmodule Bookmark.Archives do
   import Ecto.Query, warn: false
   alias Bookmark.Repo
   alias Bookmark.Archives.Archive
+  alias Bookmark.Archives
 
   @doc """
   Returns the list of archives.
@@ -86,9 +87,8 @@ defmodule Bookmark.Archives do
     |> Repo.update()
   end
 
-  # Archivebox, create archive
   def archive_url(url, user) do
-    {:ok, result} = archivebox(url)
+    {:ok, result} = Archives.archivebox(url)
     regex_result = Regex.run(~r/archive\/(.*)/, result)
 
     # this gets triggered on duplicate URL or when archivebox is not running/fails
@@ -100,7 +100,7 @@ defmodule Bookmark.Archives do
       Logger.debug(result)
       [_err, id] = String.split(List.first(regex_result), "archive/")
 
-      create_archive(%{name: id, comment: "", title: get_title(id)}, user)
+      create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
     end
   end
 
