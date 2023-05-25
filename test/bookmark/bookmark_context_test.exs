@@ -75,5 +75,16 @@ defmodule Bookmark.ArchivesTest do
       assert a1.name == "foo.com"
       assert a2.name == "bar.com"
     end
+
+    test "bulk_archives/3 doesn't crash if there is an invalid archive" do
+      # Mocked functions
+      Mimic.expect(Archives, :archive_url, fn _url, _user -> {:ok, %Archive{name: "foo.com"}} end)
+      Mimic.expect(Archives, :archive_url, fn _url, _user -> raise "Fatal error" end)
+
+      # Test archives creation
+      url_list = ["foo.com", "bar.com"]
+      assert [{:ok, %Archive{} = a1}, {:error, _}] = Archives.bulk_archives(url_list, nil)
+      assert a1.name == "foo.com"
+    end
   end
 end

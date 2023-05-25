@@ -95,10 +95,17 @@ defmodule Bookmark.Archives do
       url_list
       |> Enum.map(fn url ->
         {:ok, pid} = Task.Supervisor.start_link()
-        Task.Supervisor.async(pid, fn -> archive_url(url, user) end)
+        Task.Supervisor.async(pid, fn ->
+          try do
+            Archives.archive_url(url, user)
+          rescue e ->
+            Logger.error(e)
+            {:error, e}
+          end
+        end)
       end)
 
-    Enum.map(archive_processes, fn task -> Task.await(task) end)
+    Enum.map(archive_processes, fn task -> Task.await(task, :infinity) end)
   end
 
   def archive_url(url, user) do
