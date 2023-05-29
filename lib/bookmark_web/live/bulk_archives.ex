@@ -33,7 +33,6 @@ defmodule BookmarkWeb.BulkArchivesLive do
             https://www.google.com/"
             name="urls" style="height: 100px; width: 500px"></textarea>
 
-            <input type="hidden" name="user_token" value="{@user_token}" />
             <button class="add_archive_button">Add archive</button>
           </.form>
         <% end %>
@@ -51,10 +50,11 @@ defmodule BookmarkWeb.BulkArchivesLive do
   end
 
   def mount(_params, %{"user_token" => user_token}, socket) do
-    {:ok, assign(socket, archives: [], urls_status: nil, user_token: user_token,  form: to_form(%{}))}
+    {:ok, assign(socket, archives: [], urls_status: nil, user_token: user_token, form: to_form(%{}))}
   end
 
-  def handle_event("save", %{"urls" => urls, "user_token" => user_token}, socket) do
+  def handle_event("save", %{"urls" => urls}, socket) do
+    user_token = socket.assigns.user_token
     current_user = Bookmark.Accounts.get_user_by_session_token(user_token)
     url_list = String.split(urls, "\n")
 
