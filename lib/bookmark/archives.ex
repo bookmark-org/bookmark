@@ -106,9 +106,8 @@ defmodule Bookmark.Archives do
       timeout: :infinity
       )
 
-    IO.inspect(tasks, label: "tasks")
-    Enum.each(tasks, fn t -> IO.inspect(t, label: "task") end)
-    tasks
+    Logger.info("The following tasks were created: #{inspect(tasks)}")
+    Enum.each(tasks, fn t -> Logger.info("Task result: #{inspect(t)}") end)
     end
 
   def archive_url(url, user) do

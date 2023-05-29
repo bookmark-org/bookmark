@@ -1,8 +1,7 @@
 defmodule BookmarkWeb.BulkArchivesLive do
   use BookmarkWeb, :live_view
-  import BookmarkWeb.LiveHelpers
-  import Phoenix.HTML.Form
   attr :field, Phoenix.HTML.FormField
+  require Logger
 
   def render(assigns) do
     ~H"""
@@ -51,28 +50,26 @@ defmodule BookmarkWeb.BulkArchivesLive do
     """
   end
 
-  def handle_event("save", %{"urls" => urls, "user_token" => user_token}, socket) do
-    IO.puts("entro al handle event")
-    url_list = String.split(urls, "\n")
-    IO.inspect(urls, label: "urls")
-    IO.inspect(url_list, label: "url_list")
+  def mount(_params, %{"user_token" => user_token}, socket) do
+    {:ok, assign(socket, archives: [], urls_status: nil, user_token: user_token,  form: to_form(%{}))}
+  end
 
+  def handle_event("save", %{"urls" => urls, "user_token" => user_token}, socket) do
     current_user = Bookmark.Accounts.get_user_by_session_token(user_token)
+    url_list = String.split(urls, "\n")
+
+    Logger.info("handle_event(save). current_user: #{inspect(current_user)} url_list: #{inspect(url_list)}")
 
     view_pid = self()
 
     Process.send(view_pid, {:pending, url_list}, [:noconnect])
-    spawn(fn -> Bookmark.Archives.bulk_archives(url_list, nil, view_pid) end)
+    spawn(fn -> Bookmark.Archives.bulk_archives(url_list, current_user, view_pid) end)
 
     {:noreply, socket}
   end
 
-  def mount(_params, %{"user_token" => user_token}, socket) do
-    {:ok, assign(socket, archives: [], urls_status: nil, message: "", user_token: user_token,  form: to_form(%{}))}
-  end
-
   def handle_info({:pending, url_list}, socket) do
-    IO.puts("Entro al handle pending")
+    Logger.info("handle_info(:pending). url_list: #{inspect(url_list)}")
     map = Enum.reduce(url_list, %{}, fn key, acc ->
       Map.put(acc, key, "PENDING")
     end)
@@ -80,7 +77,8 @@ defmodule BookmarkWeb.BulkArchivesLive do
   end
 
   def handle_info({:success, archive, url}, socket) do
-    IO.puts("Entro al handle success: #{archive.name}")
+    Logger.info("handle_info(:success). url: #{inspect(url)}")
+
     {:noreply,
       assign(
         socket,
@@ -91,9 +89,8 @@ defmodule BookmarkWeb.BulkArchivesLive do
   end
 
   def handle_info({:fail, url}, socket) do
-    IO.puts("Entro al handle fail: #{url}")
-    IO.inspect( socket.assigns.urls_status, label: "map")
-    IO.inspect( Map.put(socket.assigns.urls_status, url, "FAIL"), label: "updated map")
+    Logger.info("handle_info(:fail). url: #{inspect(url)}")
+
     {:noreply,
       assign(
         socket,
@@ -102,13 +99,15 @@ defmodule BookmarkWeb.BulkArchivesLive do
     }
   end
 
+  # These handle_info are necessary for handling Task.async calls
+  # https://elixirforum.com/t/cant-use-task-async-within-liveview/32940/3
   def handle_info({_task_id, _return_value} = task_info, socket) do
-    IO.inspect(task_info)
+    Logger.debug("#{inspect(task_info)}")
     {:noreply, socket}
   end
 
   def handle_info({_, _, _, _, _} = details, socket) do
-    IO.inspect(details)
+    Logger.debug("#{inspect(details)}")
     {:noreply, socket}
   end
 end
