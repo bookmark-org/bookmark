@@ -5,6 +5,7 @@ defmodule Bookmark.ArchivesTest do
 
   alias Bookmark.Archives
   alias Bookmark.Archives.Archive
+  alias Bookmark.Repo
 
   import Bookmark.BookmarkContextFixtures
 
@@ -49,8 +50,11 @@ defmodule Bookmark.ArchivesTest do
       assert {:ok, %Archive{} = archive3} = Archives.create_archive(%{name: "some name"}, user2)
 
       # Test get_archives_by_user
-      assert [archive_1, archive2] = Bookmark.Archives.get_archives_by_user(user1)
-      assert [archive3] = Bookmark.Archives.get_archives_by_user(user2)
+      assert [archive1, archive2] ==
+        Bookmark.Archives.get_archives_by_user(user1) |> Enum.map(fn a -> Bookmark.Repo.preload(a, :user) end)
+
+      assert [archive3] ==
+        Bookmark.Archives.get_archives_by_user(user2) |> Enum.map(fn a -> Bookmark.Repo.preload(a, :user) end)
     end
 
     test "archive_url/2 with valid data creates archives" do
@@ -66,35 +70,38 @@ defmodule Bookmark.ArchivesTest do
 
     test "bulk_archives/3 with valid data creates archives" do
       # Mocked functions
-      Mimic.expect(Archives, :archivebox, 2, fn url -> {:ok, "archive/#{url}"} end)
+      Mimic.expect(Archives, :archivebox, 2, fn _url -> {:ok, "archive/some_id"} end)
       Mimic.expect(Archives, :get_title, 2, fn _archive ->  "some_title" end )
 
       # Test archives creation
-      url_list = ["foo.com", "bar.com"]
-      assert [{:ok, %Archive{} = a1}, {:ok, %Archive{} = a2}] = Archives.bulk_archives(url_list, nil)
-      assert a1.name == "foo.com"
-      assert a2.name == "bar.com"
+      assert Repo.all(Archive) |> length() == 0
+      assert :ok = Archives.bulk_archives(["foo.com", "bar.com"], nil)
+      assert Repo.all(Archive) |> length() == 2
     end
 
     test "bulk_archives/3 doesn't crash if there is an invalid archive" do
       # Mocked functions
-      Mimic.expect(Archives, :archive_url, fn _url, _user -> {:ok, %Archive{name: "foo.com"}} end)
+      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id}"} end)
+      Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
+
+      # Mocked error
       Mimic.expect(Archives, :archive_url, fn _url, _user -> raise "Fatal error" end)
 
       # Test archives creation
-      url_list = ["foo.com", "bar.com"]
-      assert [{:ok, %Archive{} = a1}, {:error, _}] = Archives.bulk_archives(url_list, nil)
-      assert a1.name == "foo.com"
+      assert Repo.all(Archive) |> length() == 0
+      assert :ok = Archives.bulk_archives(["foo.com", "bar.com"], nil)
+      assert Repo.all(Archive) |> length() == 1
     end
 
-    test "bulk_archives/3 receives and executes a callback" do
+    test "bulk_archives/3 executes a callback to the pid" do
       # Mocked functions
-      Mimic.expect(Archives, :archive_url, fn _url, _user -> {:ok, %Archive{name: "foo.com"}} end)
+      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id}"} end)
+      Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
 
       # Test archives creation
-      my_function = fn x -> IO.inspect(x) end
-      assert [{:ok, %Archive{} = a1}] = Archives.bulk_archives([""], nil, my_function)
-      assert a1.name == "foo.com"
+      test_pid = self()
+      assert :ok = Archives.bulk_archives(["foo.com"], nil, test_pid)
+      assert_received {:success, %Archive{}, "foo.com"}
     end
   end
 end

@@ -95,10 +95,10 @@ defmodule Bookmark.Archives do
       url_list, fn url ->
           try do
             {:ok, archive} = Archives.archive_url(url, user)
-            if caller_pid, do: Process.send_after(caller_pid, {:success, archive, url}, 1)
+            if caller_pid, do: Process.send(caller_pid, {:success, archive, url}, [:noconnect])
             {:ok, archive}
           rescue e ->
-            if caller_pid, do: Process.send_after(caller_pid, {:fail, url}, 1)
+            if caller_pid, do: Process.send(caller_pid, {:fail, url}, [:noconnect])
             Logger.error(Exception.format(:error, e, __STACKTRACE__))
             {:error, e}
           end
