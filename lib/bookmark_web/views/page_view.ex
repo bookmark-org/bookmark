@@ -4,7 +4,7 @@ defmodule BookmarkWeb.PageView do
     a = assigns[:a]
     conn = assigns[:conn]
     ~E"""
-    <a href=<%= "/archive/" <> a.name %> >
+    <a href=<%= "/archive/" <> a.name %> target="_blank">
       <article class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-black dark:shadow-gray-700/25 h-[35rem]" >
         <%= img_tag(Routes.static_path(conn, "/archive/archive/" <> a.name <> "/screenshot.png"), alt: "Archive", class: "h-56 w-full object-cover object-top")%>
         <div class="p-4 sm:p-6">

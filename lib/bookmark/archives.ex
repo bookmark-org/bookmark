@@ -90,23 +90,26 @@ defmodule Bookmark.Archives do
   # Archivebox, create archives
 
   # Returns a list of {:ok, %Archive}
-  def bulk_archives(url_list, user, callback \\ nil) do
-    archive_processes =
-      url_list
-      |> Enum.map(fn url ->
-        {:ok, pid} = Task.Supervisor.start_link()
-        Task.Supervisor.async(pid, fn ->
+  def bulk_archives(url_list, user, caller_pid \\ nil) do
+    tasks = Task.async_stream(
+      url_list, fn url ->
           try do
-            Archives.archive_url(url, user)
+            {:ok, archive} = Archives.archive_url(url, user)
+            if caller_pid, do: Process.send_after(caller_pid, {:success, archive, url}, 1)
+            {:ok, archive}
           rescue e ->
-            Logger.error(e)
+            if caller_pid, do: Process.send_after(caller_pid, {:fail, url}, 1)
+            Logger.error(Exception.format(:error, e, __STACKTRACE__))
             {:error, e}
           end
-        end)
-      end)
+      end,
+      timeout: :infinity
+      )
 
-    Enum.map(archive_processes, fn task -> Task.await(task, :infinity) end)
-  end
+    IO.inspect(tasks, label: "tasks")
+    Enum.each(tasks, fn t -> IO.inspect(t, label: "task") end)
+    tasks
+    end
 
   def archive_url(url, user) do
     {:ok, result} = Archives.archivebox(url)

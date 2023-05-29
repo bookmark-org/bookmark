@@ -86,5 +86,15 @@ defmodule Bookmark.ArchivesTest do
       assert [{:ok, %Archive{} = a1}, {:error, _}] = Archives.bulk_archives(url_list, nil)
       assert a1.name == "foo.com"
     end
+
+    test "bulk_archives/3 receives and executes a callback" do
+      # Mocked functions
+      Mimic.expect(Archives, :archive_url, fn _url, _user -> {:ok, %Archive{name: "foo.com"}} end)
+
+      # Test archives creation
+      my_function = fn x -> IO.inspect(x) end
+      assert [{:ok, %Archive{} = a1}] = Archives.bulk_archives([""], nil, my_function)
+      assert a1.name == "foo.com"
+    end
   end
 end
