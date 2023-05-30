@@ -5,12 +5,10 @@ defmodule BookmarkWeb.BulkArchivesLive do
 
   def render(assigns) do
     ~H"""
-    <div id="main" class="m-8 grid sm:grid-cols-3 gap-1 justify-evenly">
+    <div class="display-box">
+      <h1 class="display-box-headline">Bulk archives</h1>
       <!----------------------------URL List Column----------------------------------->
-      <div class="col-span-1 ">
-        <h3 class="text-3xl font-semibold text-white" > Archiving links: </h3>
         <%= if @urls_status do%>
-          <div class="grid grid-cols-1 overflow-auto">
             <ul class="space-y-2 list-inside ">
               <%= for {url, status}  <- @urls_status do %>
                 <li class="flex items-center text-md text-green-400 max-w-full">
@@ -25,7 +23,6 @@ defmodule BookmarkWeb.BulkArchivesLive do
                 </li>
               <% end %>
             </ul>
-          </div>
         <% else %>
           <.form for={@form} phx-submit="save">
             <textarea placeholder="Paste your URLs here, one per line:
@@ -33,17 +30,14 @@ defmodule BookmarkWeb.BulkArchivesLive do
             https://www.google.com/"
             name="urls" style="height: 100px; width: 500px"></textarea>
 
-            <button class="add_archive_button">Add archive</button>
+            <button class="donate-button">Bulk archive</button>
           </.form>
         <% end %>
-      </div>
       <!----------------------------Archive Cards Column----------------------------------->
-      <div class="col-span-2">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" style="padding: 33px;">
-          <%= for a <- @archives do %>
-            <%= BookmarkWeb.PageView.render_archive_card(a: a, conn: @socket) %>
-          <% end %>
-        </div>
+      <div>
+        <%= for a <- @archives do %>
+          <%= BookmarkWeb.PageView.render_archive_card(a: a, conn: @socket) %>
+        <% end %>
       </div>
     </div>
     """

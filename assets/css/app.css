@@ -86,7 +86,9 @@
 }
 
 .archive-screenshot {
-  width: 233px; 
+  width: 333px; 
+  float: inherit; 
+  padding: 13px;
 }
 
 .footer-icon {
@@ -238,7 +240,8 @@
 .qrbox {
   inline-size: 250px;
   overflow-wrap: break-word;
-  font-size: 9px;
+  font-size: 11px;
+  margin-top: 13px; 
 }
 
 .pdf_button {

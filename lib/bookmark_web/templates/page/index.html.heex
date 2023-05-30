@@ -2,7 +2,7 @@
 
 
   <div class="welcome-back">
-    <h1 class="display-box-headline">Welcome back, <span style="color: #ce0000">@<%= @current_user.username %></span></h1>
+    <h1 class="display-box-headline">Welcome back, <%= link("@" <> @current_user.username, to: "/@" <>  @current_user.username) %> </h1>
   </div>
 <!-- User box -->
   <div class="display-box">
