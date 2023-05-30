@@ -1,25 +1,55 @@
-<br />
 <!-- Add Archive -->
-<div style="background-color: #1e1e1e; color:white; padding: 33px; ">
-  <span class="big_headline">Archive links and earn rewards ⚡</span>
-  <%= form_tag("/archive", method: :post) %>
-  <input
-    class="add_archive_input"
-    style="background-color: white; color: black; height: 50px; margin-top: 23px; margin-bottom: 33px"
-    type="url"
-    name="url"
-    id="url"
-    placeholder="https://example.com (paste link here)"
-    pattern="https?://.*"
-    size="30"
-    required
-  />
-  <button class="add_archive_button" type="submit" onclick="showSpinner()">Add archive</button>
-</div>
-<br />
-<div style="padding: 33px; background: #1e1e1e">
-  <!-- Recent Archives -->
-  <p class="headline" style="color: white">🖥️ Recently archived</p>
+  <div class="display-box">
+    <div>
+      <h1 class="display-box-headline">Archive a link</h1>
+    </div>
+    <div class="donate-subheadline">
+      <div class="bullet">No login required <em><small><span style="color: gray">anonymously archive a link</span></small></em></div>
+    </div>
+    <div class="archive-input">
+      <%= form_tag("/archive", method: :post) %>
+      <input
+        class="add_archive_input"
+        style="background-color: white; color: black; height: 66px; margin-bottom: 23px; "
+        type="url"
+        name="url"
+        id="url"
+        placeholder="https://example.com (paste link here)"
+        pattern="https?://.*"
+        size="30"
+        required
+      />
+    </div>
+    <button class="donate-button" type="submit" onclick="showSpinner()">Add archive</button>
+  </div>
+
+<%= if @current_user do %>
+  <!-- <%= link "Profile", to: Routes.user_settings_path(@conn, :edit) %> | -->
+  (<%= link("Log out", to: Routes.user_session_path(@conn, :delete), method: :delete) %>)
+<% else %>
+
+  <!-- Create account -->
+  <div class="display-box">
+    <div>
+      <img src="/images/white-globe.png" style="float: right; width: 233px ">
+      <h1 class="display-box-headline">Create an account</h1>
+    </div>
+    <div class="donate-subheadline">
+      <div class="bullet">✔️ Custom profile <em><small><span style="color: gray">bookmark.org/@username</span></small></em></div>
+      <div class="bullet">✔️ Bulk archives <em><small><span style="color: gray">archive unlimited URLs</span></small></em></div>
+      <div class="bullet">✔️ AI summarizer <em><small><span style="color: gray">integrated with GPT-3 from OpenAI</span></small></em></div>
+      <div class="bullet">✔️ Lightning web wallet <em><small><span style="color: gray">receive bitcoin payments</span></small></em></div>
+      <div class="bullet">✔️ Nostr identity <em><small><span style="color: gray">import from Nostr, post to Nostr</span></small></em></div>
+    </div>
+    <div class="donate-action">
+      <button class="donate-button" type="submit">Create an account</button> or <%= link("login", to: Routes.user_session_path(@conn, :new)) %> to your existing account</div>
+  </div>
+
+<% end %>
+
+<!-- Recent Archives -->
+<div class="display-box">
+  <h1 class="display-box-headline">Recently archived</h1>
   <table>
     <tr>
       <%= for a <- @archives do %>
@@ -36,26 +66,24 @@
     </tr>
   </table>
 </div>
-<div style="background: #1e1e1e; padding: 33px;">
-  <p class="headline" style="color: white;">🌎 Become a patron</p>
-  <p style="color: white;">
-    Archives cost money. Your support ensures important pieces of history, commerce and culture are preserved.
-  </p>
 
-  <p style="color: white;">
-    Based on an average archive size of 10 MB, our cost model is roughly:
-  </p>
-  <p style="color: white;">⚡ <a href="/pay/2/25">25 satoshi</a> per 1 archive-year</p>
-  <p style="color: white;">⚡ <a href="/pay/2/250">250 satoshi</a> per 10 archive-years</p>
-  <p style="color: white;">⚡ <a href="/pay/2/2500">2,500 satoshi</a> per 100 archive-years</p>
-  <p style="color: white;">⚡ <a href="/pay/2/25000">25,000 satoshi</a> per archive-millennium</p>
-  <p style="color: white;">
-    If you are like us, and you would like an archive that will be around 1000 years from now, please help support this vision.
-  </p>
-  <p style="color: white;">
-    <a href="/pay/2/100000">Become a patron now</a>
-    and give generously to ensure future generations continue to have access to important pieces of digital history and culture.
-  </p>
+<!-- Donate -->
+<div class="display-box">
+  <div>
+    <h1 class="display-box-headline"><img class="small-logo" src="/images/bookmark-icon-transparent.png">Donate to Bookmark</h1>
+  </div>
+  <div class="donate-subheadline">
+    ⚡ Send sats to support independent internet archives.<br>
+    <em><small><span style="color: gray">Your donations pay for bandwidth, compute, storage, and funding of bounties for open source developers that work on this project.</span></small></em>
+  </div>
+  <div class="donate-action">
+    <button class="donate-button">Donate now</button>
+  </div>
+</div>
+
+<!-- Top Users -->
+<div class="display-box">
+  <h1 class="display-box-headline">👤 Top users</h1>
 </div>
 
 <div id="loading" class="loading"></div>
@@ -66,6 +94,6 @@
   function showSpinner() {
     if (url.value != "") {
       loadingDiv.style.visibility = 'visible';
-    } 
+    }
   }
 </script>

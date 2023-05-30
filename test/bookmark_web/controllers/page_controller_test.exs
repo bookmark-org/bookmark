@@ -3,6 +3,6 @@ defmodule BookmarkWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Bookmark.org - Archive links and earn rewards ⚡"
+    assert html_response(conn, 200) =~ "Bookmark.org - Archive links ⚡"
   end
 end

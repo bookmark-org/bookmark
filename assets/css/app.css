@@ -4,6 +4,67 @@
 /* Pico CSS */
 @import "./pico.min.css";
 
+.bg {
+  color: white; 
+  background-color: black;
+}
+
+.logo {
+  width: 300px;
+}
+
+.login {
+ padding: 30px;
+}
+
+.footer {
+  padding: 30px;
+}
+
+.small-logo {
+  width: 38px;
+  margin-right: 7px;
+}
+.donate {
+  background-color: white;
+  margin: 10px;
+  padding: 30px;
+}
+
+.donate-button {
+  width: 50%;
+  height: 66px;
+  font-size: 23px;
+  border-radius: 10px;
+  background-color: #ce0000;
+  border: 1px solid white; 
+}
+
+.donate-action {
+  margin-top: 30px;
+}
+
+.donate-subheadline {
+  font-size: 23px;
+}
+
+.display-box {
+  background-color: #1e1e1e; color:white; padding: 33px; border-radius: 13px; margin: 13px;
+}
+
+.display-box-headline {
+  font-size: 33px;
+  font-weight: bold;
+}
+
+.bullet {
+  color: white; 
+}
+
+.archive-input {
+  margin-top: 23px;
+}
+
 .card-with-margin {
   margin-left: 10px;
   margin-right: 10px;
@@ -243,6 +304,7 @@ width: 100%;
   margin: 0 auto;
   position: relative;
   width: 100%;
+  max-width: 900px;
 }
 
 
@@ -762,7 +824,7 @@ ul {
 }
 
 .add_archive_input {
-  font-size: 16px;
+  font-size: 22px;
   color: black;
 }
 
@@ -785,10 +847,6 @@ input {
 
 section {
   background: white; 
-}
-
-.container {
-  
 }
 
 body {

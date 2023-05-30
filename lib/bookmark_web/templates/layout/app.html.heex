@@ -1,5 +1,18 @@
 <main class="container">
   <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
   <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+  <div class="logo">
+    <a href="/">
+      <img
+        src="/images/bookmark-white-transparent.png"
+      />
+    </a>
+  </div>
+
   <%= @inner_content %>
+
+<br><br><br><br>
+
+
+
 </main>
