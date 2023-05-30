@@ -4,20 +4,14 @@ defmodule BookmarkWeb.PageView do
     a = assigns[:a]
     conn = assigns[:conn]
     ~E"""
+    <div style="background-color: white; padding: 33px; margin: 33px; border-radius: 13px">
     <a href=<%= "/archive/" <> a.name %> target="_blank">
-      <article class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-black dark:shadow-gray-700/25 h-[35rem]" >
-        <%= img_tag(Routes.static_path(conn, "/archive/archive/" <> a.name <> "/screenshot.png"), alt: "Archive", class: "h-56 w-full object-cover object-top")%>
-        <div class="p-4 sm:p-6">
-          <time class="block text-sm text-gray-400 dark:text-gray-400">
-            <%= NaiveDateTime.to_string(a.updated_at) %>
-          </time>
-          <h3 class="mt-0.5 text-lg text-white"><%= a.title %>y</h3>
-          <p class="mt-2 line-clamp-3 text-base/relaxed text-gray-400 dark:text-gray-500">
-            <%= a.summary %>
-          </p>
-        </div>
-      </article>
+    <h1 style="color: #ce0000; font-size: 36px"><%= a.title %></h1>
+    <h2 style="font-size: 24px"><%= a.summary %></h2>
+    <%= img_tag(Routes.static_path(conn, "/archive/archive/" <> a.name <> "/screenshot.png"), alt: "Archive", class: "archive-screenshot")%>
+    <h3 style="color: gray; margin-top: 13px; ">Archived on <%= NaiveDateTime.to_string(a.updated_at) %></h3>
     </a>
+    </div>
     """
   end
 end

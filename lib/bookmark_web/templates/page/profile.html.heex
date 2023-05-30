@@ -1,9 +1,7 @@
-<div class="white-bg-panel">
-  <p class="headline">Latest archives by <%= @username %></p>
-</div>
-
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4" style="padding: 33px;">
+ <div class="display-box">
+  <h1 class="display-box-headline">@<%= @username %> archives</h1>
   <%= for {a, index} <- Enum.with_index(@archives) do %>
     <%= render_archive_card(a: a, conn: @conn) %>
   <% end %>
+
 </div>

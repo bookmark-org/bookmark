@@ -32,11 +32,27 @@
 }
 
 .donate-button {
-  width: 50%;
   height: 66px;
   font-size: 23px;
+  font-weight: bold; 
   border-radius: 10px;
-  background-color: #ce0000;
+  color: #ce0000;
+  background-color: black;
+  border: 1px solid white; 
+}
+
+.go-button {
+  background-color: black;
+  border: none;
+  color: #ce0000;
+  padding: 13px 66px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 23px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px; 
   border: 1px solid white; 
 }
 
@@ -52,6 +68,10 @@
   background-color: #1e1e1e; color:white; padding: 33px; border-radius: 13px; margin: 13px;
 }
 
+.welcome-back {
+  background-color: #000000; color:white; padding-left: 33px; border-radius: 13px; 
+}
+
 .display-box-headline {
   font-size: 33px;
   font-weight: bold;
@@ -63,6 +83,16 @@
 
 .archive-input {
   margin-top: 23px;
+}
+
+.archive-screenshot {
+  width: 233px; 
+}
+
+.footer-icon {
+  width: 66px;
+  margin-right: 13px; 
+  margin-top: 13px; 
 }
 
 .card-with-margin {

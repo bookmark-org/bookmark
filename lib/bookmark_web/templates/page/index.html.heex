@@ -1,10 +1,33 @@
+<%= if @current_user do %>
+
+
+  <div class="welcome-back">
+    <h1 class="display-box-headline">Welcome back, <span style="color: #ce0000">@<%= @current_user.username %></span></h1>
+  </div>
+<!-- User box -->
+  <div class="display-box">
+    <div style="margin-bottom: 13px">
+      <h1 class="display-box-headline">Your balance is ⚡ <%= round(@balance) %> satoshi</h1>
+    </div>
+    <div class="donate-subheadline">
+      <%= link("Profile", to: "/@" <>  @current_user.username, class: "go-button") %>
+      <a class="go-button" href="/deposit">Deposit</a>
+      <a class="go-button" href="/withdraw">Withdraw</a>
+      <a class="go-button" href="/bulk_archives">Bulk archives</a>
+      <%= link("Log out", class: "go-button", to: Routes.user_session_path(@conn, :delete), method: :delete) %>
+    </div>
+  </div>
+<% end %>
 <!-- Add Archive -->
   <div class="display-box">
     <div>
-      <h1 class="display-box-headline">Archive a link</h1>
+      <h1 class="display-box-headline">Archive a link 🔗</h1>
     </div>
     <div class="donate-subheadline">
-      <div class="bullet">No login required <em><small><span style="color: gray">anonymously archive a link</span></small></em></div>
+
+      <%= if !(@current_user) do %>
+            <div class="bullet">No login required <em><small><span style="color: gray">anonymously archive a link</span></small></em></div>
+      <% end %>
     </div>
     <div class="archive-input">
       <%= form_tag("/archive", method: :post) %>
@@ -19,20 +42,20 @@
         size="30"
         required
       />
+
+      <small>Automatic free GPT-3 summary of every archive</small>
     </div>
     <button class="donate-button" type="submit" onclick="showSpinner()">Add archive</button>
   </div>
 
-<%= if @current_user do %>
-  <!-- <%= link "Profile", to: Routes.user_settings_path(@conn, :edit) %> | -->
-  (<%= link("Log out", to: Routes.user_session_path(@conn, :delete), method: :delete) %>)
-<% else %>
 
-  <!-- Create account -->
+
+<!-- Create account -->
+<%= if !(@current_user) do %>
   <div class="display-box">
     <div>
       <img src="/images/white-globe.png" style="float: right; width: 233px ">
-      <h1 class="display-box-headline">Create an account</h1>
+      <h1 class="display-box-headline">Join the Bookmark revolution</h1>
     </div>
     <div class="donate-subheadline">
       <div class="bullet">✔️ Custom profile <em><small><span style="color: gray">bookmark.org/@username</span></small></em></div>
@@ -42,9 +65,9 @@
       <div class="bullet">✔️ Nostr identity <em><small><span style="color: gray">import from Nostr, post to Nostr</span></small></em></div>
     </div>
     <div class="donate-action">
-      <button class="donate-button" type="submit">Create an account</button> or <%= link("login", to: Routes.user_session_path(@conn, :new)) %> to your existing account</div>
+      <a href="/users/register" class="go-button">Create an account</a> or <%= link("login", to: Routes.user_session_path(@conn, :new)) %> to your existing account
+    </div>
   </div>
-
 <% end %>
 
 <!-- Recent Archives -->
@@ -77,13 +100,8 @@
     <em><small><span style="color: gray">Your donations pay for bandwidth, compute, storage, and funding of bounties for open source developers that work on this project.</span></small></em>
   </div>
   <div class="donate-action">
-    <button class="donate-button">Donate now</button>
+    <a href="/deposit" class="go-button">Donate now</a>
   </div>
-</div>
-
-<!-- Top Users -->
-<div class="display-box">
-  <h1 class="display-box-headline">👤 Top users</h1>
 </div>
 
 <div id="loading" class="loading"></div>
