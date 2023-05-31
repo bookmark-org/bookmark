@@ -98,7 +98,7 @@ defmodule Bookmark.Archives do
             if caller_pid, do: Process.send(caller_pid, {:success, archive, url}, [:noconnect])
             {:ok, archive}
           rescue e ->
-            if caller_pid, do: Process.send(caller_pid, {:fail, url}, [:noconnect])
+            if caller_pid, do: Process.send(caller_pid, {:fail, url, e}, [:noconnect])
             Logger.error(Exception.format(:error, e, __STACKTRACE__))
             {:error, e}
           end
@@ -112,18 +112,31 @@ defmodule Bookmark.Archives do
 
   def archive_url(url, user) do
     {:ok, result} = Archives.archivebox(url)
+
     regex_result = Regex.run(~r/archive\/(.*)/, result)
 
-    # this gets triggered on duplicate URL or when archivebox is not running/fails
-    if is_nil(regex_result) do
-      Logger.error(result)
-      # TODO: Add error handling here
-     {:error, :already_exists}
-    else
-      Logger.debug(result)
-      [_err, id] = String.split(List.first(regex_result), "archive/")
-
-      create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
+    cond do
+      String.contains?(result, "Extractor failed") ->
+        if String.contains?(result, "404 Not Found") do
+          Logger.error(result)
+          {:error, :page_not_found}
+        else
+          Logger.error(result)
+          {:error, :unexpected_error}
+        end
+      String.contains?(result, "Failed to parse") ->
+        Logger.error(result)
+        {:error, :failed_to_parse}
+      String.contains?(result, "Found 0 new URLs not already in index") ->
+        Logger.error(result)
+        {:error, :already_exists}
+      is_nil(regex_result) ->
+        Logger.error(result)
+        {:error, :unexpected_error}
+      true ->
+        Logger.debug(result)
+        [_err, id] = String.split(List.first(regex_result), "archive/")
+        create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
     end
   end
 
@@ -132,11 +145,15 @@ defmodule Bookmark.Archives do
 
     body = JSON.encode!(url: url)
     headers = %{"content-type" => "application/json"}
-    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
-
+    response = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
     Logger.info("Executed: archivebox add #{url}")
 
-    {:ok, res.body["result"]}
+    case response do
+      {:ok, %Req.Response{status: 200, body: body}} -> {:ok, body["result"]}
+      _ ->
+        Logger.error(response)
+        {:error, :unexpected_error}
+    end
   end
 
   defp archivebox_url() do

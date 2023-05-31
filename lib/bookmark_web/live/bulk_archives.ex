@@ -13,11 +13,11 @@ defmodule BookmarkWeb.BulkArchivesLive do
               <%= for {url, status}  <- @urls_status do %>
                 <li class="flex items-center text-md text-green-400 max-w-full">
                 <%= case status do %>
-                  <% "PENDING" -> %>
+                  <% %{status: "PENDING"} -> %>
                     <%= BookmarkWeb.LiveHelpers.render_spinner(text:  url) %>
-                  <% "FAIL" -> %>
-                    <%= BookmarkWeb.LiveHelpers.render_fail(text:  url) %>
-                  <% "SUCCESS" -> %>
+                  <% %{status: "FAIL", error: error} -> %>
+                    <%= BookmarkWeb.LiveHelpers.render_fail(text:  url <> " (#{error})") %>
+                  <% %{status: "SUCCESS"} -> %>
                     <%= BookmarkWeb.LiveHelpers.render_success(text:  url) %>
                 <% end %>
                 </li>
@@ -65,7 +65,7 @@ defmodule BookmarkWeb.BulkArchivesLive do
   def handle_info({:pending, url_list}, socket) do
     Logger.info("handle_info(:pending). url_list: #{inspect(url_list)}")
     map = Enum.reduce(url_list, %{}, fn key, acc ->
-      Map.put(acc, key, "PENDING")
+      Map.put(acc, key, %{status: "PENDING"})
     end)
     {:noreply, assign(socket, urls_status: map)}
   end
@@ -77,18 +77,26 @@ defmodule BookmarkWeb.BulkArchivesLive do
       assign(
         socket,
         archives: socket.assigns.archives ++ [archive],
-        urls_status: Map.put(socket.assigns.urls_status, url, "SUCCESS")
+        urls_status: Map.put(socket.assigns.urls_status, url, %{status: "SUCCESS"})
       )
     }
   end
 
-  def handle_info({:fail, url}, socket) do
+  def handle_info({:fail, url, error}, socket) do
     Logger.info("handle_info(:fail). url: #{inspect(url)}")
+
+    error_message =
+      case error do
+        %{term: {:error, :already_exists}} -> "Already exists"
+        %{term: {:error, :page_not_found}} -> "Page not found"
+        %{term: {:error, :failed_to_parse}} -> "Invalid url format"
+        _ -> "Unexpected Server Error"
+      end
 
     {:noreply,
       assign(
         socket,
-        urls_status: Map.put(socket.assigns.urls_status, url, "FAIL")
+        urls_status: Map.put(socket.assigns.urls_status, url, %{status: "FAIL", error: error_message})
       )
     }
   end

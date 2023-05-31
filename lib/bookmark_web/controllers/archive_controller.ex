@@ -79,10 +79,24 @@ defmodule BookmarkWeb.ArchiveController do
       conn
       |> redirect(to: Routes.archive_path(conn, :show, archive.name))
     else
-      # TODO: Add error handling here
+      {:error, :page_not_found} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> "  Not Found")
+        |> redirect(to: "/")
+
+      {:error, :already_exists} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> " already exists")
+        |> redirect(to: "/")
+
+      {:error, :failed_to_parse} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> " Invalid url format")
+        |> redirect(to: "/")
+
       _ ->
       conn
-      |> put_flash(:info, url <> " already exists")
+      |> put_flash(:error, "Error: Unexpected Server Error")
       |> redirect(to: "/")
     end
   end
