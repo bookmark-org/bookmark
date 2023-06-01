@@ -94,6 +94,7 @@ defmodule Bookmark.Archives do
     tasks = Task.async_stream(
       url_list, fn url ->
           try do
+            :timer.sleep(:rand.uniform(1000))
             {:ok, archive} = Archives.archive_url(url, user)
             if caller_pid, do: Process.send(caller_pid, {:success, archive, url}, [:noconnect])
             {:ok, archive}
@@ -108,7 +109,7 @@ defmodule Bookmark.Archives do
 
     Logger.info("The following tasks were created: #{inspect(tasks)}")
     Enum.each(tasks, fn t -> Logger.info("Task result: #{inspect(t)}") end)
-    end
+  end
 
   def archive_url(url, user) do
     if check_nsfw_domain(url) do
