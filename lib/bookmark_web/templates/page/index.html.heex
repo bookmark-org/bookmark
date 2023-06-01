@@ -29,7 +29,7 @@
             <div class="bullet">No login required <em><small><span style="color: gray">anonymously archive a link</span></small></em></div>
       <% end %>
     </div>
-    <div class="archive-input">
+    <div class="archive-input" OnSubmit="showSpinner()">
       <%= form_tag("/archive", method: :post) %>
       <input
         class="add_archive_input"
@@ -45,7 +45,7 @@
 
       <small>Automatic free GPT-3 summary of every archive</small>
     </div>
-    <button class="donate-button" type="submit" onclick="showSpinner()">Add archive</button>
+    <button class="donate-button" type="submit">Add archive</button>
   </div>
 
 
@@ -113,5 +113,6 @@
     if (url.value != "") {
       loadingDiv.style.visibility = 'visible';
     }
+    return false;
   }
 </script>
