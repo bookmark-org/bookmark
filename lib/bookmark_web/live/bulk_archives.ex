@@ -90,6 +90,8 @@ defmodule BookmarkWeb.BulkArchivesLive do
         %{term: {:error, :already_exists}} -> "Already exists"
         %{term: {:error, :page_not_found}} -> "Page not found"
         %{term: {:error, :failed_to_parse}} -> "Invalid url format"
+        %{term: {:error, :domain_not_allowed}} -> "Domain not allowed"
+        %{term: {:error, :timeout_error}} -> "Timeout Error"
         _ -> "Unexpected Server Error"
       end
 

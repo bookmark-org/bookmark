@@ -111,49 +111,72 @@ defmodule Bookmark.Archives do
     end
 
   def archive_url(url, user) do
-    {:ok, result} = Archives.archivebox(url)
-
-    regex_result = Regex.run(~r/archive\/(.*)/, result)
-
-    cond do
-      String.contains?(result, "Extractor failed") ->
-        if String.contains?(result, "404 Not Found") do
-          Logger.error(result)
-          {:error, :page_not_found}
-        else
-          Logger.error(result)
-          {:error, :unexpected_error}
-        end
-      String.contains?(result, "Failed to parse") ->
-        Logger.error(result)
-        {:error, :failed_to_parse}
-      String.contains?(result, "Found 0 new URLs not already in index") ->
-        Logger.error(result)
-        {:error, :already_exists}
-      is_nil(regex_result) ->
-        Logger.error(result)
-        {:error, :unexpected_error}
-      true ->
-        Logger.debug(result)
-        [_err, id] = String.split(List.first(regex_result), "archive/")
-        create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
+    if check_nsfw_domain(url) do
+      {:error, :domain_not_allowed}
+    else
+      archivebox(url, user)
     end
   end
 
-  def archivebox(url) do
+  def archivebox(url, user) do
     Logger.info("Executing: archivebox add #{url} ...")
-
     body = JSON.encode!(url: url)
     headers = %{"content-type" => "application/json"}
     response = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
     Logger.info("Executed: archivebox add #{url}")
 
     case response do
-      {:ok, %Req.Response{status: 200, body: body}} -> {:ok, body["result"]}
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        result = body["result"]
+
+        regex_result = Regex.run(~r/archive\/(.*)/, result)
+
+        cond do
+          String.contains?(result, "Extractor failed") ->
+            if String.contains?(result, "404 Not Found") do
+              Logger.error(result)
+              {:error, :page_not_found}
+            else
+              Logger.error(result)
+              {:error, :unexpected_error}
+            end
+          String.contains?(result, "Failed to parse") ->
+            Logger.error(result)
+            {:error, :failed_to_parse}
+          String.contains?(result, "Found 0 new URLs not already in index") ->
+            Logger.error(result)
+            {:error, :already_exists}
+          is_nil(regex_result) ->
+            Logger.error(result)
+            {:error, :unexpected_error}
+          true ->
+            Logger.debug(result)
+            [_err, id] = String.split(List.first(regex_result), "archive/")
+            create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
+        end
+      {:ok, %Req.Response{status: 500, body: body}} ->
+        Logger.error(body)
+        {:error, :internal_server_error}
+
+      {:error, %{reason: :timeout}} ->
+        {:error, :timeout_error}
+
       _ ->
         Logger.error(response)
         {:error, :unexpected_error}
     end
+  end
+
+  defp check_nsfw_domain(url) do
+    blocked_domains =
+      :bookmark
+      |> :code.priv_dir()
+      |> Path.join("/static/blocked_domains.txt")
+      |> File.read!()
+      |> String.split("\n", trim: true)
+
+    blocked_domains
+    |> Enum.find(&String.contains?(url, &1))
   end
 
   defp archivebox_url() do
