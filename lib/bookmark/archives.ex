@@ -167,7 +167,7 @@ defmodule Bookmark.Archives do
         {:error, :timeout_error}
 
       _ ->
-        Logger.error(response)
+        Logger.error("Archivebox response error: #{inspect(response)}")
         {:error, :unexpected_error}
     end
   end
