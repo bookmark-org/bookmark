@@ -200,7 +200,7 @@ defmodule Bookmark.Archives do
       {output, 0} = System.cmd("python3", ["summarize.py", pdf_path], cd: File.cwd!)
       {:ok, output}
     rescue e ->
-      Logger.error(e)
+      Logger.error(Exception.format(:error, e, __STACKTRACE__))
       {:ok, "Summary not available"}
     end
   end
