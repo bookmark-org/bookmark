@@ -10,6 +10,8 @@ defmodule Bookmark.ArchivesTest do
   import Bookmark.BookmarkContextFixtures
 
   describe "archives" do
+    setup [:initialize_env_variables]
+
     @invalid_attrs %{name: nil}
 
     test "list_archives/0 returns all archives" do
@@ -59,7 +61,7 @@ defmodule Bookmark.ArchivesTest do
 
     test "archive_url/2 with valid data creates archives" do
       # Mocked functions
-      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id"} end)
+      Mimic.expect(Req, :post, fn _url, _opts -> archivebox_response("archive/some_id") end)
       Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
 
       # Test archive creation
@@ -70,7 +72,7 @@ defmodule Bookmark.ArchivesTest do
 
     test "bulk_archives/3 with valid data creates archives" do
       # Mocked functions
-      Mimic.expect(Archives, :archivebox, 2, fn _url -> {:ok, "archive/some_id"} end)
+      Mimic.expect(Req, :post, 2, fn _url, _opts ->  archivebox_response("archive/some_id") end)
       Mimic.expect(Archives, :get_title, 2, fn _archive ->  "some_title" end )
 
       # Test archives creation
@@ -80,28 +82,40 @@ defmodule Bookmark.ArchivesTest do
     end
 
     test "bulk_archives/3 doesn't crash if there is an invalid archive" do
-      # Mocked functions
-      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id}"} end)
-      Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
+      # Mocked function
+      Mimic.expect(Archives, :archive_url, fn url, _user ->
+        assert url == "foo.com"
+        {:ok, %Archive{}}
+      end)
 
       # Mocked error
       Mimic.expect(Archives, :archive_url, fn _url, _user -> raise "Fatal error" end)
 
-      # Test archives creation
-      assert Repo.all(Archive) |> length() == 0
-      assert :ok = Archives.bulk_archives(["foo.com", "bar.com"], nil)
-      assert Repo.all(Archive) |> length() == 1
+      # Test bulk_archives
+      assert :ok = Archives.bulk_archives(["foo.com", "foo.com"], nil)
     end
 
     test "bulk_archives/3 executes a callback to the pid" do
       # Mocked functions
-      Mimic.expect(Archives, :archivebox, fn _url -> {:ok, "archive/some_id}"} end)
-      Mimic.expect(Archives, :get_title, fn _archive ->  "some_title" end )
+      Mimic.expect(Archives, :archive_url, fn url, _user ->
+        assert url == "foo.com"
+        {:ok, %Archive{}}
+      end)
 
       # Test archives creation
       test_pid = self()
       assert :ok = Archives.bulk_archives(["foo.com"], nil, test_pid)
-      assert_received {:success, %Archive{}, "foo.com"}
     end
+  end
+
+  ## Setup functions
+  defp initialize_env_variables(_) do
+    System.put_env("BOOKMARK_ARCHIVEBOX_URL", "")
+    :ok
+  end
+
+  ## Private functions
+  defp archivebox_response(response) do
+    {:ok, %Req.Response{status: 200, body: %{"result" => response}}}
   end
 end

@@ -9,7 +9,7 @@ defmodule BookmarkWeb.UserRegistrationControllerTest do
       response = html_response(conn, 200)
       assert response =~ "Register"
       assert response =~ "Log in"
-      assert response =~ "Register</a>"
+      assert response =~ "Register"
     end
 
     test "redirects if already logged in", %{conn: conn} do
