@@ -134,12 +134,16 @@ defmodule Bookmark.Archives do
 
         cond do
           String.contains?(result, "Extractor failed") ->
-            if String.contains?(result, "404 Not Found") do
-              Logger.error(result)
-              {:error, :page_not_found}
-            else
-              Logger.error(result)
-              {:error, :unexpected_error}
+            cond do
+              String.contains?(result, "404 Not Found") ->
+                Logger.error(result)
+                {:error, :page_not_found}
+              String.contains?(result, "unable to resolve host address") ->
+                Logger.error(result)
+                {:error, :cant_be_reached}
+              true ->
+                Logger.error(result)
+                {:error, :unexpected_error}
             end
           String.contains?(result, "Failed to parse") ->
             Logger.error(result)
