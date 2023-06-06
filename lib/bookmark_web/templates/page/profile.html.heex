@@ -1,7 +1,5 @@
- <div class="display-box">
-  <h1 class="display-box-headline">@<%= @username %> archives</h1>
+ @<%= @username %> archives
+
   <%= for {a, index} <- Enum.with_index(@archives) do %>
     <%= render_archive_card(a: a, conn: @conn) %>
   <% end %>
-
-</div>

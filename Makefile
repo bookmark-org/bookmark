@@ -35,6 +35,7 @@ stop: # Terminates the execution of all containers
 .PHONY: clean
 clean: # Terminates the execution of all containers + delete volumes
 	docker compose down -v --remove-orphans
+	docker volume rm bookmark_db -f
 	rm -r priv/static/archive/*
 
 .PHONY: push-image
