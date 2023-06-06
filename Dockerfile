@@ -87,6 +87,12 @@ ENV MIX_ENV="prod"
 # Only copy the final release from the build stage
 COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/bookmark ./
 
+# Enable summarize script
+COPY ./summarize.py ./bin/
+COPY ./python-requirements.txt ./bin/
+RUN apt update && apt install python3 python3-pip -y
+RUN pip install -r ./bin/python-requirements.txt
+
 USER nobody
 
 CMD ["/app/bin/server"]

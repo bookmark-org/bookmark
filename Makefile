@@ -11,6 +11,7 @@ help: # Show help for each of the Makefile recipes.
 .PHONY: build
 build: # Build docker image.
 	docker build -t bookmark:latest .
+	docker tag bookmark:latest bookmarkorg/bookmark:latest
 
 .PHONY: prod
 prod: # Run bookmark dockerized in prod mode. Dockerized Database and ArchiveboxServer

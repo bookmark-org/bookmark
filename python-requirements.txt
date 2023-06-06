@@ -1,0 +1,4 @@
+###### Requirements without Version Specifiers ######
+openai
+PyPDF2
+tiktoken

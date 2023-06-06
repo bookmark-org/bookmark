@@ -92,6 +92,7 @@ defmodule BookmarkWeb.BulkArchivesLive do
         %{term: {:error, :failed_to_parse}} -> "Invalid url format"
         %{term: {:error, :domain_not_allowed}} -> "Domain not allowed"
         %{term: {:error, :timeout_error}} -> "Timeout Error"
+        %{term: {:error, :cant_be_reached}} -> "Site can’t be reached"
         _ -> "Unexpected Server Error"
       end
 

@@ -134,12 +134,16 @@ defmodule Bookmark.Archives do
 
         cond do
           String.contains?(result, "Extractor failed") ->
-            if String.contains?(result, "404 Not Found") do
-              Logger.error(result)
-              {:error, :page_not_found}
-            else
-              Logger.error(result)
-              {:error, :unexpected_error}
+            cond do
+              String.contains?(result, "404 Not Found") ->
+                Logger.error(result)
+                {:error, :page_not_found}
+              String.contains?(result, "unable to resolve host address") ->
+                Logger.error(result)
+                {:error, :cant_be_reached}
+              true ->
+                Logger.error(result)
+                {:error, :unexpected_error}
             end
           String.contains?(result, "Failed to parse") ->
             Logger.error(result)
@@ -163,7 +167,7 @@ defmodule Bookmark.Archives do
         {:error, :timeout_error}
 
       _ ->
-        Logger.error(response)
+        Logger.error("Archivebox response error: #{inspect(response)}")
         {:error, :unexpected_error}
     end
   end
@@ -193,10 +197,12 @@ defmodule Bookmark.Archives do
     pdf_path = pdf_path(archive)
 
     try do
+      Logger.info("Executing: python3 summarize.py #{pdf_path} ...")
       {output, 0} = System.cmd("python3", ["summarize.py", pdf_path], cd: File.cwd!)
+      Logger.info("Executed: python3 summarize.py #{pdf_path}")
       {:ok, output}
     rescue e ->
-      Logger.error(e)
+      Logger.error(Exception.format(:error, e, __STACKTRACE__))
       {:ok, "Summary not available"}
     end
   end

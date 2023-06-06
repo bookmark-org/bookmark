@@ -84,6 +84,11 @@ defmodule BookmarkWeb.ArchiveController do
         |> put_flash(:error, "Error: " <> url <> "  (not found)")
         |> redirect(to: "/")
 
+      {:error, :cant_be_reached} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> "  (site can’t be reached)")
+        |> redirect(to: "/")
+
       {:error, :already_exists} ->
         conn
         |> put_flash(:error, "Error: " <> url <> " (already exists)")
