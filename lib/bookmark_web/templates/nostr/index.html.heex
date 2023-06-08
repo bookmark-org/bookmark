@@ -1,0 +1,20 @@
+ <div class="display-box">
+    <div>
+      <h1 class="display-box-headline" style="color: white;">Extract archives from your notes 🔗</h1>
+    </div>
+    <div class="archive-input" OnSubmit="showSpinner()">
+      <%= form_tag("/nostr", method: :post) %>
+      <input
+        class="add_archive_input"
+        style="background-color: white; color: black; height: 66px; margin-bottom: 23px; "
+        type="text"
+        name="nostr_key"
+        id="nostr_key"
+        placeholder="Paste your Nostr Public Key here (only hex format is supported)"
+        required
+      />
+
+      <small>Automatic free GPT-3 summary of every archive</small>
+    </div>
+    <button class="donate-button" type="submit">Continue</button>
+  </div>

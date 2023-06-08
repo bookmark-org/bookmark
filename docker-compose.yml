@@ -29,6 +29,11 @@ services:
     volumes: 
       - db:/var/lib/postgresql/data
 
+  nostr-client:
+    image: bookmarkorg/nostr-client:latest
+    ports:
+      - '5005:5005'
+
   archivebox:
     image: bookmarkorg/archivebox-server:latest
     ports:

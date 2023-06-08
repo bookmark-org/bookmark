@@ -22,7 +22,9 @@ dev: # Run bookmark locally in dev mode. Dockerized Database and ArchiveboxServe
 	OPENAI_API_KEY=$(OPENAI_API_KEY)
 	export OPENAI_API_KEY
 	docker compose -f docker-compose-dev.yml up -d
-	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5001/add  iex -S mix phx.server
+	BOOKMARK_ARCHIVEBOX_URL=http://localhost:5001/add \
+	  BOOKMARK_NOSTR_CLIENT_URL=http://localhost:5005/links \
+	  iex -S mix phx.server
 	docker compose stop
 
 .PHONY: console-prod
