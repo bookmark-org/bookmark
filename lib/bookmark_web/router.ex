@@ -54,6 +54,7 @@ defmodule BookmarkWeb.Router do
     pipe_through :browser_noroot
 
     get "/twitter/:tweet_id", PageController, :twitter
+    get "/image", PageController, :image_viewer
   end
 
   scope "/", BookmarkWeb do

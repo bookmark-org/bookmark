@@ -154,4 +154,11 @@ defmodule BookmarkWeb.PageController do
         :crypto.hash(:sha256, to_string(timestamp)) |> Base.encode16() |> String.downcase()
     )
   end
+
+  def image_viewer(conn, %{"url" => image_url}) do
+    render(conn, "image_viewer.html",
+    image_url: image_url
+  )
+  end
+
 end
