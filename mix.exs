@@ -46,7 +46,7 @@ defmodule Bookmark.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.7"},
+      {:phoenix_live_view, "~> 0.18.18"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.7"},
       {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
@@ -63,7 +63,8 @@ defmodule Bookmark.MixProject do
       {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
-      {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
+      {:mimic, "~> 1.7", only: :test}
     ]
   end
 

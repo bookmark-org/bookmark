@@ -10,27 +10,19 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
   def render(assigns) do
     ~H"""
-      <div class="withdraw-panel" style="margin-top: 5rem; height: 74vh">
-        <h1>Withdraw</h1>
-        <div style="display: flex; justify-content: space-between">
-          <div>Total:</div>
-          <div><%= floor(@balance_local) %> <%= pluralize(@balance_local) %></div>
-        </div>
-        <div style="display: flex; justify-content: space-between">
-          <em>Fee:</em>
-          <em>-2 Sats</em>
-        </div>
-        <div style="display: flex; justify-content: space-between">
-          <strong>Available:</strong>
-          <strong><%= max(floor(@balance_local - 2), 0) %> <%= pluralize(@balance_local) %></strong>
-        </div>
-        <form phx-submit="pay">
-          <div class="pay-invoice">
-            <input class="pay-invoice-input" id="bolt_invoice" type="text" value={@invoice} placeholder="bolt11 invoice" name="bolt11_invoice"/>
-            <button type="button" id="scan-btn" phx-hook="ScanCode">📷</button>
-          </div>
-          <button class="pay-invoice-btn">Pay Invoice</button>
-        </form>
+    <div class="display-box">
+      <h1 class="display-box-headline">Withdraw</h1>
+          <div style="font-size: 24px; margin-bottom: 33px; ">Generate an invoice using your destination wallet. </div>
+
+          <div><small>Total balance: <%= floor(@balance_local) %> <%= pluralize(@balance_local) %></small></div>
+          <div><small><em>Transaction fee: -2 Sats</em></small></div>
+          <div style="margin-bottom: 33px; "><strong>You will receive: <%= max(floor(@balance_local - 2), 0) %> <%= pluralize(@balance_local) %></strong></div>
+
+          <form phx-submit="pay">
+            <input class="donate-button" id="bolt_invoice" type="text" value={@invoice} placeholder="Paste BOLT-11 invoice (ln...)" name="bolt11_invoice" style="height: 66px; background-color: white; border-radius: 13px; margin-bottom: 13px; float: left; "/>
+            <button class="donate-button" style="color: lightgray; width: 30%; float: left; margin-right: 13px; " type="button" id="scan-btn" phx-hook="ScanCode">Scan QR</button>
+            <button class="donate-button" style="width: 66%">Withdraw</button>
+          </form>
 
         <%= if @show_modal do %>
           <.modal>
