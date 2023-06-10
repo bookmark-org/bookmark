@@ -12,7 +12,6 @@ defmodule BookmarkWeb.NostrController do
     nostr_key = params["nostr_key"]
 
     conn
-    |> put_flash(:info, "Redirecting to bulk archive page...")
     |> put_session(:nostr_key, nostr_key)
     |> redirect(to: Routes.live_path(conn, BookmarkWeb.BulkArchivesLive))
   end

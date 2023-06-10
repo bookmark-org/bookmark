@@ -10,6 +10,7 @@ defmodule Bookmark.Nostr.Client do
   end
 
   def get_links(nostr_key) do
+    nostr_key = to_hex(nostr_key)
     Logger.info("Executing: Nostr.Client.get_links(#{nostr_key}) ...")
     body = JSON.encode!(public_key: nostr_key)
     headers = %{"content-type" => "application/json"}
@@ -24,4 +25,17 @@ defmodule Bookmark.Nostr.Client do
         {:error, response}
       end
   end
+
+  def to_hex("npub" <> _ = key) do
+    case Bech32.decode(key) do
+      {:ok, "npub", binary_key} ->
+        binary_key
+        |> Binary.to_hex()
+     error ->
+        Logger.error("Invalid key: #{key}")
+        nil
+    end
+  end
+
+  def to_hex(key), do: key
 end
