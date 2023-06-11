@@ -19,6 +19,8 @@ services:
     # TODO: Archivebox Server must take environment variables to enable these properties
     # environment:
     #     - PROPERTY=VALUE
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./priv/static/archive:/app/archivebox
 

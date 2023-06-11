@@ -155,10 +155,16 @@ defmodule BookmarkWeb.PageController do
     )
   end
 
-  def image_viewer(conn, %{"url" => image_url}) do
-    render(conn, "image_viewer.html",
-    image_url: image_url
-  )
-  end
+  # This endpoint is necessary to do archivebox can archive image url.
+  # Recives an image url, expressed in base64, and embebeds it inside HTML.
+  # Note: We need to receive a base64 url, because archivebox causes nested urls other way
+  def image_viewer(conn, %{"url" => encoded_url}) do
+    image_url = Base.decode64!(encoded_url)
 
+    %{path: path, host: host} = URI.parse(image_url)
+    filename = Path.basename(path)
+    title = "#{host}: #{filename}"
+
+    render(conn, "image_viewer.html", image_url: image_url, title: title, layout: false)
+  end
 end

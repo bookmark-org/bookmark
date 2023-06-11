@@ -8,6 +8,7 @@ defmodule Bookmark.Archives do
   alias Bookmark.Repo
   alias Bookmark.Archives.Archive
   alias Bookmark.Archives
+  alias Bookmark.Utils
 
   @doc """
   Returns the list of archives.
@@ -115,7 +116,33 @@ defmodule Bookmark.Archives do
     if check_nsfw_domain(url) do
       {:error, :domain_not_allowed}
     else
+      url = parse_url_if_is_image(url)
       archivebox(url, user)
+    end
+  end
+
+  # Transforms image urls to Bookmark image viewer urls (expressed in Base64), which allows to archive them as HTML.
+  # Examples:
+  #   url = https://foo.com/ -> https://foo.com/
+  #   url = https://foo.com/image.jpg -> bookmark.org/image?url={base_64(https://foo.com/image.jpg)}
+  def parse_url_if_is_image(url) do
+    %{path: path} = URI.parse(url)
+
+    image_extensions = [".apng", ".avif", ".gif", ".jpg", ".jpeg", ".jfif", ".pjpeg", ".pjp", ".png",
+    ".svg", ".webp", ".bmp", "ico", ".cur", ".tif", ".tiff"]
+
+    if String.ends_with?(path, image_extensions) do
+      encoded_url =
+        url
+        |> Utils.remove_query_string()
+        |> Base.encode64()
+
+      # TODO: Handle base_path depending if is prod or dev
+      base_path = "http://host.docker.internal:4000"
+      image_viewer_path = BookmarkWeb.Router.Helpers.page_path(BookmarkWeb.Endpoint, :image_viewer, %{url: encoded_url})
+      base_path <> image_viewer_path
+    else
+      url
     end
   end
 
