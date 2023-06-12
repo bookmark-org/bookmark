@@ -137,7 +137,7 @@ defmodule Bookmark.Archives do
         |> Utils.remove_query_string()
         |> Base.encode64()
 
-      # TODO: Handle base_path depending if is prod or dev
+      # TODO: Handle the base_path in prod mode, using the published domain
       base_path = "http://host.docker.internal:4000"
       image_viewer_path = BookmarkWeb.Router.Helpers.page_path(BookmarkWeb.Endpoint, :image_viewer, %{url: encoded_url})
       base_path <> image_viewer_path

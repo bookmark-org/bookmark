@@ -32,7 +32,9 @@ services:
   archivebox:
     image: bookmarkorg/archivebox-server:latest
     ports:
-        - '5001:5000'
+      - '5001:5000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     # TODO: Archivebox Server must take environment variables to enable these properties
     # environment:
     #     - PROPERTY=VALUE
