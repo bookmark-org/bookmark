@@ -53,6 +53,31 @@ defmodule BookmarkWeb.LiveHelpers do
     """
   end
 
+  def render_spinner(assigns) do
+    text = assigns[:text]
+    ~H"""
+    🤔
+    <%= text %>
+    """
+  end
+
+  def render_success(assigns) do
+    text = assigns[:text]
+    ~H"""
+    😄
+    <%= text %>
+    """
+  end
+
+
+  def render_fail(assigns) do
+    text = assigns[:text]
+    ~H"""
+    😞
+    <%= text %>
+    """
+  end
+
   defp hide_modal(js \\ %JS{}) do
     js
     |> JS.push("modal-closed")

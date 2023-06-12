@@ -7,6 +7,7 @@ defmodule Bookmark.Archives do
   import Ecto.Query, warn: false
   alias Bookmark.Repo
   alias Bookmark.Archives.Archive
+  alias Bookmark.Archives
 
   @doc """
   Returns the list of archives.
@@ -86,34 +87,101 @@ defmodule Bookmark.Archives do
     |> Repo.update()
   end
 
-  # Archivebox, create archive
+  # Archivebox, create archives
+
+  # Returns a list of {:ok, %Archive}
+  def bulk_archives(url_list, user, caller_pid \\ nil) do
+    tasks = Task.async_stream(
+      url_list, fn url ->
+          try do
+            :timer.sleep(:rand.uniform(1000))
+            {:ok, archive} = Archives.archive_url(url, user)
+            if caller_pid, do: Process.send(caller_pid, {:success, archive, url}, [:noconnect])
+            {:ok, archive}
+          rescue e ->
+            if caller_pid, do: Process.send(caller_pid, {:fail, url, e}, [:noconnect])
+            Logger.error(Exception.format(:error, e, __STACKTRACE__))
+            {:error, e}
+          end
+      end,
+      timeout: :infinity
+      )
+
+    Logger.info("The following tasks were created: #{inspect(tasks)}")
+    Enum.each(tasks, fn t -> Logger.info("Task result: #{inspect(t)}") end)
+  end
+
   def archive_url(url, user) do
-    {:ok, result} = archivebox(url)
-    regex_result = Regex.run(~r/archive\/(.*)/, result)
-
-    # this gets triggered on duplicate URL or when archivebox is not running/fails
-    if is_nil(regex_result) do
-      Logger.error(result)
-      # TODO: Add error handling here
-     {:error, :already_exists}
+    if check_nsfw_domain(url) do
+      {:error, :domain_not_allowed}
     else
-      Logger.debug(result)
-      [_err, id] = String.split(List.first(regex_result), "archive/")
-
-      create_archive(%{name: id, comment: "", title: get_title(id)}, user)
+      archivebox(url, user)
     end
   end
 
-  def archivebox(url) do
+  def archivebox(url, user) do
     Logger.info("Executing: archivebox add #{url} ...")
-
     body = JSON.encode!(url: url)
     headers = %{"content-type" => "application/json"}
-    {:ok, res} = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
-
+    response = Req.post(archivebox_url(), body: body, headers: headers, receive_timeout: 120_000)
     Logger.info("Executed: archivebox add #{url}")
 
-    {:ok, res.body["result"]}
+    case response do
+      {:ok, %Req.Response{status: 200, body: body}} ->
+        result = body["result"]
+
+        regex_result = Regex.run(~r/archive\/(.*)/, result)
+
+        cond do
+          String.contains?(result, "Extractor failed") ->
+            cond do
+              String.contains?(result, "404 Not Found") ->
+                Logger.error(result)
+                {:error, :page_not_found}
+              String.contains?(result, "unable to resolve host address") ->
+                Logger.error(result)
+                {:error, :cant_be_reached}
+              true ->
+                Logger.error(result)
+                {:error, :unexpected_error}
+            end
+          String.contains?(result, "Failed to parse") ->
+            Logger.error(result)
+            {:error, :failed_to_parse}
+          String.contains?(result, "Found 0 new URLs not already in index") ->
+            Logger.error(result)
+            {:error, :already_exists}
+          is_nil(regex_result) ->
+            Logger.error(result)
+            {:error, :unexpected_error}
+          true ->
+            Logger.debug(result)
+            [_err, id] = String.split(List.first(regex_result), "archive/")
+            create_archive(%{name: id, comment: "", title: Archives.get_title(id)}, user)
+        end
+      {:ok, %Req.Response{status: 500, body: body}} ->
+        Logger.error(body)
+        {:error, :internal_server_error}
+
+      {:error, %{reason: :timeout}} ->
+        {:error, :timeout_error}
+
+      _ ->
+        Logger.error("Archivebox response error: #{inspect(response)}")
+        {:error, :unexpected_error}
+    end
+  end
+
+  defp check_nsfw_domain(url) do
+    blocked_domains =
+      :bookmark
+      |> :code.priv_dir()
+      |> Path.join("/static/blocked_domains.txt")
+      |> File.read!()
+      |> String.split("\n", trim: true)
+
+    blocked_domains
+    |> Enum.find(&String.contains?(url, &1))
   end
 
   defp archivebox_url() do
@@ -134,7 +202,7 @@ defmodule Bookmark.Archives do
       Logger.info("Executed: python3 summarize.py #{pdf_path}")
       {:ok, output}
     rescue e ->
-      Logger.error(e)
+      Logger.error(Exception.format(:error, e, __STACKTRACE__))
       {:ok, "Summary not available"}
     end
   end

@@ -1,5 +1,6 @@
 defmodule BookmarkWeb.UserSessionControllerTest do
-  use BookmarkWeb.ConnCase, async: true
+  use BookmarkWeb.ConnCase
+  use Mimic
 
   import Bookmark.AccountsFixtures
 
@@ -24,6 +25,8 @@ defmodule BookmarkWeb.UserSessionControllerTest do
 
   describe "POST /users/log_in" do
     test "logs the user in", %{conn: conn, user: user} do
+      Mimic.expect(Bookmark.Wallets, :balance, 3, fn _user -> 10 end)
+
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
           "user" => %{"email" => user.email, "password" => valid_user_password()}

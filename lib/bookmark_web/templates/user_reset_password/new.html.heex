@@ -1,13 +1,12 @@
-<div>
-  <p class="headline">Forgot your password?</p>
+<div class="display-box">
+  <h1 class="display-box-headline">Forgot your password?</h1>
 
   <.form :let={f} for={:user} action={Routes.user_reset_password_path(@conn, :create)}>
     <span style="color: #1e1e1e">
-      <%= label(f, :email) %>
+      <h1>Email</h1>
       <%= email_input(f, :email, required: true) %>
-
       <div>
-        <%= submit("Reset password", class: "login_button") %>
+        <%= submit("Reset password", class: "donate-button") %>
       </div>
     </span>
   </.form>

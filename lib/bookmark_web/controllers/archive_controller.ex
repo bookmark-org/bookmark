@@ -79,10 +79,39 @@ defmodule BookmarkWeb.ArchiveController do
       conn
       |> redirect(to: Routes.archive_path(conn, :show, archive.name))
     else
-      # TODO: Add error handling here
+      {:error, :page_not_found} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> "  (not found)")
+        |> redirect(to: "/")
+
+      {:error, :cant_be_reached} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> "  (site can’t be reached)")
+        |> redirect(to: "/")
+
+      {:error, :already_exists} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> " (already exists)")
+        |> redirect(to: "/")
+
+      {:error, :failed_to_parse} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> " (invalid url format)")
+        |> redirect(to: "/")
+
+      {:error, :domain_not_allowed} ->
+        conn
+        |> put_flash(:error, "Error: " <> url <> " (domain not allowed)")
+        |> redirect(to: "/")
+
+      {:error, :timeout_error} ->
+        conn
+        |> put_flash(:error, "Error: Timeout Error")
+        |> redirect(to: "/")
+
       _ ->
       conn
-      |> put_flash(:info, url <> " already exists")
+      |> put_flash(:error, "Error: Unexpected Server Error")
       |> redirect(to: "/")
     end
   end
@@ -91,41 +120,5 @@ defmodule BookmarkWeb.ArchiveController do
     {%{}, %{url: :string}}
     |> Changeset.cast(params, [:url])
     |> Changeset.validate_required([:url])
-    |> validate_domain()
-  end
-
-  def validate_domain(%{valid?: true} = changeset) do
-    Changeset.validate_change(changeset, :url, fn _, value ->
-      value
-      |> check_nsfw_domain()
-      |> case do
-        true ->
-          []
-
-        false ->
-          [{:url, "domain not allowed"}]
-      end
-    end)
-  end
-
-  def validate_domain(changeset), do: changeset
-
-  defp check_nsfw_domain(url) do
-    blocked_domains =
-      :bookmark
-      |> :code.priv_dir()
-      |> Path.join("/static/blocked_domains.txt")
-      |> File.read!()
-      |> String.split("\n", trim: true)
-
-    blocked_domains
-    |> Enum.find(&String.contains?(url, &1))
-    |> case do
-      nil ->
-        true
-
-      _ ->
-        false
-    end
   end
 end

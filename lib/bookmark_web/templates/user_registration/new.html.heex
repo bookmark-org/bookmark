@@ -1,5 +1,5 @@
-<div class="white-bg-panel">
-  <p class="headline">Register</p>
+<div class="display-box">
+  <h1 class="display-box-headline">Create an account</h1>
 
   <.form :let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
     <%= if @changeset.action do %>
@@ -8,21 +8,24 @@
       </div>
     <% end %>
     <span style="color: #1e1e1e">
+      <h1>
       <%= label(f, :username) %> https://bookmark.org/@username <%= text_input(f, :username,
         required: true
       ) %>
+      </h1>
       <%= error_tag(f, :username) %>
 
-      <%= label(f, :email) %> (will be kept private) <%= email_input(f, :email, required: true) %>
+
+      <h1><%= label(f, :email) %> (will be kept private) <%= email_input(f, :email, required: true) %></h1>
       <%= error_tag(f, :email) %>
 
-      <%= label(f, :password) %> (at least 12 characters) <%= password_input(f, :password,
+      <h1><%= label(f, :password) %> (at least 12 characters) <%= password_input(f, :password,
         required: true
-      ) %>
+      ) %></h1>
       <%= error_tag(f, :password) %>
     </span>
     <div>
-      <%= submit("Register", class: "login_button") %>
+      <%= submit("Register", class: "donate-button") %>
     </div>
   </.form>
 
