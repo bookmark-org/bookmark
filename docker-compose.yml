@@ -11,7 +11,7 @@ services:
       - bookmark-db
       - archivebox
     ports:
-      - '4000:4000'
+      - '80:4000'
     env_file:
       - base.env
     volumes:
