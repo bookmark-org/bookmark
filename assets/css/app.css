@@ -85,6 +85,28 @@
   margin-top: 23px;
 }
 
+.input-box {
+  background-color: black;
+  color: white; 
+  padding: 10px; 
+  margin-top: 13px; 
+  margin-bottom: 13px; 
+  border-radius: 10px; 
+}
+
+.input-box-input {
+  background-color: white; 
+  color: white; 
+  padding: 6px; 
+  border-radius: 10px;  
+}
+
+.text-input {
+  color: black; 
+  font-size: 16px; 
+  height: 333px; 
+}
+
 .archive-screenshot {
   width: 333px; 
   padding: 13px;
