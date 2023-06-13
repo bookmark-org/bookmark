@@ -77,7 +77,8 @@ defmodule Bookmark.Archives do
 
   def get_title(archive_id) do
     list = index_data(archive_id)
-    list["title"]
+
+    String.slice(list["title"], 0..199)
   end
 
   def add_summary(archive) do
