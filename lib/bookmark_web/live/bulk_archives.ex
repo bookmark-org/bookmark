@@ -28,7 +28,7 @@ defmodule BookmarkWeb.BulkArchivesLive do
             <textarea placeholder="Paste your URLs here, one per line:
             https://www.example.com/
             https://www.google.com/"
-            name="urls" style="height: 100px; width: 500px"></textarea>
+            name="urls" style="height: 100px; width: 500px"><%= if  @links, do: @links%></textarea>
 
             <button class="donate-button">Bulk archive</button>
           </.form>
@@ -43,8 +43,21 @@ defmodule BookmarkWeb.BulkArchivesLive do
     """
   end
 
-  def mount(_params, %{"user_token" => user_token}, socket) do
-    {:ok, assign(socket, archives: [], urls_status: nil, user_token: user_token, form: to_form(%{}))}
+  def mount(_params, session, socket) do
+    user_token = session["user_token"]
+    links = get_nostr_links(session["nostr_key"])
+
+    {:ok, assign(socket, archives: [], urls_status: nil, links: links, user_token: user_token, form: to_form(%{}))}
+  end
+
+  def get_nostr_links(nostr_key) do
+    with {:ok, links} = Bookmark.Nostr.Client.get_links(nostr_key) do
+      links |> Enum.join("\n")
+    else
+      error ->
+        Logger.error("get_nostr_links: #{inspect(error)}")
+        nil
+    end
   end
 
   def handle_event("save", %{"urls" => urls}, socket) do
