@@ -64,7 +64,9 @@ defmodule Bookmark.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:mimic, "~> 1.7", only: :test}
+      {:mimic, "~> 1.7", only: :test},
+      {:bech32, "~> 1.0"},
+      {:binary, "~> 0.0.5"}
     ]
   end
 

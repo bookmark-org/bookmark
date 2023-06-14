@@ -82,6 +82,8 @@ defmodule BookmarkWeb.Router do
   scope "/", BookmarkWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    get "/nostr", NostrController, :index
+    post "/nostr", NostrController, :create
     live "/withdraw", WithdrawalsLive
     live "/bulk_archives", BulkArchivesLive
     get "/users/settings", UserSettingsController, :edit

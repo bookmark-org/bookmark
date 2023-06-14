@@ -14,6 +14,12 @@ config :bookmark, BookmarkWeb.Endpoint, cache_static_manifest: "priv/static/cach
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :bookmark, BookmarkWeb.Endpoint,
+  # Binding to loopback ipv4 address prevents access from other machines.
+  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
+  check_origin: false,
+  debug_errors: true
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
