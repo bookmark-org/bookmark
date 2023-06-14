@@ -1,5 +1,5 @@
-<div class="display-box">
-  <h1 class="display-box-headline">Log in</h1>
+<div class="display-box" data-theme="dark">
+  <h1 class="display-box-headline" style="color: white;">Log in</h1>
 
   <.form :let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user}>
     <%= if @error_message do %>
@@ -7,12 +7,13 @@
         <p><%= @error_message %></p>
       </div>
     <% end %>
-Email
-      <%= email_input(f, :email, required: true) %>
-Password
-      <%= password_input(f, :password, required: true) %>
+      <%= label(:email, "Email", style: "color:white;") %>
+      <%= email_input(f, :email, required: true, class: "form-input",  placeholder: "Enter your email") %>
 
+      <%= label(:email, "Password", style: "color:white;") %>
+      <%= password_input(f, :password, required: true, class: "form-input", placeholder: "Enter your password") %>
     <div>
+    <br>
       <%= submit("Log in", class: "donate-button") %>
     </div>
   </.form>
