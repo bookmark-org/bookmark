@@ -56,25 +56,29 @@ defmodule BookmarkWeb.LiveHelpers do
   def render_spinner(assigns) do
     text = assigns[:text]
     ~H"""
-    🤔
-    <%= text %>
+    <p aria-busy="true" style="color: white;">
+      🤔 <%= text %>
+    </p>
     """
   end
 
   def render_success(assigns) do
     text = assigns[:text]
     ~H"""
-    😄
-    <%= text %>
+    <p style="color: green;">
+      <i class="fa fa-check-circle" style="color:white;"></i>
+      😄 <%= text %>
+    </p>
     """
   end
-
 
   def render_fail(assigns) do
     text = assigns[:text]
     ~H"""
-    😞
-    <%= text %>
+    <p style="color: red;">
+      <i class="fa fa-exclamation-circle"></i>
+      😞 <%= text %>
+    </p>
     """
   end
 
