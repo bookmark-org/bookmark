@@ -132,7 +132,7 @@ defmodule Bookmark.Archives do
     image_extensions = [".apng", ".avif", ".gif", ".jpg", ".jpeg", ".jfif", ".pjpeg", ".pjp", ".png",
     ".svg", ".webp", ".bmp", "ico", ".cur", ".tif", ".tiff"]
 
-    if String.ends_with?(path, image_extensions) do
+    if String.ends_with?(path || "", image_extensions) do
       encoded_url =
         url
         |> Utils.remove_query_string()
