@@ -75,6 +75,7 @@
 .display-box-headline {
   font-size: 33px;
   font-weight: bold;
+  color: white;
 }
 
 .bullet {
@@ -99,12 +100,6 @@
   color: white; 
   padding: 6px; 
   border-radius: 10px;  
-}
-
-.text-input {
-  color: black; 
-  font-size: 16px; 
-  height: 333px; 
 }
 
 .archive-screenshot {
@@ -897,6 +892,12 @@ a {
 
 input {
   color: #1e1e1e;
+}
+
+.form-input{
+  height: 45px !important;
+  font-size: medium;
+  background-color: rgb(245, 240, 240) !important;
 }
 
 section {
