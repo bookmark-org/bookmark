@@ -148,6 +148,7 @@ defmodule Bookmark.Archives do
   end
 
   def archivebox(url, user) do
+    url = add_timestamp(url)
     Logger.info("Executing: archivebox add #{url} ...")
     body = JSON.encode!(url: url)
     headers = %{"content-type" => "application/json"}
@@ -198,6 +199,12 @@ defmodule Bookmark.Archives do
         Logger.error("Archivebox response error: #{inspect(response)}")
         {:error, :unexpected_error}
     end
+  end
+
+  # This function is necessary to avoid the "URL already exists" archivebox error
+  # https://duplicate-url.domain/page -> https://duplicate-url.domain/page#<unix_timestamp>
+  def add_timestamp(url) do
+    url <> "##{Integer.to_string(:os.system_time(:millisecond))}"
   end
 
   defp check_nsfw_domain(url) do
