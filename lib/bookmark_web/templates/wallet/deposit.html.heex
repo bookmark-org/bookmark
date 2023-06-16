@@ -1,5 +1,5 @@
 <div class="display-box" align="center">
-  <h1 class="display-box-headline"><%= @amount %> sats to @<%= @conn.assigns.current_user.username %></h1>
+  <h1 class="display-box-headline"><%= @amount %> sats to @<%= @user.username %></h1>
   <%= img_tag(@qr, class: "qr") %>
   <div class="qrbox">
     <%= @invoice %>

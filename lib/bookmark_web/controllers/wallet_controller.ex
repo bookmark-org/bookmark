@@ -69,7 +69,7 @@ defmodule BookmarkWeb.WalletController do
   end
 
   def deposit(conn, params) do
-    user = conn.assigns.current_user
+    user = conn.assigns.current_user || Bookmark.Accounts.get_user_by_email("anonymous@bookmark.org")
 
     amount =
       if params["amount"] != nil do
@@ -95,7 +95,8 @@ defmodule BookmarkWeb.WalletController do
       amount: amount,
       qr: qr(display_invoice),
       meta_attrs: attrs_list,
-      title: title
+      title: title,
+      user: user
     )
   end
 
