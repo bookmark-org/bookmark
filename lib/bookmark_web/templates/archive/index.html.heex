@@ -1,17 +1,7 @@
-<section style="position: fixed; z-index: 3; top: 0; right: 0; margin-top: 33px; padding-right: 3px; background: yellow">
-  <span style="font-size: 13px; color: #1e1e1e; margin-left: 33px; margin-right: 100px;">
-    <strong>Donate</strong>
-    <%= archive_poster = assigns[:archive_poster]
 
-    archive_poster_user =
-      if archive_poster do
-        Bookmark.Accounts.get_user_by_username(archive_poster)
-      end
 
-    link("⚡1 sat", to: "/pay/" <> to_string(archive_poster_user.id) <> "/1") %>
-    <%= link("⚡10", to: "/pay/" <> to_string(archive_poster_user.id) <> "/10") %>
-    <%= link("⚡100", to: "/pay/" <> to_string(archive_poster_user.id) <> "/100") %>
-  </span>
+<section style="position: fixed; z-index: 3; top: 0; right: 0; padding-top: 11px; padding-right: 13px; background: black">
+<button class="donate-button" style="height: 42px; font-size: 18px; ">⚡ Donate</button>
 </section>
 <!-- embedded iframe -->
 <%= tag(:iframe,
@@ -109,7 +99,7 @@
     //    First object in modal is the modal title
     //    Last object is the modal close link
 
-    
+
     // defaults
     var modalName = "modal";
     var lightboxClass = "lightbox";
@@ -216,8 +206,8 @@
 
       }
     };
-    
-    
+
+
     var _getTarget = function (obj) {
       var target = obj;
       var isBodyTag = obj.tagName.toLowerCase() === "body";
@@ -233,9 +223,9 @@
     var _openModal = function (e) {
 
       e.preventDefault();
-      
+
       var target = _getTarget(e.target);
-      
+
       if (target) {
 
         var count = target.count;
@@ -262,7 +252,7 @@
     var _keydown_openerObj = function (e) {
       // enter or space from the opener object
       if (e.which === 13 || e.which === 32) {
-          e.preventDefault(); 
+          e.preventDefault();
           _openModal(e);
       }
     };
@@ -270,19 +260,19 @@
     var _addOpenModalLinkAttr = function (modalLink) {
       modalLink.id = modalLink.id || "modal_" + modalLink.count + "_lnk";
       modalLink.setAttribute("aria-controls", modalName + "_" + modalLink.count);
-      
+
       // test if it's not a button
       var tag = modalLink.tagName.toLowerCase();
       if (tag !== "button") {
         modalLink.setAttribute("aria-role", "button");
         modalLink.addEventListener("keydown", _keydown_openerObj, false);
       }
-      
+
       // click only requires space and enter activtion too
       if (tag !== "a" || "button") {
         modalLink.tabIndex = 0;
       }
-      
+
       modalLink.addEventListener("click", _openModal, false);
     };
 
@@ -307,7 +297,7 @@
       // tab key and not shift on the close link.
       if (e.which === 9 && !e.shiftKey) {
         if (target.classList.contains(modalName + "_lnk-close")) {
-          e.preventDefault(); 
+          e.preventDefault();
           //focus on first object in modal - or should it be the modal? Requires testing
           d.getElementById(modalName + "_" + e.target.count + "_title").focus();
         }
@@ -316,7 +306,7 @@
       // enter or space on the close link - why again??
       if (e.which === 13 || e.which === 32) {
         if (target.classList.contains(modalName + "_lnk-close")) {
-          e.preventDefault(); 
+          e.preventDefault();
           _closeModal(e);
         }
       }
@@ -328,7 +318,7 @@
       if (imgs && imgs[0]) {
         alt = imgs[0].alt;
       }
-      return modalLink.getAttribute("data-modalTitle") || alt || modalLink.textContent; 
+      return modalLink.getAttribute("data-modalTitle") || alt || modalLink.textContent;
     };
 
     var _getModalTitle = function (modalLink) {
@@ -421,9 +411,9 @@
 
     var configuration = function (cfg) {
       modalName = cfg.modalName || modalName;
-      
+
       lightboxClass = cfg.lightboxClass || lightboxClass;
-      
+
       // any object with a class -modal will have the class -modal-open added when the modal is open.
       //openClass = "-" + modalName + (cfg.openClass || "-open");
       openClass = cfg.openClass ? "-" + modalName + cfg.openClass : openClass;
