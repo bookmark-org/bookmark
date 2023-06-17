@@ -12,22 +12,26 @@
 
 <span style="position: fixed; bottom: 0; left: 0; right: 0; background: #1e1e1e; text-align: center; padding: 6px; border-top: 1px solid #333">
 
-
 archived by <%= if assigns.archive_poster do
       link(assigns.archive_poster,
         to: Routes.static_path(@conn, "/@" <> assigns.archive_poster)
       )
     end %>
 on <%= @date %>
-<div style="padding-top: 13px; ">
 
-  <%= link("🔗 Copy Link",
-    to: "",
-    data: [modal: nil],
+   <span id="copy" style="font-size: 9px">
+   https://bookmark.org/archive/<%= @id %></span>
+
+<div style="padding-top: 3px; ">
+
+  <span onclick="copyEvent('copy')">
+  <%= content_tag(:p, "🔗 Copy Link",
     role: :button,
     class: "donate-button",
     style: "height: 33px; font-size: 13px; "
   ) %>
+  </span>
+
 
   <%= link("PNG",
     to: Routes.static_path(@conn, "/archive/archive/" <> @id <> "/screenshot.png"),
@@ -68,3 +72,13 @@ on <%= @date %>
     </symbol>
   </defs>
 </svg>
+
+<!-- URL copy box -->
+<script>
+  function copyEvent(id)
+  {
+      var str = document.getElementById(id);
+      window.getSelection().selectAllChildren(str);
+      document.execCommand("Copy")
+  }
+</script>
