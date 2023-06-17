@@ -26,7 +26,7 @@
     <div class="donate-subheadline">
 
       <%= if !(@current_user) do %>
-            <div class="bullet">No login required <em><small><span style="color: gray">anonymously archive a link</span></small></em></div>
+            <div class="bullet">No login required <em><small><span style="color: gray">anonymous ok 👍</span></small></em></div>
       <% end %>
     </div>
     <div class="archive-input" OnSubmit="showSpinner()">
@@ -43,7 +43,6 @@
         required
       />
 
-      <small>Automatic free GPT-3 summary of every archive</small>
     </div>
     <button class="donate-button" type="submit">Add archive</button>
   </div>
@@ -54,15 +53,12 @@
 <%= if !(@current_user) do %>
   <div class="display-box">
     <div>
-      <img src="/images/white-globe.png" style="float: right; width: 233px ">
-      <h1 class="display-box-headline">Join the Bookmark revolution</h1>
+      <h1 class="display-box-headline">Join the Bookmark revolution 🚀 </h1>
     </div>
     <div class="donate-subheadline">
-      <div class="bullet">✔️ Custom profile <em><small><span style="color: gray">bookmark.org/@username</span></small></em></div>
-      <div class="bullet">✔️ Bulk archives <em><small><span style="color: gray">archive unlimited URLs</span></small></em></div>
-      <div class="bullet">✔️ AI summarizer <em><small><span style="color: gray">integrated with GPT-3 from OpenAI</span></small></em></div>
-      <div class="bullet">✔️ Lightning web wallet <em><small><span style="color: gray">receive bitcoin payments</span></small></em></div>
-      <div class="bullet">✔️ Nostr identity <em><small><span style="color: gray">import from Nostr, post to Nostr</span></small></em></div>
+      <div class="bullet">🫂 Nostr import </div>
+      <div class="bullet">🤖 Bulk archive bot </div>
+      <div class="bullet">⚡ Lightning zaps </div>
     </div>
     <div class="donate-action">
       <a href="/users/register" class="go-button">Create an account</a> or <%= link("login", to: Routes.user_session_path(@conn, :new)) %> to your existing account
