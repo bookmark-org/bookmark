@@ -6,6 +6,7 @@ services:
     restart: on-failure
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+      BOOKMARK_ARCHIVE_DELAY: ${BOOKMARK_ARCHIVE_DELAY}
       MIX_ENV: prod
     depends_on:
       - bookmark-db

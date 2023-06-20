@@ -6,10 +6,12 @@ This repository contains the code for [bookmark.org](https://bookmark.org/), an 
 
 1. Install [Docker](https://docs.docker.com/engine/install/). Don't forget to perform the [Docker post-installation](https://docs.docker.com/engine/install/linux-postinstall/).
 
-2. Optional: Create the following `.env` file in the root folder of this project (only required for archive summary generated with AI)
+2. Optional: Create the following `.env` file in the root folder of this project (only required for archive summary generated with AI and custom delay in bulk archiving)
 
 ```
 OPENAI_API_KEY=<api-key>
+# Expressed in milliseconds
+BOOKMARK_ARCHIVE_DELAY=1000
 ```
 
 3. Optional: Login to the Docker registry (only required for Docker image pushes)

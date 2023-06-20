@@ -93,10 +93,12 @@ defmodule Bookmark.Archives do
 
   # Returns a list of {:ok, %Archive}
   def bulk_archives(url_list, user, caller_pid \\ nil) do
+    delay = get_bulk_archive_delay()
+
     tasks = Task.async_stream(
-      url_list, fn url ->
+      Enum.with_index(url_list), fn {url, index} ->
           try do
-            :timer.sleep(:rand.uniform(1000))
+            :timer.sleep(index * delay)
             {:ok, archive} = Archives.archive_url(url, user)
             if caller_pid, do: Process.send(caller_pid, {:success, archive, url}, [:noconnect])
             {:ok, archive}
@@ -259,5 +261,15 @@ defmodule Bookmark.Archives do
     file_path = Bookmark.Archives.directory() <> "/archive/" <> archive_id
     index_json = File.read!(file_path <> "/index.json")
     JSON.decode!(index_json)
+  end
+
+  # Delay expressed in milliseconds.
+  # Returns the BOOKMARK_ARCHIVE_DELAY env variable or 300 as default
+  def get_bulk_archive_delay() do
+    if System.get_env("BOOKMARK_ARCHIVE_DELAY") do
+      String.to_integer(System.get_env("BOOKMARK_ARCHIVE_DELAY"))
+    else
+      300
+    end
   end
 end
