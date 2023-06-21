@@ -10,6 +10,8 @@ defmodule Bookmark.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :wallet_key
     field :username
+    has_one :nostr_key, Bookmark.Nostr.Key
+
     timestamps()
   end
 
