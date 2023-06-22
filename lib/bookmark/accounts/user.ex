@@ -52,6 +52,8 @@ defmodule Bookmark.Accounts.User do
     |> unique_constraint(:username)
     |> validate_format(:username, ~r/[a-zA-Z][a-zA-Z0-9-_]/)
     |> unique_constraint(:nostr_key)
+    |> unsafe_validate_unique(:email, Bookmark.Repo)
+    |> unique_constraint(:email)
   end
 
   defp validate_email(changeset) do
