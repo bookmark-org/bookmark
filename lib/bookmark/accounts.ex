@@ -50,6 +50,11 @@ defmodule Bookmark.Accounts do
     if User.valid_password?(user, password), do: user
   end
 
+
+  def get_user_by_nostr_key(public_key) do
+    Repo.get_by(User, nostr_key: public_key)
+  end
+
   @doc """
   Gets a single user.
 
@@ -85,6 +90,14 @@ defmodule Bookmark.Accounts do
     |> User.registration_changeset(attrs)
     |> Repo.insert()
   end
+
+
+  def nostr_register_user(attrs) do
+    %User{}
+    |> User.nostr_registration_changeset(attrs)
+    |> Repo.insert()
+  end
+
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.

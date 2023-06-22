@@ -10,6 +10,8 @@ defmodule Bookmark.Repo.Migrations.AddNostrKeyToUser do
 
     alter table(:users) do
       add :nostr_key, references(:nostr_keys, type: :string, column: :pubkey, primary_key: true)
+      modify(:email, :citext, null: true)
+      modify(:hashed_password, :string, null: true)
     end
   end
 end

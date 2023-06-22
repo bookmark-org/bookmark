@@ -43,6 +43,17 @@ defmodule Bookmark.Accounts.User do
     |> validate_password(opts)
   end
 
+  def nostr_registration_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password, :wallet_key, :username])
+    |> cast_assoc(:nostr_key)
+    |> validate_required([:username, :nostr_key])
+    |> validate_length(:username, max: 32)
+    |> unique_constraint(:username)
+    |> validate_format(:username, ~r/[a-zA-Z][a-zA-Z0-9-_]/)
+    |> unique_constraint(:nostr_key)
+  end
+
   defp validate_email(changeset) do
     changeset
     |> validate_required([:email])
