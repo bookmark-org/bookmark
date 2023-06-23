@@ -52,7 +52,7 @@ defmodule Bookmark.Accounts do
 
 
   def get_user_by_nostr_key(public_key) do
-    if key = Repo.get!(Bookmark.Nostr.Key, public_key) do
+    if key = Repo.get(Bookmark.Nostr.Key, public_key) do
       Repo.get!(User, key.user_id)
     end
   end
