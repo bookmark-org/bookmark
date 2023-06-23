@@ -9,6 +9,9 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@bookmark_org" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+
     <%= if assigns[:meta_attrs], do: meta_tags(assigns[:meta_attrs]) %>
 
     <title><%= if assigns[:title], do: assigns[:title] %></title>
@@ -22,6 +25,11 @@
     >
     </script>
 
+    <script
+      src="https://unpkg.com/pay-with-ln@0.1.0/dist/pay-with-ln.js"
+      integrity="sha384-Uid8n0M8dpAoE1SOQOXOcMfDy9hvqtSp+A3xMFilQn+Z6fxsnmCayPVP8na5vdAv"
+      crossorigin="anonymous">
+    </script>
   </head>
   <body class="bg">
     <%= @inner_content %>

@@ -1,0 +1,40 @@
+<div class="form-account background">
+  <div class="shape"></div>
+  <div class="shape"></div>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+
+<.form :let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)} class="form-account form">
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+  <h3 class="form-account h3">Create an account</h3>
+
+  <%= label(:username, "Username", class: "form-account label") %>
+  <%= text_input(f, :username, required: true, class: "form-account input", placeholder: "Choose your username") %>
+  <%= error_tag(f, :username) %>
+
+  <%= label(:email, "Email", class: "form-account label") %>
+  <%= email_input(f, :email, required: true, class: "form-account input", placeholder: "Enter your email") %>
+  <%= error_tag(f, :email) %>
+
+  <%= label(:email, "Password", class: "form-account label") %>
+  <%= password_input(f, :password, required: true, class: "form-account input", placeholder: "Choose your password") %>
+  <%= error_tag(f, :password) %>
+
+  <%= text_input(f, :register_type, value: "email", hidden: true) %>
+
+  <%= submit("Register", class: "form-account button", style: "margin-top:40px; margin-bottom:40px;") %>
+  <p>
+    <%= link("Log in", to: Routes.user_session_path(@conn, :new)) %> | <%= link(
+      "Forgot your password?",
+      to: Routes.user_reset_password_path(@conn, :new)
+    ) %>
+  </p>
+  </.form>
+</div>
+
+  
