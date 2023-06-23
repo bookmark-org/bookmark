@@ -12,12 +12,20 @@
 
       <%= label(:email, "Password", style: "color:white;") %>
       <%= password_input(f, :password, required: true, class: "form-input", placeholder: "Enter your password") %>
+
+      <%= text_input(f, :login_type, value: "email", hidden: true) %>
     <div>
-    <br>
-      <%= submit("Log in", class: "donate-button") %>
+      <br><%= submit("Log in", class: "donate-button") %>
     </div>
   </.form>
 
+  <p style="color: white; text-align: center;">Or</p>
+
+  <.form :let={f} for={@conn} action={Routes.user_session_path(@conn, :create)} as={:user} OnSubmit="doNip07Login()" id="nostr_form">
+    <%= text_input(f, :nostr_key, id: :nostr_key, value: "", hidden: true) %>
+    <%= text_input(f, :login_type, value: "nostr", hidden: true) %>
+    <%= submit("Login with Extension (NIP-07)", class: "donate-button") %>
+  </.form>
   <p>
     <%= link("Register", to: Routes.user_registration_path(@conn, :new)) %> | <%= link(
       "Forgot your password?",
@@ -25,3 +33,29 @@
     ) %>
   </p>
 </div>
+
+
+<script>
+  let nip07LoginExecuted = false;
+
+  async function doNip07Login() {
+    if (nip07LoginExecuted) { return; }
+    event.preventDefault();
+
+    const pubKey = await unwrap(window.nostr).getPublicKey();
+    const nostrKeyInput = document.getElementById('nostr_key');
+    nostrKeyInput.value = pubKey;
+
+    nip07LoginExecuted = true;
+
+    const form = document.getElementById('nostr_form');
+    form.submit();
+  }
+
+  function unwrap(v) {
+    if (v === undefined || v === null) {
+      throw new Error("missing value");
+    }
+    return v;
+  }
+</script>

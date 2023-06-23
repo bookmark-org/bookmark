@@ -4,8 +4,8 @@ defmodule Bookmark.Nostr.Key do
 
   @primary_key false
   schema "nostr_keys" do
+    field :pubkey, :string, primary_key: true
     field :name, :string
-    field :pubkey, :string
     field :relays, {:array, :string}
     belongs_to :user, Bookmark.Accounts.User
     timestamps()

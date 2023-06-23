@@ -41,7 +41,7 @@ defmodule BookmarkWeb.UserRegistrationController do
     end
   end
 
-  #*********************************** Helper functions *************************************ç
+  #*********************************** Helper functions *************************************
   defp render_new(conn, template_path) do
     changeset = Accounts.change_user_registration(%User{})
     title = "bookmark.org user registration"
