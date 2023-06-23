@@ -40,7 +40,7 @@ defmodule BookmarkWeb.UserRegistrationControllerTest do
     test "render errors for invalid data", %{conn: conn} do
       conn =
         post(conn, Routes.user_registration_path(conn, :create), %{
-          "user" => %{"email" => "with spaces", "password" => "too short"}
+          "user" => %{"email" => "with spaces", "password" => "too short", "register_type" => "email"}
         })
 
       response = html_response(conn, 200)

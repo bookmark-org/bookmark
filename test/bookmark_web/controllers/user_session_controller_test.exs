@@ -29,7 +29,7 @@ defmodule BookmarkWeb.UserSessionControllerTest do
 
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => valid_user_password()}
+          "user" => %{"email" => user.email, "password" => valid_user_password(), "login_type" => "email"}
         })
 
       assert get_session(conn, :user_token)
@@ -47,7 +47,8 @@ defmodule BookmarkWeb.UserSessionControllerTest do
           "user" => %{
             "email" => user.email,
             "password" => valid_user_password(),
-            "remember_me" => "true"
+            "remember_me" => "true",
+            "login_type" => "email"
           }
         })
 
@@ -62,7 +63,8 @@ defmodule BookmarkWeb.UserSessionControllerTest do
         |> post(Routes.user_session_path(conn, :create), %{
           "user" => %{
             "email" => user.email,
-            "password" => valid_user_password()
+            "password" => valid_user_password(),
+            "login_type" => "email"
           }
         })
 
@@ -72,7 +74,7 @@ defmodule BookmarkWeb.UserSessionControllerTest do
     test "emits error message with invalid credentials", %{conn: conn, user: user} do
       conn =
         post(conn, Routes.user_session_path(conn, :create), %{
-          "user" => %{"email" => user.email, "password" => "invalid_password"}
+          "user" => %{"email" => user.email, "password" => "invalid_password", "login_type" => "email"}
         })
 
       response = html_response(conn, 200)
