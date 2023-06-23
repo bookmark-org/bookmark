@@ -2,7 +2,7 @@
   <h1 class="display-box-headline" style="color: white;">Create an account</h1>
 
 
-  <.form :let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}>
+  <form>
     <%= if @changeset.action do %>
       <div class="alert alert-danger">
         <p>Oops, something went wrong! Please check the errors below.</p>
@@ -10,23 +10,19 @@
     <% end %>
     <span style="color: #1e1e1e">
 
-      <%= label(:username, "Username", style: "color:white;") %>
-      <%= text_input(f, :username, required: true, class: "form-input", placeholder: "Choose your username") %>
-      <%= error_tag(f, :username) %>
-
-      <%= label(:email, "Email", style: "color:white;") %>
-      <%= email_input(f, :email, required: true, class: "form-input", placeholder: "Enter your email") %>
-      <%= error_tag(f, :email) %>
-
-      <%= label(:email, "Password", style: "color:white;") %>
-      <%= password_input(f, :password, required: true, class: "form-input", placeholder: "Choose your password") %>
-      <%= error_tag(f, :password) %>
     </span>
+    <br> <button type="button" class="donate-button" onclick={"location.href='#{Routes.user_registration_path(@conn, :new, %{type: :email})}'"}>
+      Register with Email
+    </button>
+
+    <br> <div style="text-align: center;">OR</div>
+
     <div>
-      <br>
-      <%= submit("Register", class: "donate-button") %>
+      <br> <button type="button" class="donate-button" onclick={"location.href='#{Routes.user_registration_path(@conn, :new, %{type: :nostr})}'"}>
+        Register with Nostr Wallet
+      </button>
     </div>
-  </.form>
+  </form>
 
   <p>
     <%= link("Log in", to: Routes.user_session_path(@conn, :new)) %> | <%= link(

@@ -37,7 +37,7 @@ defmodule BookmarkWeb.UserRegistrationController do
       {:error, %Ecto.Changeset{} = changeset} ->
         IO.inspect(changeset, label: "Error")
 
-        render(conn, "new_with_#{register_type}.html", changeset: changeset, meta_attrs: nil, title: nil)
+        render(conn, "new_with_#{register_type}.html", nostr_key: user_params["nostr_key"], changeset: changeset, meta_attrs: nil, title: nil)
     end
   end
 
@@ -53,6 +53,7 @@ defmodule BookmarkWeb.UserRegistrationController do
     ]
 
     render(conn, template_path,
+      nostr_key: nil,
       changeset: changeset,
       title: title,
       meta_attrs: attrs_list

@@ -13,14 +13,17 @@
       <%= text_input(f, :username, id: :username, required: true, class: "form-input", placeholder: "Choose your username") %>
       <%= error_tag(f, :username) %>
 
-      <%= text_input(f, :nostr_key, id: :nostr_key, value: "", hidden: true) %>
+
+      <%= label(:username, "Nostr Key", style: "color:white;", hidden: is_nil @nostr_key) %>
+      <%= text_input(f, :nostr_key, id: :nostr_key, class: "form-input", value: @nostr_key, readonly: true, hidden: is_nil @nostr_key) %>
+      <%= error_tag(f, :email) %>
 
       <%= text_input(f, :register_type, value: "nostr", hidden: true) %>
 
     </span>
     <div>
       <br>
-      <%= submit("Register", class: "donate-button") %>
+      <%= submit("Register with Nostr Wallet", class: "donate-button") %>
     </div>
   </.form>
 
