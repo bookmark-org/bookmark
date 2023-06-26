@@ -1,9 +1,14 @@
 defmodule BookmarkWeb.UserSessionController do
   use BookmarkWeb, :controller
 
+  # Prevents receiving external login attempts
+  plug :protect_from_forgery
+
   alias Bookmark.Accounts
   alias BookmarkWeb.UserAuth
 
+
+  #*********************************** Actions *************************************
   def new(conn, _params) do
     title = "bookmark.org login"
 
@@ -21,13 +26,18 @@ defmodule BookmarkWeb.UserSessionController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    %{"email" => email, "password" => password} = user_params
+    login_type = user_params["login_type"]
 
-    if user = Accounts.get_user_by_email_and_password(email, password) do
+    if user = get_user(user_params, login_type) do
       UserAuth.log_in_user(conn, user, user_params)
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
-      render(conn, "new.html", error_message: "Invalid email or password")
+      message = case login_type  do
+        "email" -> "Invalid email or password"
+        "nostr" -> "Invalid Nostr account"
+      end
+
+      render(conn, "new.html", error_message: message)
     end
   end
 
@@ -35,5 +45,17 @@ defmodule BookmarkWeb.UserSessionController do
     conn
     |> put_flash(:info, "Logged out successfully.")
     |> UserAuth.log_out_user()
+  end
+
+  #*********************************** Helper functions *************************************
+  def get_user(params, login_type) do
+    case login_type do
+      "email" ->
+        %{"email" => email, "password" => password} = params
+        Accounts.get_user_by_email_and_password(email, password)
+      "nostr" ->
+        %{"nostr_key" => nostr_key} = params
+        Accounts.get_user_by_nostr_key(nostr_key)
+    end
   end
 end

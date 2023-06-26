@@ -17,7 +17,7 @@ defmodule Bookmark.NostrTest do
 
     test "get_key!/1 returns the key with given id" do
       key = key_fixture()
-      assert Nostr.get_key!(key.id) == key
+      assert Nostr.get_key!(key.pubkey) == key
     end
 
     test "create_key/1 with valid data creates a key" do
@@ -46,13 +46,13 @@ defmodule Bookmark.NostrTest do
     test "update_key/2 with invalid data returns error changeset" do
       key = key_fixture()
       assert {:error, %Ecto.Changeset{}} = Nostr.update_key(key, @invalid_attrs)
-      assert key == Nostr.get_key!(key.id)
+      assert key == Nostr.get_key!(key.pubkey)
     end
 
     test "delete_key/1 deletes the key" do
       key = key_fixture()
       assert {:ok, %Key{}} = Nostr.delete_key(key)
-      assert_raise Ecto.NoResultsError, fn -> Nostr.get_key!(key.id) end
+      assert_raise Ecto.NoResultsError, fn -> Nostr.get_key!(key.pubkey) end
     end
 
     test "change_key/1 returns a key changeset" do

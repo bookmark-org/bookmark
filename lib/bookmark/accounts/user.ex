@@ -10,6 +10,8 @@ defmodule Bookmark.Accounts.User do
     field :confirmed_at, :naive_datetime
     field :wallet_key
     field :username
+    has_one :nostr_key, Bookmark.Nostr.Key
+
     timestamps()
   end
 
@@ -39,6 +41,18 @@ defmodule Bookmark.Accounts.User do
     |> validate_format(:username, ~r/[a-zA-Z][a-zA-Z0-9-_]/)
     |> validate_email()
     |> validate_password(opts)
+  end
+
+  def nostr_registration_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password, :wallet_key, :username])
+    |> cast_assoc(:nostr_key)
+    |> validate_required([:username, :nostr_key])
+    |> validate_length(:username, max: 32)
+    |> unique_constraint(:username)
+    |> validate_format(:username, ~r/[a-zA-Z][a-zA-Z0-9-_]/)
+    |> unique_constraint(:nostr_key)
+    |> unique_constraint(:email)
   end
 
   defp validate_email(changeset) do

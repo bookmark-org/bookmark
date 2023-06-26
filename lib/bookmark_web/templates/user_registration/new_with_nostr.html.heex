@@ -1,0 +1,66 @@
+<div class="display-box">
+  <h1 class="display-box-headline" style="color: white;">Create an account</h1>
+
+  <.form :let={f} for={@changeset} action={Routes.user_registration_path(@conn, :create)}  OnSubmit="doNip07Login()">
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+      </div>
+    <% end %>
+    <span style="color: #1e1e1e">
+
+      <%= label(:username, "Username", style: "color:white;") %>
+      <%= text_input(f, :username, id: :username, required: true, class: "form-input", placeholder: "Choose your username") %>
+      <%= error_tag(f, :username) %>
+
+
+      <%= label(:username, "Nostr Key", style: "color:white;", hidden: is_nil @nostr_key) %>
+      <%= text_input(f, :nostr_key, id: :nostr_key, class: "form-input", value: @nostr_key, readonly: true, hidden: is_nil @nostr_key) %>
+      <%= error_tag(f, :email) %>
+
+      <%= text_input(f, :register_type, value: "nostr", hidden: true) %>
+
+    </span>
+    <div>
+      <br>
+      <%= submit("Register with Nostr Wallet", class: "donate-button") %>
+    </div>
+  </.form>
+
+  <p>
+    <%= link("Log in", to: Routes.user_session_path(@conn, :new)) %> | <%= link(
+      "Forgot your password?",
+      to: Routes.user_reset_password_path(@conn, :new)
+    ) %>
+  </p>
+</div>
+
+
+<script>
+  let nip07LoginExecuted = false; 
+
+  async function doNip07Login() {
+    if (nip07LoginExecuted) { return; }
+
+    event.preventDefault();
+    var username = document.getElementById('username');
+
+    if (username.value != "") {
+      const pubKey = await unwrap(window.nostr).getPublicKey();
+      const nostrKeyInput = document.getElementById('nostr_key');
+      nostrKeyInput.value = pubKey;
+
+      nip07LoginExecuted = true;
+
+      const form = document.querySelector('form');
+      form.submit();
+    }
+  }
+
+  function unwrap(v) {
+    if (v === undefined || v === null) {
+      throw new Error("missing value");
+    }
+    return v;
+  }
+</script>
