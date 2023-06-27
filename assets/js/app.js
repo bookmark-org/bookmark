@@ -29,8 +29,19 @@ import QrScanner from "../vendor/qr-scanner.min.js"
 
 let Hooks = {};
 Hooks.ScanCode = {
-	mounted() {
+	async mounted() {
 		const btn = document.getElementById("scan-btn");
+
+		if (await QrScanner.hasCamera()) {
+			showScanButton();
+		}
+
+		function showScanButton() {
+			var scanButton = document.getElementById('scan-btn');
+			scanButton.removeAttribute('hidden');
+			var withdrawButton = document.getElementById('withdraw-btn');
+			withdrawButton.style.width = '66%';
+		}
 
 		btn.addEventListener("click", () => {
 			this.pushEvent("scan-btn-clicked");
