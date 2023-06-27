@@ -39,16 +39,13 @@ config :bookmark, BookmarkWeb.Endpoint,
 #
 # Note that this task requires Erlang/OTP 20 or later.
 # Run `mix help phx.gen.cert` for more information.
-#
-# The `http:` config above can be replaced with:
-#
-#     https: [
-#       port: 4001,
-#       cipher_suite: :strong,
-#       keyfile: "priv/cert/selfsigned_key.pem",
-#       certfile: "priv/cert/selfsigned.pem"
-#     ],
-#
+config :bookmark, BookmarkWeb.Endpoint,
+  https: [
+    port: 4001,
+    cipher_suite: :strong,
+    keyfile: "priv/cert/selfsigned_key.pem",
+    certfile: "priv/cert/selfsigned.pem"
+  ]
 # If desired, both `http:` and `https:` keys can be
 # configured to run both http and https servers on
 # different ports.
