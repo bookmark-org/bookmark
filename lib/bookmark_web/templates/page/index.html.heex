@@ -13,7 +13,8 @@
       <%= link("Profile", to: "/@" <>  @current_user.username, class: "go-button") %>
       <a class="go-button" href="/deposit">Deposit</a>
       <a class="go-button" href="/withdraw">Withdraw</a>
-      <a class="go-button" href="/bulk_archives">Bulk archives</a>
+      <a class="go-button" href="/bulk_archives">Archives</a>
+      <a class="go-button" href="/nostr">Nostr</a>
       <%= link("Log out", class: "go-button", to: Routes.user_session_path(@conn, :delete), method: :delete) %>
     </div>
   </div>
