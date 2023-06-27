@@ -969,6 +969,12 @@ body {
   }
 }
 
+/*****************************************  Bulk Archives **************************************/
+
+@media screen and (max-width: 350px) {.responsive-form {width: auto;}}
+@media screen and (min-width: 350px) {.responsive-form {width: 300px;}}
+@media screen and (min-width: 550px) {.responsive-form {width: 500px;}}
+
 
 /******************************************** Withdraw *****************************************/
 
