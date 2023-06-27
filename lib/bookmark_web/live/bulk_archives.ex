@@ -24,11 +24,11 @@ defmodule BookmarkWeb.BulkArchivesLive do
               <% end %>
             </ul>
         <% else %>
-          <.form for={@form} phx-submit="save">
+          <.form for={@form} phx-submit="save" class="responsive-form">
             <textarea placeholder="Paste your URLs here, one per line:
             https://www.example.com/
             https://www.google.com/"
-            name="urls" style="height: 100px; width: 500px; background-color: white; font-size: 16px;"><%= if  @links, do: @links%></textarea>
+            name="urls" style="height: 100px; width: 100%; background-color: white; font-size: 16px;"><%= if  @links, do: @links%></textarea>
 
             <button class="donate-button">Bulk archive</button>
           </.form>

@@ -32,13 +32,16 @@
 }
 
 .donate-button {
-  height: 66px;
+  height: auto;
+  line-height: 1.5;
   font-size: 23px;
   font-weight: bold; 
   border-radius: 10px;
   color: #ce0000;
   background-color: black;
-  border: 1px solid white; 
+  border: 1px solid white;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .go-button {
@@ -967,3 +970,10 @@ body {
 }
 
 
+
+
+/*****************************************  Bulk Archives **************************************/
+
+@media screen and (max-width: 350px) {.responsive-form {width: auto;}}
+@media screen and (min-width: 350px) {.responsive-form {width: 300px;}}
+@media screen and (min-width: 550px) {.responsive-form {width: 500px;}}
