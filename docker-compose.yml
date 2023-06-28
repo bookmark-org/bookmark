@@ -25,6 +25,7 @@ services:
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       BOOKMARK_ARCHIVE_DELAY: ${BOOKMARK_ARCHIVE_DELAY}
+      PHX_HOST: alpha.bookmark.org
       MIX_ENV: prod
     depends_on:
       - bookmark-db
