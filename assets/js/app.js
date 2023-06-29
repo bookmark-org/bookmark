@@ -29,8 +29,19 @@ import QrScanner from "../vendor/qr-scanner.min.js"
 
 let Hooks = {};
 Hooks.ScanCode = {
-	mounted() {
+	async mounted() {
 		const btn = document.getElementById("scan-btn");
+
+		if (await QrScanner.hasCamera()) {
+			showScanButton();
+		}
+
+		function showScanButton() {
+			var scanButton = document.getElementById('scan-btn');
+			scanButton.removeAttribute('hidden');
+			var withdrawButton = document.getElementById('withdraw-btn');
+			withdrawButton.style.width = '66%';
+		}
 
 		btn.addEventListener("click", () => {
 			this.pushEvent("scan-btn-clicked");
@@ -43,7 +54,9 @@ Hooks.ScanCode = {
 				video,
 				result => { 
 					qrScanner.stop();
-					this.pushEvent("modal-closed", result);
+					qr_data = result["data"]
+					console.log("QR data: ", qr_data)
+					this.pushEvent("modal-closed", qr_data);
 				}, {
 					highlightScanRegion: true,
 					highlightCodeOutline: true,

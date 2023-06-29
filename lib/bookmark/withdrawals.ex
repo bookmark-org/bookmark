@@ -13,7 +13,7 @@ defmodule Bookmark.Withdrawals do
            headers: [{:x_api_key, key}],
            method: :post,
            body: body,
-           receive_timeout: 30_000
+           receive_timeout: 60_000
          ) do
       {:ok, response} ->
         case response.status do

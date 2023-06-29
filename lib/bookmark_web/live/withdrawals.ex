@@ -20,8 +20,8 @@ defmodule BookmarkWeb.WithdrawalsLive do
 
           <form phx-submit="pay">
             <input class="donate-button" id="bolt_invoice" type="text" value={@invoice} placeholder="Paste BOLT-11 invoice (ln...)" name="bolt11_invoice" style="height: 66px; background-color: white; border-radius: 13px; margin-bottom: 13px; float: left; "/>
-            <button class="donate-button" style="color: lightgray; width: 30%; float: left; margin-right: 13px; " type="button" id="scan-btn" phx-hook="ScanCode">Scan QR</button>
-            <button class="donate-button" style="width: 66%">Withdraw</button>
+            <button class="donate-button scan" style="color: lightgray; float: left; margin-right: 13px; " type="button" id="scan-btn" phx-hook="ScanCode" hidden>Scan QR</button>
+            <button class="donate-button withdraw" style="margin-top: 50px;" id="withdraw-btn">Withdraw</button>
           </form>
 
         <%= if @show_modal do %>

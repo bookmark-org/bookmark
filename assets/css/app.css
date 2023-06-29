@@ -969,11 +969,21 @@ body {
   }
 }
 
-
-
-
 /*****************************************  Bulk Archives **************************************/
 
 @media screen and (max-width: 350px) {.responsive-form {width: auto;}}
 @media screen and (min-width: 350px) {.responsive-form {width: 300px;}}
 @media screen and (min-width: 550px) {.responsive-form {width: 500px;}}
+
+
+/******************************************** Withdraw *****************************************/
+
+@media screen and (max-width: 350px) {
+  .donate-button.scan{ width: auto; }
+  .donate-button.withdraw{ width: auto; margin-top: 50px;}
+}
+
+@media screen and (min-width: 350px) {
+  .donate-button.scan{ width: auto; margin-bottom: 10px; padding-left: auto;}
+  .donate-button.withdraw{ width: 100%;}
+}

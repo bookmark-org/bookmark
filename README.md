@@ -20,6 +20,8 @@ BOOKMARK_ARCHIVE_DELAY=1000
 $ docker login -u bookmarkorg -p <registry-password>
 ```
 
+4. Optional: You can use HTTPS on localhost in port 4001. If you are using Google Chrome, open `chrome://flags/#allow-insecure-localhost` to enable the use of self-signed certificates on localhost.
+
 ## Basic Commands: Development
 
 Run the app:
