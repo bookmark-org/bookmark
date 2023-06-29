@@ -14,22 +14,14 @@ defmodule Bookmark.ArchivesTest do
 
     @invalid_attrs %{name: nil}
 
+    #********************************** Get Archives  *********************************#
+
     test "list_archives/0 returns all archives" do
       archive = archive_fixture()
       [archive_from_list] = Archives.list_archives()
       assert archive_from_list |> Bookmark.Repo.preload(:user) == archive
     end
 
-    test "create_archive/1 with valid data creates a archive" do
-      valid_attrs = %{name: "some name"}
-
-      assert {:ok, %Archive{} = archive} = Archives.create_archive(valid_attrs, nil)
-      assert archive.name == "some name"
-    end
-
-    test "create_archive/1 with invalid data returns error changeset" do
-      assert_raise(MatchError,  fn -> Archives.create_archive(@invalid_attrs, nil) end)
-    end
 
     test "get_archives_by_user/1 returns all archives from the user" do
       # Create 2 users
@@ -59,6 +51,20 @@ defmodule Bookmark.ArchivesTest do
         Bookmark.Archives.get_archives_by_user(user2) |> Enum.map(fn a -> Bookmark.Repo.preload(a, :user) end)
     end
 
+    #********************************** Create Archives  *********************************#
+
+    test "create_archive/1 with valid data creates a archive" do
+      valid_attrs = %{name: "some name"}
+
+      assert {:ok, %Archive{} = archive} = Archives.create_archive(valid_attrs, nil)
+      assert archive.name == "some name"
+    end
+
+    test "create_archive/1 with invalid data returns error changeset" do
+      assert_raise(MatchError,  fn -> Archives.create_archive(@invalid_attrs, nil) end)
+    end
+
+
     test "archive_url/2 with valid data creates archives" do
       # Mocked functions
       Mimic.expect(Req, :post, fn _url, _opts -> archivebox_response("archive/some_id") end)
@@ -69,6 +75,21 @@ defmodule Bookmark.ArchivesTest do
       assert archive.name == "some_id"
       assert archive.title == "some_title"
     end
+
+    test "Avoid archive if url is blocked" do
+      # Blocked URL
+      assert {:error, :domain_not_allowed} = Archives.archive_url("https://es.pornhub.com/", nil)
+      assert {:error, :domain_not_allowed} = Archives.archive_url("https://s1.s2.s3.s4.sex.com/", nil)
+
+      # Not blocked URL
+      Mimic.expect(Req, :post, fn url, _opts -> archivebox_response("archive/_id") end)
+      Mimic.expect(Archives, :get_title, fn _archive ->  "_" end )
+
+      allowed_url = "https://whyisthisinteresting.substack.com/p/the-platinum-photography-edition"
+      assert {:ok, %Archive{} = _archive} = Archives.archive_url(allowed_url, nil)
+    end
+
+    #********************************** Bulk Archives  *********************************#
 
     test "bulk_archives/3 with valid data creates archives" do
       # Mocked functions

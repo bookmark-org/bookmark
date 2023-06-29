@@ -210,6 +210,8 @@ defmodule Bookmark.Archives do
   end
 
   defp check_nsfw_domain(url) do
+    domain = Utils.get_domain(url)
+
     blocked_domains =
       :bookmark
       |> :code.priv_dir()
@@ -217,8 +219,7 @@ defmodule Bookmark.Archives do
       |> File.read!()
       |> String.split("\n", trim: true)
 
-    blocked_domains
-    |> Enum.find(&String.contains?(url, &1))
+    Enum.find(blocked_domains, fn blocked_domain -> blocked_domain == domain end)
   end
 
   defp archivebox_url() do
