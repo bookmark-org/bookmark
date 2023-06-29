@@ -54,7 +54,9 @@ Hooks.ScanCode = {
 				video,
 				result => { 
 					qrScanner.stop();
-					this.pushEvent("modal-closed", result);
+					qr_data = result["data"]
+					console.log("QR data: ", qr_data)
+					this.pushEvent("modal-closed", qr_data);
 				}, {
 					highlightScanRegion: true,
 					highlightCodeOutline: true,
