@@ -6,11 +6,16 @@ This repository contains the code for [bookmark.org](https://bookmark.org/), an 
 
 1. Install [Docker](https://docs.docker.com/engine/install/). Don't forget to perform the [Docker post-installation](https://docs.docker.com/engine/install/linux-postinstall/).
 
-2. Optional: Create the following `.env` file in the root folder of this project (only required for archive summary generated with AI and custom delay in bulk archiving)
+2. Create the following `.env` file in the root directory of this project
 
 ```
+# Required: Set to true if you are in a production environment, otherwise, use false.
+IS_PROD=true
+
+# (Optional) Only required for archive summary generated with AI.
 OPENAI_API_KEY=<api-key>
-# Expressed in milliseconds
+
+# (Optional) Delay expressed in milliseconds, to avoid concurrency issues during bulk archive processing (Default: 300).
 BOOKMARK_ARCHIVE_DELAY=1000
 ```
 

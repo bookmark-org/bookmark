@@ -39,9 +39,22 @@ stop: # Terminates the execution of all containers
 
 .PHONY: clean
 clean: # Terminates the execution of all containers + delete volumes
-	docker compose down -v --remove-orphans
-	docker volume rm bookmark_db -f
-	rm -r priv/static/archive/*
+	@if [ "${IS_PROD}" = "true" ]; then \
+		echo "You can't run 'make clean' in production.\nIf you want to stop the containers, run 'make stop'"; \
+	else \
+		echo "ATTENTION: You are on the verge of DELETING the ENTIRE database and files. Please be aware, this action is IRREVERSIBLE.\nAre you absolutely certain you want to proceed? Y/n"; \
+		read response; \
+		response=$$(echo "$$response" | tr '[:upper:]' '[:lower:]'); \
+		if [ "$$response" = "y" ]; then \
+			docker compose down -v --remove-orphans; \
+			docker volume rm bookmark_db -f; \
+			rm -r priv/static/archive/*; \
+			echo "Successful deletion"; \
+		else \
+			echo "Operation aborted"; \
+		fi \
+	fi
+
 
 .PHONY: push-image
 push-image: # Push image to registry
